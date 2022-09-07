@@ -5,14 +5,17 @@ import 'simpledotcss';
 import { store } from './store';
 import { App } from './App';
 import './index.css';
+import { HashRouter } from 'react-router-dom';
 
 const container = document.body;
 const root = createRoot(container);
 
 root.render(
   <React.StrictMode>
-    <Provider store={store}>
-      <App />
-    </Provider>
+    <HashRouter>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </HashRouter>
   </React.StrictMode>
 );
