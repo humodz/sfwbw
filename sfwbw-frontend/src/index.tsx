@@ -1,13 +1,16 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
-import 'simpledotcss';
 import { store } from './store';
 import { App } from './App';
-import './index.css';
 import { HashRouter } from 'react-router-dom';
 
-const container = document.body;
+import 'simpledotcss';
+import './simpledotcss-tweaks.css';
+import './index.css';
+
+
+const container = document.getElementById('root')!;
 const root = createRoot(container);
 
 root.render(

@@ -1,7 +1,4 @@
-import { useEffect } from 'react';
 import { Link, Route, Routes } from 'react-router-dom';
-import { increment, incrementByAmount, selectCount } from './store/counterSlice';
-import { useAppDispatch, useAppSelector } from './store/hooks';
 import { Editor } from './views/Editor';
 import { Home } from './views/Home';
 
@@ -12,7 +9,7 @@ export function App() {
         <nav>
           <Link to="/">Home</Link>
           <Link to="/editor">Editor</Link>
-          <a href="https://example.com">Github</a>
+          <a target="_blank" href="https://example.com">Github</a>
         </nav>
 
         <h1>Super Famicom Wars by Web</h1>
