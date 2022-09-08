@@ -1,5 +1,5 @@
 {
-  "name": "sfwbw-frontend",
+  "name": "@sfwbw/sfwbw-frontend",
   "version": "0.1.0",
   "private": true,
   "scripts": {
