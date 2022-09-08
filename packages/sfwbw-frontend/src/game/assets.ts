@@ -1,5 +1,5 @@
 import { isBuilding, isTerrain, Tile } from '.';
-import { tiles } from '../assets';
+import { tiles } from '@sfwbw/sfwbw-assets';
 
 export function getTileImage(tile: Tile): string {
   if (isTerrain(tile.type)) {
