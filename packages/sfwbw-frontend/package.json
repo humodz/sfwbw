@@ -36,7 +36,8 @@
     "react-router-dom": "^6.3.0",
     "simpledotcss": "^2.1.1",
     "typescript": "^4.8.2",
-    "@sfwbw/sfwbw-assets": "*"
+    "@sfwbw/sfwbw-assets": "*",
+    "@sfwbw/sfwbw-core": "*"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^2.1.0",

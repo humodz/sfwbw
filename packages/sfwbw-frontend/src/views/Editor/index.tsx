@@ -1,7 +1,7 @@
 import produce from 'immer';
 import { useState } from 'react';
 import { Pallette } from '../../components/Palette';
-import { Nation, Terrain, Tile } from '../../game';
+import { Nation, Terrain, Tile } from '@sfwbw/sfwbw-core';
 import { getTileImage } from '../../game/assets';
 import { repeat, saveFile } from '../../utils';
 

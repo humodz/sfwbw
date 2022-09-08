@@ -1,5 +1,5 @@
 import { nations } from '@sfwbw/sfwbw-assets';
-import { Building, Nation, Terrain, Tile } from '../../game';
+import { Building, Nation, Terrain, Tile } from '@sfwbw/sfwbw-core';
 import { getTileImage } from '../../game/assets';
 import { cls } from '../../utils';
 
