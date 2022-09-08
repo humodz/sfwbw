@@ -1,3 +1,4 @@
+import produce from 'immer';
 import { useState } from 'react';
 import { Pallette } from '../../components/Palette';
 import { Nation, Terrain, Tile } from '../../game';
@@ -6,47 +7,43 @@ import { repeat, saveFile } from '../../utils';
 
 import styles from './styles.module.css';
 
-function createBoard(size: { width: number, height: number }): Tile[] {
-  return repeat(size.height * size.width, { type: Terrain.PLAINS, nation: Nation.NEUTRAL });
+function createBoard(size: { width: number, height: number }): Tile[][] {
+  return repeat(size.height, repeat(size.width, { type: Terrain.PLAINS, nation: Nation.NEUTRAL }));
 }
 
 export function Editor() {
   const [height, setHeight] = useState(9);
   const [width, setWidth] = useState(15);
-
   const [name, setName] = useState('untitled');
-
-  const [board, setBoard] = useState<Tile[]>(() => createBoard({ height, width }));
+  const [board, setBoard] = useState<Tile[][]>(() => createBoard({ height, width }));
 
   const [selectedTile, setSelectedTile] = useState<Tile>({
     type: Terrain.PLAINS,
     nation: Nation.NEUTRAL,
   });
 
-  const cssVariables = {
-    '--rows': String(height),
-    '--columns': String(width),
-    '--tile-size': '32px',
-  };
-
-  const updateBoard = (tileIndex: number, newTile: Tile) => {
-    setBoard(board => {
-      const newBoard = [...board];
-      board[tileIndex] = newTile;
-      return newBoard;
-    });
+  const updateBoard = (y: number, x: number, newTile: Tile) => {
+    setBoard(produce(draft => {
+      draft[y][x] = newTile;
+    }));
   };
 
   const saveMap = () => {
     const data = {
       name,
-      width,
-      height,
+      width: board[0].length,
+      height: board.length,
       board,
     };
 
     const rawData = JSON.stringify(data, null, 2);
     saveFile(`${name}.sfw-map.json`, rawData);
+  };
+
+  const cssVariables = {
+    '--rows': String(board.length),
+    '--columns': String(board[0].length),
+    '--tile-size': '32px',
   };
 
   return (
@@ -115,18 +112,20 @@ export function Editor() {
 
       <div className={styles.editorMap} style={cssVariables as any}>
         {
-          board.map((tile, i) => (
-            <img
-              key={i}
-              onMouseDown={() => updateBoard(i, selectedTile)}
-              onMouseOver={event => {
-                if (event.buttons === 1) {
-                  updateBoard(i, selectedTile);
-                }
-              }}
-              src={getTileImage(tile)}
-              draggable={false}
-            />
+          board.map((row, y) => (
+            row.map((tile, x) => (
+              <img
+                key={`${y}-${x}`}
+                onMouseDown={() => updateBoard(y, x, selectedTile)}
+                onMouseOver={event => {
+                  if (event.buttons === 1) {
+                    updateBoard(y, x, selectedTile);
+                  }
+                }}
+                src={getTileImage(tile)}
+                draggable={false}
+              />
+            ))
           ))
         }
       </div>
