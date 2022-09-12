@@ -6,6 +6,7 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
+    "add": "cd ../.. && lerna add --scope=@sfwbw/sfwbw-backend",
     "prebuild": "rimraf dist",
     "build": "rollup -c rollup.config.js",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
@@ -21,6 +22,10 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@mikro-orm/cli": "^5.4.1",
+    "@mikro-orm/core": "^5.4.1",
+    "@mikro-orm/nestjs": "^5.1.1",
+    "@mikro-orm/postgresql": "^5.4.1",
     "@nestjs/common": "^9.0.0",
     "@nestjs/core": "^9.0.0",
     "@nestjs/platform-express": "^9.0.0",
@@ -73,5 +78,11 @@
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
+  },
+  "mikro-orm": {
+    "useTsNode": true,
+    "configPaths": [
+      "./src/db/mikro-orm.config.ts"
+    ]
   }
 }

@@ -1,4 +1,5 @@
 .rollup.cache
+dbdata
 
 # compiled output
 /dist
