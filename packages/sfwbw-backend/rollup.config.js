@@ -1,8 +1,9 @@
 import typescript from '@rollup/plugin-typescript';
-import { nodeResolve } from '@rollup/plugin-node-resolve';
+import nodeResolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import json from '@rollup/plugin-json';
 import alias from '@rollup/plugin-alias';
+import chalk from 'chalk';
 
 export default {
   input: 'src/main.ts',
@@ -12,7 +13,7 @@ export default {
     sourcemap: true,
   },
   plugins: [
-    skipDependencies([
+    optionalDependencies([
       'cache-manager',
       'class-validator',
       'class-transformer',
@@ -40,9 +41,26 @@ export default {
   },
 };
 
-function skipDependencies(packages) {
-  const entries = packages.map((name) => ({
-    find: name,
+function optionalDependencies(packages) {
+  const regExpSpecialChars = /[.+*?|\\^$()[\]{}]/g;
+
+  const notInstalled = packages.filter((name) => {
+    try {
+      require.resolve(name);
+      console.warn(
+        `${chalk.yellow.bold('WARNING')}`,
+        `Not skipping ${chalk.green.bold(name)} because it is installed`,
+      );
+      return false;
+    } catch {
+      return true;
+    }
+  });
+
+  const entries = notInstalled.map((name) => ({
+    // Using regexp instead of string to avoid the following error:
+    // Error: Could not load ./skipped-dependency.js/microservices-module
+    find: new RegExp(`^${name.replace(regExpSpecialChars, '\\$1')}$`),
     replacement: './skipped-dependency.js',
   }));
 
