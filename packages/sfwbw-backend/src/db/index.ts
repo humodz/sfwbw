@@ -13,3 +13,7 @@ export function databaseModule() {
     entities: allEntities,
   });
 }
+
+export function entitiesModule() {
+  return MikroOrmModule.forFeature(allEntities);
+}
