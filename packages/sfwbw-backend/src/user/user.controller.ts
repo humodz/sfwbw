@@ -2,7 +2,7 @@ import { EntityRepository } from '@mikro-orm/postgresql';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { User } from '../db/entities';
-import { CreateUserDto } from './create-user.dto';
+import { CreateUserRequest } from './dto/create-user.request';
 import * as Scrypt from 'scrypt-kdf';
 
 @Controller('/users')
@@ -13,7 +13,7 @@ export class UserController {
   ) {}
 
   @Post()
-  async create(@Body() userDto: CreateUserDto): Promise<User> {
+  async create(@Body() userDto: CreateUserRequest): Promise<User> {
     const user = this.userRepository.create({
       username: userDto.username,
       passwordHash: await this.hashPassword(userDto.password),
