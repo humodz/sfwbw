@@ -2,25 +2,26 @@ import { useState, useEffect } from 'react';
 import { FormField } from '../../components/forms/FormField';
 import { PasswordField } from '../../components/forms/PasswordField';
 
-import { icons } from '@sfwbw/sfwbw-assets';
-import { Else, If } from '../../utils/jsx-conditionals';
+import { If } from '../../utils/jsx-conditionals';
 
 import styles from './styles.module.css';
 import { useRegisterMutation, useSignInMutation } from '../../store/apiSlice';
+import { ErrorMessage } from '../../components/ErrorMessage';
+import { FormButton } from '../../components/forms/FormButton';
 
 
 export function SignIn() {
   return (
     <main>
       <article>
-        <div style={{ width: 'fit-content', margin: 'auto' }}>
-        <h4 style={{ marginTop: '0.5rem' }}>Sign In</h4>
+        <div className={styles.content}>
+          <h4 className={styles.header}>Sign In</h4>
           <SignInForm />
         </div>
       </article>
       <article>
-        <div style={{ width: 'fit-content', margin: 'auto' }}>
-          <h4 style={{ marginTop: '0.5rem' }}>New User?</h4>
+        <div className={styles.content}>
+          <h4 className={styles.header}>New User?</h4>
           <RegisterForm />
         </div>
       </article>
@@ -163,79 +164,4 @@ function RegisterForm() {
       }
     </form>
   );
-}
-
-
-interface FormButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  loading?: boolean;
-}
-
-function FormButton(props: FormButtonProps) {
-  const buttonProps = { ...props, loading: undefined };
-
-  return (
-    <button disabled={props.loading} {...buttonProps}>
-      {
-        If(!props.loading) && (
-          props.children
-        ) || Else && (
-          <LoadingIcon />
-        )
-      }
-    </button>
-  );
-}
-
-
-function LoadingIcon() {
-  return (
-    <img
-      src={icons.loading}
-      alt="Loading"
-      className={styles.loading}
-      style={{
-        height: '20px',
-        width: '20px',
-      }}
-    />
-  );
-}
-
-interface ErrorMessageProps {
-  children: string | JSX.Element;
-}
-
-function ErrorMessage(props: ErrorMessageProps) {
-  return (
-    <div
-      style={{
-        display: 'flex',
-        borderLeft: '5px solid var(--code)',
-        borderRadius: '2px',
-        padding: '0.5rem',
-        backgroundColor: 'var(--accent-bg)'
-      }}
-    >
-      <img
-        src={icons.error}
-        alt="Error"
-        style={{
-          imageRendering: 'pixelated',
-          height: '64px',
-          width: '64px',
-          borderRadius: 0,
-          flexBasis: 0,
-          flexGrow: 0,
-        }}
-      />
-      <div
-        style={{
-          marginLeft: '1rem',
-          flexGrow: 1,
-        }}
-      >
-        {props.children}
-      </div>
-    </div>
-  )
 }

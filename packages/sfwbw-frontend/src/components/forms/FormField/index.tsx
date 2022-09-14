@@ -16,7 +16,10 @@ export function FormField(props: FormFieldProps) {
   useEffect(() => {
     if (ref.current) {
       ref.current.setCustomValidity(props.errorMessage || '');
-      ref.current.reportValidity();
+
+      if (props.errorMessage) {
+        ref.current.reportValidity();
+      }
     }
   }, [props.errorMessage]);
 
