@@ -8,6 +8,9 @@ import styles from './styles.module.css';
 import { useRegisterMutation, useSignInMutation } from '../../store/apiSlice';
 import { ErrorMessage } from '../../components/ErrorMessage';
 import { FormButton } from '../../components/forms/FormButton';
+import { setAccessToken } from '../../store/authSlice';
+import { isErrorResponse } from '../../utils';
+import { useAppDispatch } from '../../store/hooks';
 
 
 export function SignIn() {
@@ -30,6 +33,8 @@ export function SignIn() {
 }
 
 function SignInForm() {
+  const dispatch = useAppDispatch();
+
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -43,7 +48,11 @@ function SignInForm() {
       password,
     });
 
-    console.log(response);
+    if (isErrorResponse(response)) {
+      return;
+    }
+
+    dispatch(setAccessToken(response.data.accessToken));
   };
 
   return (

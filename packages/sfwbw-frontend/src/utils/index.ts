@@ -26,3 +26,11 @@ export function saveFile(filename: string, content: string, type = 'text') {
     URL.revokeObjectURL(url);
   }, 0);
 }
+
+export function isSuccessResponse(response: any): response is { data: any } {
+  return 'data' in response;
+}
+
+export function isErrorResponse(response: any): response is { error: any } {
+  return 'error' in response;
+}
