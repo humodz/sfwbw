@@ -1,15 +1,15 @@
-import subprocess as sp
 import tempfile as tf
 from utils import Point, convert, rect, make_gif
 
 
 def main():
+  base_offset = Point(4, 4)
   frame_offset = Point(25, 0)
-  first_frame = Point(56, 606)
-  size = Point(24, 24)
+  first_frame = Point(56, 606) + base_offset
+  size = Point(24, 24) - base_offset
 
   input_img = 'source-images/units.png'
-  output_img = 'loading.gif'
+  output_img = 'src/icons/loading.gif'
   tmp_frame = f'{tf.mkdtemp()}/icon-{{}}.png'
 
   bg_color = '#E85CE8'
