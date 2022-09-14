@@ -9,12 +9,25 @@ import { Response } from 'express';
 
 @Catch(UniqueConstraintViolationException)
 export class UniqueConstraintFilter implements ExceptionFilter {
-  catch(exception: { detail: string }, host: ArgumentsHost) {
+  catch(exception: ConstraintError, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
 
+    console.log(exception);
+
+    const property = exception.constraint.split('_')[1];
+
     response.status(HttpStatus.CONFLICT).json({
-      message: exception.detail,
+      message: `${capitalize(property)} already in use`,
     });
   }
+}
+
+interface ConstraintError {
+  detail: string;
+  constraint: string;
+}
+
+function capitalize(text: string) {
+  return text[0].toUpperCase() + text.slice(1);
 }

@@ -108,7 +108,7 @@ function RegisterForm() {
     const response = await register({
       username,
       password,
-      email,
+      email: email || null,
     });
 
     console.log(response);
