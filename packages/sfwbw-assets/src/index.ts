@@ -7,6 +7,8 @@ import yellowNation from './nations/yellow.png';
 import { terrain } from './terrain';
 import { buildings } from './buildings';
 
+export { default as loading } from './icons/loading.gif';
+
 export const tiles = {
   terrain,
   buildings,

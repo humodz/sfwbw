@@ -3,6 +3,7 @@
 import subprocess as sp
 import tempfile as tf
 import os
+from utils import make_color_transparent, Point, crop_image, rect
 
 
 def main():
@@ -31,38 +32,8 @@ def crop_units(input_img, output_img, offset):
 	padding_x = 3
 
 	for i in range(sprite_count):
-		pos = offset + sprite_size * Point(0, i) + Point(0, 3 * i)
+		pos = offset + sprite_size * Point(0, i) + Point(0, padding_x * i)
 		crop_image(input_img, output_img.format(i), rect(sprite_size, pos))
-
-
-def make_color_transparent(input_img, output_img, color):
-	command = ['convert', input_img, '-transparent', color, output_img]
-	sp.run(command)
-
-
-def crop_image(input_img, output_img, where):
-	command = ['convert', input_img, '-crop', where, output_img]
-	sp.run(command)
-
-
-def rect(size, offset):
-	return f'{size.x}x{size.y}+{offset.x}+{offset.y}'
-
-
-class Point:
-	def __init__(self, x, y):
-		self.x = x 
-		self.y = y
-
-	def __add__(self, that):
-		return Point(self.x + that.x, self.y + that.y)
-
-	def __mul__(self, that):
-		return Point(self.x * that.x, self.y * that.y)
-
-	def __repr__(self):
-		return f'Point(x={self.x}, y={self.y})'
-
 
 
 main()
