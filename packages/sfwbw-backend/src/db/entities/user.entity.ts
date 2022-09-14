@@ -16,7 +16,7 @@ export class User {
   @Unique()
   @Property({ type: String, nullable: true })
   @Expose()
-  email?: string | null;
+  email: string | null = null;
 
   @Property()
   role!: 'player' | 'admin';

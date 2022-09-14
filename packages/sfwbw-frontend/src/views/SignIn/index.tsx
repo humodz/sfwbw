@@ -2,10 +2,11 @@ import { useState, useEffect } from 'react';
 import { FormField } from '../../components/forms/FormField';
 import { PasswordField } from '../../components/forms/PasswordField';
 
-import { loading } from '@sfwbw/sfwbw-assets';
+import { icons } from '@sfwbw/sfwbw-assets';
 import { Else, If } from '../../utils/jsx-conditionals';
 
 import styles from './styles.module.css';
+import { useRegisterMutation, useSignInMutation } from '../../store/apiSlice';
 
 
 export function SignIn() {
@@ -28,14 +29,20 @@ export function SignIn() {
 }
 
 function SignInForm() {
-  const [isLoading, setIsLoading] = useState(true);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  const onSignIn = (event: React.FormEvent) => {
+  const [signIn, { isLoading, error }] = useSignInMutation();
+
+  const onSignIn = async (event: React.FormEvent) => {
     event.preventDefault();
-    setIsLoading(true);
-    alert('sign in: ' + username + ' ' + password);
+
+    const response = await signIn({
+      username,
+      password,
+    });
+
+    console.log(response);
   };
 
   return (
@@ -58,15 +65,22 @@ function SignInForm() {
 
       <div>
         <FormButton type="submit" loading={isLoading} style={{ width: '100%' }}>
-            Sign In
+          Sign In
         </FormButton>
       </div>
+
+      {
+        If(error) && (
+          <ErrorMessage>
+            {(error as any).data.message}
+          </ErrorMessage>
+        )
+      }
     </form>
   );
 }
 
 function RegisterForm() {
-  const [isLoading, setIsLoading] = useState(false);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
@@ -74,24 +88,30 @@ function RegisterForm() {
 
   const [passwordConfirmationError, setPasswordConfirmationError] = useState('');
 
-  const onRegister = (event: React.FormEvent) => {
-    event.preventDefault();
-
-    if (password !== passwordConfirmation) {
-      setPasswordConfirmationError('Please match the password');
-      return;
-    }
-
-    setIsLoading(true);
-
-    alert('register: ' + username + ' ' + password + ' ' + email);
-  };
-
   useEffect(() => {
     if (password === passwordConfirmation && passwordConfirmationError) {
       setPasswordConfirmationError('');
     }
   }, [password, passwordConfirmation, passwordConfirmationError]);
+
+  const [register, { isLoading, error }] = useRegisterMutation();
+
+  const onRegister = async (event: React.FormEvent) => {
+    event.preventDefault();
+
+    if (password !== passwordConfirmation) {
+      setPasswordConfirmationError('Please type the same password');
+      return;
+    }
+
+    const response = await register({
+      username,
+      password,
+      email,
+    });
+
+    console.log(response);
+  };
 
   return (
     <form onSubmit={onRegister}>
@@ -133,6 +153,14 @@ function RegisterForm() {
           Register
         </FormButton>
       </div>
+
+      {
+        If(error) && (
+          <ErrorMessage>
+            {(error as any).data.message}
+          </ErrorMessage>
+        )
+      }
     </form>
   );
 }
@@ -143,8 +171,10 @@ interface FormButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> 
 }
 
 function FormButton(props: FormButtonProps) {
+  const buttonProps = { ...props, loading: undefined };
+
   return (
-    <button disabled={props.loading} {...props}>
+    <button disabled={props.loading} {...buttonProps}>
       {
         If(!props.loading) && (
           props.children
@@ -160,7 +190,7 @@ function FormButton(props: FormButtonProps) {
 function LoadingIcon() {
   return (
     <img
-      src={loading}
+      src={icons.loading}
       alt="Loading"
       className={styles.loading}
       style={{
@@ -169,4 +199,43 @@ function LoadingIcon() {
       }}
     />
   );
+}
+
+interface ErrorMessageProps {
+  children: string | JSX.Element;
+}
+
+function ErrorMessage(props: ErrorMessageProps) {
+  return (
+    <div
+      style={{
+        display: 'flex',
+        borderLeft: '5px solid var(--code)',
+        borderRadius: '2px',
+        padding: '0.5rem',
+        backgroundColor: 'var(--accent-bg)'
+      }}
+    >
+      <img
+        src={icons.error}
+        alt="Error"
+        style={{
+          imageRendering: 'pixelated',
+          height: '64px',
+          width: '64px',
+          borderRadius: 0,
+          flexBasis: 0,
+          flexGrow: 0,
+        }}
+      />
+      <div
+        style={{
+          marginLeft: '1rem',
+          flexGrow: 1,
+        }}
+      >
+        {props.children}
+      </div>
+    </div>
+  )
 }

@@ -28,7 +28,7 @@ export class UserController {
     const user = this.userRepository.create({
       username: newUser.username,
       passwordHash: await this.authService.hashPassword(newUser.password),
-      email: newUser.email,
+      email: newUser.email || null,
       role: 'player',
     });
 
