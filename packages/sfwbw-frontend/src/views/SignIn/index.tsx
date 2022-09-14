@@ -12,7 +12,7 @@ export function SignIn() {
       </article>
       <article>
         <div style={{ width: 'fit-content', margin: 'auto' }}>
-          <h5>Or Register Instead</h5>
+          <h4 style={{ marginTop: '0.5rem' }}>New User?</h4>
           <RegisterForm />
         </div>
       </article>
