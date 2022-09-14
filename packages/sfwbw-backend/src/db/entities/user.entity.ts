@@ -17,4 +17,7 @@ export class User {
   @Property({ type: String, nullable: true })
   @Expose()
   email?: string | null;
+
+  @Property()
+  role!: 'player' | 'admin';
 }
