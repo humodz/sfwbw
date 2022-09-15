@@ -1,7 +1,7 @@
 import { EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { Injectable } from '@nestjs/common';
-import { User } from 'src/db/entities';
+import { User } from '../db/entities';
 import * as Scrypt from 'scrypt-kdf';
 import { JwtService } from '@nestjs/jwt';
 

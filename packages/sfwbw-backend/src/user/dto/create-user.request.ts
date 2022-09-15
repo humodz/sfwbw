@@ -1,5 +1,5 @@
 import { IsEmail } from 'class-validator';
-import { IsNullable } from 'src/utils/validation';
+import { IsNullable } from '../../utils/validation';
 import { IsPassword, IsUsername } from './validation';
 
 export class CreateUserRequest {

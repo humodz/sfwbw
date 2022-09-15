@@ -11,8 +11,8 @@ import {
 } from '@nestjs/common';
 import { User } from '../db/entities';
 import { CreateUserRequest } from './dto/create-user.request';
-import { AuthService } from 'src/auth/auth.service';
-import { LoggedUser, Protected } from 'src/auth';
+import { AuthService } from '../auth/auth.service';
+import { LoggedUser, Protected } from '../auth';
 import { UpdateUserRequest } from './dto/update-user.request';
 
 @Controller('/users')
