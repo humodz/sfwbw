@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
+import { AuthConfig } from 'src/config';
 import { EntitiesModule } from '../db';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
@@ -16,9 +17,14 @@ import { JwtStrategy } from './jwt.strategy';
   imports: [
     EntitiesModule,
     PassportModule,
-    JwtModule.register({
-      secret: 'REPLACETHIS',
-      signOptions: { expiresIn: '1d' },
+    JwtModule.registerAsync({
+      inject: [AuthConfig],
+      useFactory: (authConfig: AuthConfig) => ({
+        secret: authConfig.secret,
+        signOptions: {
+          expiresIn: authConfig.expiresIn,
+        },
+      }),
     }),
   ],
   providers: [AuthService, JwtStrategy],

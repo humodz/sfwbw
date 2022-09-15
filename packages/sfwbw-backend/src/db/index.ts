@@ -1,6 +1,7 @@
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { Module } from '@nestjs/common';
 import { APP_FILTER } from '@nestjs/core';
+import { DatabaseConfig } from '../config';
 import * as entities from './entities';
 import { UniqueConstraintFilter } from './filters/unique-constraint.filter';
 
@@ -10,13 +11,15 @@ export const EntitiesModule = MikroOrmModule.forFeature(allEntities);
 
 @Module({
   imports: [
-    MikroOrmModule.forRoot({
-      type: 'postgresql',
-      dbName: 'postgres',
-      schema: 'public',
-      user: 'postgres',
-      password: 'example',
-      entities: allEntities,
+    MikroOrmModule.forRootAsync({
+      inject: [DatabaseConfig],
+      useFactory: (dbConfig: DatabaseConfig) => ({
+        type: 'postgresql',
+        schema: 'public',
+        clientUrl: dbConfig.connectionUri,
+        password: dbConfig.password,
+        entities: allEntities,
+      }),
     }),
   ],
   providers: [

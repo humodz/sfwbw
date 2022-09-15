@@ -1,12 +1,16 @@
+import { Options } from '@mikro-orm/core';
+import { PostgreSqlDriver } from '@mikro-orm/postgresql';
 import * as entities from './entities';
 
 const allEntities = Object.values(entities);
 
-export default {
+// Used by the mikro-orm cli
+const config: Options<PostgreSqlDriver> = {
   type: 'postgresql',
-  dbName: 'postgres',
   schema: 'public',
-  user: 'postgres',
+  clientUrl: 'postgresql://postgres@127.0.0.1:5432/postgres',
   password: 'example',
   entities: allEntities,
 };
+
+export default config;
