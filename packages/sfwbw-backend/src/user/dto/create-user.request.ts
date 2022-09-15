@@ -1,4 +1,5 @@
-import { IsEmail, IsOptional } from 'class-validator';
+import { IsEmail } from 'class-validator';
+import { IsNullable } from 'src/utils/validation';
 import { IsPassword, IsUsername } from './validation';
 
 export class CreateUserRequest {
@@ -9,6 +10,6 @@ export class CreateUserRequest {
   password!: string;
 
   @IsEmail()
-  @IsOptional()
-  email?: string | null;
+  @IsNullable()
+  email!: string | null;
 }
