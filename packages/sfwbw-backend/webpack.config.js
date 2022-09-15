@@ -1,12 +1,10 @@
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const webpack = require('webpack');
 
 module.exports = (config) => {
   return {
     ...config,
-    plugins: [
-      ...(config.plugins || []),
-      ignoreMissingOptionalDependencies(),
-    ],
+    plugins: [...(config.plugins || []), ignoreMissingOptionalDependencies()],
   };
 };
 
