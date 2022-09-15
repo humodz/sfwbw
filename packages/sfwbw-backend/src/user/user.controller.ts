@@ -28,6 +28,7 @@ export class UserController {
     const user = this.userRepository.create({
       username: newUser.username,
       passwordHash: await this.authService.hashPassword(newUser.password),
+      passwordVersion: 1,
       email: newUser.email || null,
       role: 'player',
     });
@@ -82,6 +83,7 @@ export class UserController {
       loggedUser.passwordHash = await this.authService.hashPassword(
         updates.password,
       );
+      loggedUser.passwordVersion += 1;
     }
 
     await this.userRepository.persistAndFlush(loggedUser);

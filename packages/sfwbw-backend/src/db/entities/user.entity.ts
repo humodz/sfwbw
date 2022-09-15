@@ -13,6 +13,9 @@ export class User {
   @Property()
   passwordHash!: string;
 
+  @Property({ type: Number })
+  passwordVersion!: number;
+
   @Unique()
   @Property({ type: String, nullable: true })
   @Expose()

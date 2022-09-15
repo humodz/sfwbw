@@ -6,6 +6,7 @@ import * as Scrypt from 'scrypt-kdf';
 import { JwtService } from '@nestjs/jwt';
 
 export interface TokenPayload {
+  passwordVersion: number;
   username: string;
 }
 
@@ -36,6 +37,7 @@ export class AuthService {
 
   async createToken(user: User) {
     const payload: TokenPayload = {
+      passwordVersion: user.passwordVersion,
       username: user.username,
     };
 

@@ -6,7 +6,7 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "add": "cd ../.. && lerna add --scope=@sfwbw/sfwbw-backend",
+    "add": "cd ../.. && lerna add --scope=\"$npm_package_name\"",
     "prebuild": "rimraf dist",
     "build": "rollup -c rollup.config.js",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
@@ -22,7 +22,9 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "db:up": "cd db && sudo docker compose up -d",
-    "db:down": "cd db && sudo docker compose down"
+    "db:down": "cd db && sudo docker compose down",
+    "db:fresh": "mikro-orm schema:fresh",
+    "db:update": "f() { mikro-orm schema:update \"${1:--r}\"; }; f"
   },
   "dependencies": {
     "@mikro-orm/cli": "^5.4.1",
