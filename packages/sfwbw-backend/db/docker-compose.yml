@@ -8,9 +8,12 @@ services:
     ports:
       - 5432:5432
     volumes:
-      - ./dbdata:/var/lib/postgresql/data
+      - dbdata:/var/lib/postgresql/data
 
   adminer:
     image: adminer
     ports:
       - 8800:8080
+
+volumes:
+  dbdata:
