@@ -1,16 +1,15 @@
+import styles from './styles.module.css';
 import { useState, useEffect } from 'react';
 import { FormField } from '../../components/forms/FormField';
 import { PasswordField } from '../../components/forms/PasswordField';
-
 import { If } from '../../utils/jsx-conditionals';
-
-import styles from './styles.module.css';
 import { useRegisterMutation, useSignInMutation } from '../../store/apiSlice';
 import { ErrorMessage } from '../../components/ErrorMessage';
 import { FormButton } from '../../components/forms/FormButton';
 import { setAccessToken } from '../../store/authSlice';
 import { isErrorResponse } from '../../utils';
 import { useAppDispatch } from '../../store/hooks';
+import { useNavigate } from 'react-router-dom';
 
 
 export function SignIn() {
@@ -33,6 +32,7 @@ export function SignIn() {
 }
 
 function SignInForm() {
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
   const [username, setUsername] = useState('');
@@ -53,6 +53,7 @@ function SignInForm() {
     }
 
     dispatch(setAccessToken(response.data.accessToken));
+    navigate('/');
   };
 
   return (
@@ -91,6 +92,9 @@ function SignInForm() {
 }
 
 function RegisterForm() {
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
@@ -104,7 +108,11 @@ function RegisterForm() {
     }
   }, [password, passwordConfirmation, passwordConfirmationError]);
 
-  const [register, { isLoading, error }] = useRegisterMutation();
+  const [register, registerInfo] = useRegisterMutation();
+  const [signIn, signInInfo] = useSignInMutation();
+
+  const isLoading = registerInfo.isLoading || signInInfo.isLoading;
+  const error = registerInfo.error || signInInfo.error;
 
   const onRegister = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -114,13 +122,27 @@ function RegisterForm() {
       return;
     }
 
-    const response = await register({
+    const registerResponse = await register({
       username,
       password,
       email: email || null,
     });
 
-    console.log(response);
+    if (isErrorResponse(registerResponse)) {
+      return;
+    }
+
+    const signInResponse = await signIn({
+      username,
+      password,
+    });
+
+    if (isErrorResponse(signInResponse)) {
+      return;
+    }
+
+    dispatch(setAccessToken(signInResponse.data.accessToken));
+    navigate('/');
   };
 
   return (
@@ -130,7 +152,10 @@ function RegisterForm() {
         label={<>Username<br />(only letters, numbers and the following: . _ -)</>}
         value={username}
         setValue={setUsername}
-        extras={{ required: true, minLength: 4, pattern: '^[-_.a-zA-Z0-9]+$' }}
+        extras={{
+          required: true, minLength: 4, pattern: '^[-_.a-zA-Z0-9]+$',
+          disabled: isLoading,
+        }}
       />
 
       <PasswordField
@@ -147,7 +172,7 @@ function RegisterForm() {
         value={passwordConfirmation}
         setValue={setPasswordConfirmation}
         errorMessage={passwordConfirmationError}
-        extras={{ required: true }}
+        extras={{ required: true, disabled: isLoading }}
       />
 
       <FormField
@@ -156,6 +181,7 @@ function RegisterForm() {
         label="e-mail (optional)"
         value={email}
         setValue={setEmail}
+        extras={{ disabled: isLoading }}
       />
 
       <div>
