@@ -1,5 +1,5 @@
 import { EntityRepository } from '@mikro-orm/core';
-import { InjectRepository, logger } from '@mikro-orm/nestjs';
+import { InjectRepository } from '@mikro-orm/nestjs';
 import {
   BadRequestException,
   Body,
@@ -7,17 +7,24 @@ import {
   Delete,
   ForbiddenException,
   Get,
+  HttpCode,
+  HttpStatus,
   Param,
   ParseIntPipe,
   Post,
   Put,
 } from '@nestjs/common';
-import { GameStatus } from 'src/db/entities/game.entity';
-import { PlayerInGame } from 'src/db/entities/player-in-game.entity';
+import { GameStatus } from '../db/entities/game.entity';
+import { PlayerInGame } from '../db/entities/player-in-game.entity';
+import { UserRole } from '../db/entities/user.entity';
 import { LoggedUser, Protected } from '../auth';
 import { Game, User } from '../db/entities';
 import { CreateGameRequest } from './dto/create-game.request';
 import { UpdateGameRequest } from './dto/update-game.request';
+import { isDefined } from '../utils/validation';
+import { UdpatePlayerRequest } from './dto/update-player.request';
+
+const gameFieldsToPopulate = ['owner', 'players', 'players.user'] as const;
 
 @Controller('/games')
 export class GameController {
@@ -60,14 +67,14 @@ export class GameController {
   async getGameById(@Param('id', ParseIntPipe) id: number) {
     return await this.gameRepository.findOneOrFail(
       { id },
-      { populate: ['owner', 'players'] },
+      { populate: gameFieldsToPopulate },
     );
   }
 
   @Get()
   async listGames() {
     const games = await this.gameRepository.findAll({
-      populate: ['owner', 'players'],
+      populate: gameFieldsToPopulate,
     });
 
     return { games };
@@ -75,6 +82,7 @@ export class GameController {
 
   @Protected()
   @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
   async deleteGame(
     @LoggedUser() loggedUser: User,
     @Param('id', ParseIntPipe) id: number,
@@ -84,7 +92,7 @@ export class GameController {
       { populate: ['owner'] },
     );
 
-    if (loggedUser.role !== 'admin' && loggedUser.id !== game.owner.id) {
+    if (loggedUser.role !== UserRole.ADMIN && loggedUser.id !== game.owner.id) {
       throw new ForbiddenException();
     }
 
@@ -100,10 +108,10 @@ export class GameController {
   ) {
     const game = await this.gameRepository.findOneOrFail(
       { id },
-      { populate: ['owner'] },
+      { populate: gameFieldsToPopulate },
     );
 
-    if (loggedUser.role !== 'admin' && loggedUser.id !== game.owner.id) {
+    if (loggedUser.role !== UserRole.ADMIN && loggedUser.id !== game.owner.id) {
       throw new ForbiddenException();
     }
 
@@ -111,8 +119,93 @@ export class GameController {
       throw new BadRequestException('Game is not open');
     }
 
-    console.log(updates);
+    if (updates.name) {
+      game.name = updates.name;
+    }
+
+    if (isDefined(updates.isPrivate)) {
+      game.isPrivate = updates.isPrivate;
+    }
+
+    if (updates.password !== undefined) {
+      game.password = updates.password;
+    }
+
+    if (updates.maxTurns !== undefined) {
+      game.maxTurns = updates.maxTurns;
+    }
+
+    await this.gameRepository.flush();
 
     return game;
+  }
+
+  @Protected()
+  @Put(':id/players/self')
+  async joinGame(
+    @LoggedUser() loggedUser: User,
+    @Param('id', ParseIntPipe) id: number,
+    @Body() body: UdpatePlayerRequest,
+  ) {
+    const game = await this.gameRepository.findOneOrFail(
+      { id },
+      { populate: gameFieldsToPopulate },
+    );
+
+    const existingPlayerInGame = await this.playerInGameRepository.findOne({
+      game,
+      user: loggedUser,
+    });
+
+    if (
+      !existingPlayerInGame &&
+      loggedUser.role !== UserRole.ADMIN &&
+      isDefined(game.password) &&
+      game.password !== body.password
+    ) {
+      throw new ForbiddenException();
+    }
+
+    const playerInGame = this.playerInGameRepository.create({
+      game,
+      user: loggedUser,
+      ready: body.ready,
+    });
+
+    await this.playerInGameRepository.persistAndFlush(playerInGame);
+
+    return game;
+  }
+
+  @Protected()
+  @Delete(':id/players/self')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async leaveGame(
+    @LoggedUser() loggedUser: User,
+    @Param('id', ParseIntPipe) id: number,
+  ) {
+    const game = await this.gameRepository.findOneOrFail(
+      { id },
+      { populate: ['owner', 'players'] },
+    );
+
+    const playerInGame = await this.playerInGameRepository.findOne({
+      game,
+      user: loggedUser,
+    });
+
+    if (!playerInGame) {
+      return;
+    }
+
+    this.playerInGameRepository.remove(playerInGame);
+
+    if (game.players.length === 0) {
+      this.gameRepository.remove(game);
+    } else if (game.owner.id === loggedUser.id) {
+      game.owner = game.players.getItems()[0].user;
+    }
+
+    await this.gameRepository.flush();
   }
 }

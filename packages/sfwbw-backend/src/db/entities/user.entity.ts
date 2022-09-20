@@ -1,6 +1,7 @@
 import {
   Collection,
   Entity,
+  Enum,
   OneToMany,
   PrimaryKey,
   Property,
@@ -9,9 +10,15 @@ import {
 import { Expose } from 'class-transformer';
 import { Game } from './game.entity';
 import { PlayerInGame } from './player-in-game.entity';
+
+export enum UserRole {
+  ADMIN = 'ADMIN',
+  PLAYER = 'PLAYER',
+}
+
 @Entity({ tableName: 'app_user' })
 export class User {
-  @PrimaryKey({ type: 'int' })
+  @PrimaryKey()
   id!: number;
 
   @Expose()
@@ -30,8 +37,8 @@ export class User {
   @Property({ type: String, nullable: true })
   email: string | null = null;
 
-  @Property()
-  role!: 'player' | 'admin';
+  @Enum(() => UserRole)
+  role!: UserRole;
 
   @OneToMany({ entity: () => Game, mappedBy: 'owner' })
   ownedGames = new Collection<Game>(this);

@@ -20,7 +20,7 @@ export enum GameStatus {
 @Entity()
 export class Game {
   @Expose()
-  @PrimaryKey({ type: 'int' })
+  @PrimaryKey()
   id!: number;
 
   @Expose()
@@ -63,8 +63,8 @@ export class Game {
     }
 
     return this.players.getItems().map((it) => ({
-      // TODO per-user settings
-      user: it.user,
+      ...(it as any),
+      game: undefined,
     }));
   }
 }

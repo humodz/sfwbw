@@ -14,6 +14,7 @@ import { CreateUserRequest } from './dto/create-user.request';
 import { AuthService } from '../auth/auth.service';
 import { LoggedUser, Protected } from '../auth';
 import { UpdateUserRequest } from './dto/update-user.request';
+import { UserRole } from 'src/db/entities/user.entity';
 
 @Controller('/users')
 export class UserController {
@@ -30,7 +31,7 @@ export class UserController {
       passwordHash: await this.authService.hashPassword(newUser.password),
       passwordVersion: 1,
       email: newUser.email || null,
-      role: 'player',
+      role: UserRole.PLAYER,
     });
 
     await this.userRepository.persistAndFlush(user);
@@ -71,7 +72,10 @@ export class UserController {
     @Param('username') username: string,
     @Body() updates: UpdateUserRequest,
   ) {
-    if (loggedUser.role !== 'admin' && loggedUser.username !== username) {
+    if (
+      loggedUser.role !== UserRole.ADMIN &&
+      loggedUser.username !== username
+    ) {
       throw new ForbiddenException();
     }
 
