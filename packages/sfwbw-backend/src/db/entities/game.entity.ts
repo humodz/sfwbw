@@ -21,16 +21,16 @@ export enum GameStatus {
 @Entity()
 export class Game {
   @Expose()
-  @PrimaryKey()
+  @PrimaryKey({ type: 'int' })
   id!: number;
 
   @Expose()
   @Unique()
-  @Property()
+  @Property({ type: String })
   name!: string;
 
   @Expose()
-  @Property()
+  @Property({ type: Boolean })
   isPrivate!: boolean;
 
   @Property({ type: String, nullable: true })

@@ -5,21 +5,18 @@ import {
   ExceptionFilter,
   HttpStatus,
 } from '@nestjs/common';
-import { Response } from 'express';
+import { getResponse } from '../../utils/nest';
 
 @Catch(UniqueConstraintViolationException)
 export class UniqueConstraintFilter implements ExceptionFilter {
   catch(exception: ConstraintError, host: ArgumentsHost) {
-    const ctx = host.switchToHttp();
-    const response = ctx.getResponse<Response>();
-
-    console.log(exception);
-
     const property = exception.constraint.split('_')[1];
 
-    response.status(HttpStatus.CONFLICT).json({
-      message: `${capitalize(property)} already in use`,
-    });
+    getResponse(host)
+      .status(HttpStatus.CONFLICT)
+      .json({
+        message: `${capitalize(property)} already in use`,
+      });
   }
 }
 

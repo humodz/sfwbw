@@ -11,23 +11,23 @@ import { Game } from './game.entity';
 import { PlayerInGame } from './player-in-game.entity';
 @Entity({ tableName: 'app_user' })
 export class User {
-  @PrimaryKey()
+  @PrimaryKey({ type: 'int' })
   id!: number;
 
-  @Unique()
-  @Property()
   @Expose()
+  @Unique()
+  @Property({ type: String })
   username!: string;
 
-  @Property()
+  @Property({ type: String })
   passwordHash!: string;
 
-  @Property({ type: Number })
+  @Property({ type: 'int' })
   passwordVersion!: number;
 
+  @Expose()
   @Unique()
   @Property({ type: String, nullable: true })
-  @Expose()
   email: string | null = null;
 
   @Property()

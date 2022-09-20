@@ -1,6 +1,14 @@
 import { EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+} from '@nestjs/common';
 import { GameStatus } from 'src/db/entities/game.entity';
 import { PlayerInGame } from 'src/db/entities/player-in-game.entity';
 import { LoggedUser, Protected } from '../auth';
@@ -44,6 +52,14 @@ export class GameController {
     return game;
   }
 
+  @Get(':id')
+  async getGameById(@Param('id', ParseIntPipe) id: number) {
+    return await this.gameRepository.findOneOrFail(
+      { id },
+      { populate: ['owner', 'players'] },
+    );
+  }
+
   @Get()
   async listGames() {
     const games = await this.gameRepository.findAll({
@@ -51,5 +67,11 @@ export class GameController {
     });
 
     return { games };
+  }
+
+  @Delete(':id')
+  async deleteGame(@Param('id', ParseIntPipe) id: number) {
+    const game = await this.gameRepository.findOneOrFail({ id });
+    await this.gameRepository.removeAndFlush(game);
   }
 }

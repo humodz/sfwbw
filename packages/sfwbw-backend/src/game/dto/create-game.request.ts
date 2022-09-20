@@ -8,7 +8,6 @@ import {
   MaxLength,
   MinLength,
 } from 'class-validator';
-import { IsNullable } from 'src/utils/validation';
 
 export class CreateGameRequest {
   @IsString()
@@ -22,8 +21,8 @@ export class CreateGameRequest {
   @IsString()
   @MinLength(1)
   @MaxLength(32)
-  @IsNullable()
-  password!: string | null;
+  @IsOptional()
+  password: string | null = null;
 
   @IsObject()
   map!: any;

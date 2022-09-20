@@ -3,6 +3,7 @@ import { Module } from '@nestjs/common';
 import { APP_FILTER } from '@nestjs/core';
 import { DatabaseConfig } from '../config';
 import * as entities from './entities';
+import { NotFoundFilter } from './filters/not-found.filter';
 import { UniqueConstraintFilter } from './filters/unique-constraint.filter';
 
 const allEntities = Object.values(entities);
@@ -26,6 +27,10 @@ export const EntitiesModule = MikroOrmModule.forFeature(allEntities);
     {
       provide: APP_FILTER,
       useClass: UniqueConstraintFilter,
+    },
+    {
+      provide: APP_FILTER,
+      useClass: NotFoundFilter,
     },
   ],
 })
