@@ -27,7 +27,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
 
     if (!user || user.passwordVersion !== payload.passwordVersion) {
-      throw new UnauthorizedException('deu ruim');
+      throw new UnauthorizedException();
     }
 
     return user;

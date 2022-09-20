@@ -3,6 +3,7 @@ import { InjectRepository } from '@mikro-orm/nestjs';
 import {
   Body,
   Controller,
+  ForbiddenException,
   Get,
   Param,
   Post,
@@ -72,7 +73,7 @@ export class UserController {
     @Body() updates: UpdateUserRequest,
   ) {
     if (loggedUser.role !== 'admin' && loggedUser.username !== username) {
-      throw new UnauthorizedException();
+      throw new ForbiddenException();
     }
 
     if (updates.email !== undefined) {
