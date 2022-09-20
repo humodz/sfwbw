@@ -1,14 +1,15 @@
 import {
   Collection,
   Entity,
-  ManyToMany,
+  OneToMany,
   PrimaryKey,
   Property,
   Unique,
 } from '@mikro-orm/core';
 import { Expose } from 'class-transformer';
 import { Game } from './game.entity';
-@Entity()
+import { PlayerInGame } from './player-in-game.entity';
+@Entity({ tableName: 'app_user' })
 export class User {
   @PrimaryKey()
   id!: number;
@@ -32,6 +33,9 @@ export class User {
   @Property()
   role!: 'player' | 'admin';
 
-  @ManyToMany({ entity: () => Game, mappedBy: 'players' })
+  @OneToMany({ entity: () => Game, mappedBy: 'owner' })
+  ownedGames = new Collection<Game>(this);
+
+  @OneToMany({ entity: () => PlayerInGame, mappedBy: 'user' })
   games = new Collection<Game>(this);
 }

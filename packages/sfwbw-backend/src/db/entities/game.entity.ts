@@ -2,11 +2,14 @@ import {
   Collection,
   Entity,
   Enum,
-  ManyToMany,
+  ManyToOne,
+  OneToMany,
   PrimaryKey,
   Property,
+  Unique,
 } from '@mikro-orm/core';
 import { Expose } from 'class-transformer';
+import { PlayerInGame } from './player-in-game.entity';
 import { User } from './user.entity';
 
 export enum GameStatus {
@@ -21,9 +24,12 @@ export class Game {
   @PrimaryKey()
   id!: number;
 
+  @Expose()
+  @Unique()
   @Property()
   name!: string;
 
+  @Expose()
   @Property()
   isPrivate!: boolean;
 
@@ -36,12 +42,28 @@ export class Game {
 
   @Expose()
   @Property({ type: 'json' })
-  map!: string;
+  map!: any;
 
   @Expose()
-  @Property({ type: 'int' })
+  @Property({ type: 'int', nullable: true })
   maxTurns!: number | null;
 
-  @ManyToMany({ entity: () => User, inversedBy: 'games' })
-  players = new Collection<User>(this);
+  @Expose()
+  @ManyToOne({ entity: () => User, inversedBy: 'ownedGames' })
+  owner!: User;
+
+  @OneToMany({ entity: () => PlayerInGame, mappedBy: 'game' })
+  players = new Collection<PlayerInGame>(this);
+
+  @Expose({ name: 'players' })
+  getPlayers() {
+    if (!this.players.isInitialized()) {
+      return null;
+    }
+
+    return this.players.getItems().map((it) => ({
+      // TODO per-user settings
+      user: it.user,
+    }));
+  }
 }

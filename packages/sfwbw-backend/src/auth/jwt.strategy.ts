@@ -5,17 +5,19 @@ import { InjectRepository } from '@mikro-orm/nestjs';
 import { User } from '../db/entities';
 import { EntityRepository } from '@mikro-orm/core';
 import { TokenPayload } from './auth.service';
+import { AuthConfig } from 'src/config';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: EntityRepository<User>,
+    authConfig: AuthConfig,
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      secretOrKey: 'REPLACETHIS',
+      secretOrKey: authConfig.secret,
     });
   }
 
@@ -25,7 +27,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
 
     if (!user || user.passwordVersion !== payload.passwordVersion) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException('deu ruim');
     }
 
     return user;
