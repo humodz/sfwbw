@@ -4,7 +4,7 @@ import { IsPassword } from './validation';
 export class UpdateUserRequest {
   @IsPassword()
   @IsOptional()
-  password!: string;
+  password?: string | null;
 
   @IsEmail()
   @IsOptional()

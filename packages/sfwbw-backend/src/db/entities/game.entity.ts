@@ -6,7 +6,6 @@ import {
   OneToMany,
   PrimaryKey,
   Property,
-  Unique,
 } from '@mikro-orm/core';
 import { Expose } from 'class-transformer';
 import { PlayerInGame } from './player-in-game.entity';
@@ -25,10 +24,12 @@ export class Game {
   id!: number;
 
   @Expose()
-  @Unique()
   @Property({ type: String })
   name!: string;
 
+  // TODO what's this for?
+  // 1. hide from games list
+  // 2. require invite link to join
   @Expose()
   @Property({ type: Boolean })
   isPrivate!: boolean;

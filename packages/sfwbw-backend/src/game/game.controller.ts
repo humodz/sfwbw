@@ -1,19 +1,23 @@
 import { EntityRepository } from '@mikro-orm/core';
-import { InjectRepository } from '@mikro-orm/nestjs';
+import { InjectRepository, logger } from '@mikro-orm/nestjs';
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
+  ForbiddenException,
   Get,
   Param,
   ParseIntPipe,
   Post,
+  Put,
 } from '@nestjs/common';
 import { GameStatus } from 'src/db/entities/game.entity';
 import { PlayerInGame } from 'src/db/entities/player-in-game.entity';
 import { LoggedUser, Protected } from '../auth';
 import { Game, User } from '../db/entities';
 import { CreateGameRequest } from './dto/create-game.request';
+import { UpdateGameRequest } from './dto/update-game.request';
 
 @Controller('/games')
 export class GameController {
@@ -69,9 +73,46 @@ export class GameController {
     return { games };
   }
 
+  @Protected()
   @Delete(':id')
-  async deleteGame(@Param('id', ParseIntPipe) id: number) {
-    const game = await this.gameRepository.findOneOrFail({ id });
+  async deleteGame(
+    @LoggedUser() loggedUser: User,
+    @Param('id', ParseIntPipe) id: number,
+  ) {
+    const game = await this.gameRepository.findOneOrFail(
+      { id },
+      { populate: ['owner'] },
+    );
+
+    if (loggedUser.role !== 'admin' && loggedUser.id !== game.owner.id) {
+      throw new ForbiddenException();
+    }
+
     await this.gameRepository.removeAndFlush(game);
+  }
+
+  @Protected()
+  @Put(':id')
+  async updateGame(
+    @LoggedUser() loggedUser: User,
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updates: UpdateGameRequest,
+  ) {
+    const game = await this.gameRepository.findOneOrFail(
+      { id },
+      { populate: ['owner'] },
+    );
+
+    if (loggedUser.role !== 'admin' && loggedUser.id !== game.owner.id) {
+      throw new ForbiddenException();
+    }
+
+    if (game.status !== GameStatus.OPEN) {
+      throw new BadRequestException('Game is not open');
+    }
+
+    console.log(updates);
+
+    return game;
   }
 }

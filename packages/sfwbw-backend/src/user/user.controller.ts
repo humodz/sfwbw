@@ -8,7 +8,6 @@ import {
   Param,
   Post,
   Put,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { User } from '../db/entities';
 import { CreateUserRequest } from './dto/create-user.request';
