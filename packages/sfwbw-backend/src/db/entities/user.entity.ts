@@ -32,7 +32,7 @@ export class User {
   @Property({ type: 'int' })
   passwordVersion!: number;
 
-  @Expose()
+  @Expose({ groups: ['user-self'] })
   @Unique()
   @Property({ type: String, nullable: true })
   email: string | null = null;

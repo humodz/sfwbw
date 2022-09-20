@@ -8,6 +8,7 @@ import {
   Param,
   Post,
   Put,
+  SerializeOptions,
 } from '@nestjs/common';
 import { User } from '../db/entities';
 import { CreateUserRequest } from './dto/create-user.request';
@@ -46,6 +47,7 @@ export class UserController {
 
   @Protected()
   @Get('self')
+  @SerializeOptions({ groups: ['user-self'] })
   async getCurrentUser(@LoggedUser() user: User) {
     return user;
   }
