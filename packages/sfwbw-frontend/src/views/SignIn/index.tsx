@@ -14,18 +14,14 @@ import { useNavigate } from 'react-router-dom';
 
 export function SignIn() {
   return (
-    <main>
+    <main className={styles.content}>
       <article>
-        <div className={styles.content}>
-          <h4 className={styles.header}>Sign In</h4>
-          <SignInForm />
-        </div>
+        <h4 className={styles.header}>Sign In</h4>
+        <SignInForm />
       </article>
       <article>
-        <div className={styles.content}>
-          <h4 className={styles.header}>New User?</h4>
-          <RegisterForm />
-        </div>
+        <h4 className={styles.header}>New User?</h4>
+        <RegisterForm />
       </article>
     </main>
   );

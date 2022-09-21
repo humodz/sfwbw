@@ -4,6 +4,7 @@ import { useAppDispatch, useCurrentUser } from './store/hooks';
 import { Else, If } from './utils/jsx-conditionals';
 import { Editor } from './views/Editor';
 import { Home } from './views/Home';
+import { Profile } from './views/Profile';
 import { SignIn } from './views/SignIn';
 
 export function App() {
@@ -23,7 +24,7 @@ export function App() {
           {
             If(currentUser) && (
               <>
-                <Link to="Profile">Profile</Link>
+                <Link to="/profile">Profile</Link>
                 <a onClick={signOut}>Sign Out</a>
               </>
             ) || Else && (
@@ -39,7 +40,7 @@ export function App() {
       </header>
       <Routes>
         <Route path="/" element={<Home />}/>
-        <Route path="/profile" element={<main>WIP</main>}/>
+        <Route path="/profile" element={<Profile />}/>
         <Route path="/sign-in" element={<SignIn />}/>
         <Route path="/editor" element={<Editor />}/>
         <Route path="*" element={<Navigate to="/" />}/>
