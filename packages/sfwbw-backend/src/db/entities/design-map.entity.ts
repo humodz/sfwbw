@@ -1,11 +1,20 @@
-import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
+import { Entity, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
 import { Expose } from 'class-transformer';
+import { Tile } from '@sfwbw/sfwbw-core';
+import { User } from './user.entity';
 
 @Entity()
 export class DesignMap {
   @Expose()
   @PrimaryKey()
   id!: number;
+
+  @ManyToOne({ entity: () => User, inversedBy: 'designMaps' })
+  author!: User;
+
+  @Expose()
+  @Property({ type: String })
+  name!: string;
 
   @Expose()
   @Property({ type: 'int' })
@@ -21,5 +30,5 @@ export class DesignMap {
 
   @Expose()
   @Property({ type: 'json' })
-  data!: unknown;
+  tiles!: Tile[][];
 }

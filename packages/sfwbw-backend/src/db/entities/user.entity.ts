@@ -8,6 +8,7 @@ import {
   Unique,
 } from '@mikro-orm/core';
 import { Expose } from 'class-transformer';
+import { DesignMap } from './design-map.entity';
 import { Game } from './game.entity';
 import { PlayerInGame } from './player-in-game.entity';
 
@@ -45,4 +46,7 @@ export class User {
 
   @OneToMany({ entity: () => PlayerInGame, mappedBy: 'user' })
   games = new Collection<Game>(this);
+
+  @OneToMany({ entity: () => DesignMap, mappedBy: 'author' })
+  designMaps = new Collection<DesignMap>(this);
 }

@@ -26,4 +26,7 @@ export class PlayerInGame {
 
   @Property({ type: Boolean, default: false })
   ready = false;
+
+  // TODO - order
+  // TODO - nation
 }

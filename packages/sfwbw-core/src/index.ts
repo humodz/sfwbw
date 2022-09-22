@@ -1,10 +1,10 @@
 
 export interface Tile {
   type: TileType;
-  nation: Nation;
+  player: number;
 }
 
-export type TileType = Terrain | Building;
+export const PLAYER_NEUTRAL = 0;
 
 export enum Terrain {
   PLAINS = 'plains',
@@ -30,6 +30,12 @@ export enum Building {
   STATION = 'station',
   LAB = 'lab',
 }
+
+export type TileType = Terrain | Building;
+export const TileType = {
+  ...Terrain,
+  ...Building,
+};
 
 export enum Nation {
   NEUTRAL = 'neutral',
