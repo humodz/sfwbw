@@ -22,9 +22,7 @@ export class AuthController {
     );
 
     if (!user) {
-      throw new UnauthorizedException({
-        message: 'Invalid username or password',
-      });
+      throw new UnauthorizedException('Invalid username or password');
     }
 
     const token = await this.authService.createToken(user);

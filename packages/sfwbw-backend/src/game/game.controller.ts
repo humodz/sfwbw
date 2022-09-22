@@ -9,6 +9,7 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  InternalServerErrorException,
   Param,
   ParseIntPipe,
   Post,
@@ -18,12 +19,20 @@ import { GameStatus } from '../db/entities/game.entity';
 import { PlayerInGame } from '../db/entities/player-in-game.entity';
 import { UserRole } from '../db/entities/user.entity';
 import { LoggedUser, Protected } from '../auth';
-import { Game, User } from '../db/entities';
+import { DesignMap, Game, User } from '../db/entities';
 import { CreateGameRequest } from './dto/create-game.request';
 import { UpdateGameRequest } from './dto/update-game.request';
 import { UpdatePlayerRequest } from './dto/update-player.request';
+import { isDefined } from 'src/utils/validation';
+import { Nation } from '@sfwbw/sfwbw-core';
+import { first } from 'src/utils/array';
 
-const gameFieldsToPopulate = ['owner', 'players', 'players.user'] as const;
+const gameFieldsToPopulate = [
+  'owner',
+  'players',
+  'players.user',
+  'designMap',
+] as const;
 
 @Controller('/games')
 export class GameController {
@@ -32,6 +41,8 @@ export class GameController {
     private readonly gameRepository: EntityRepository<Game>,
     @InjectRepository(PlayerInGame)
     private readonly playerInGameRepository: EntityRepository<PlayerInGame>,
+    @InjectRepository(DesignMap)
+    private readonly designMapRepository: EntityRepository<DesignMap>,
   ) {}
 
   @Post()
@@ -40,9 +51,13 @@ export class GameController {
     @LoggedUser() user: User,
     @Body() newGame: CreateGameRequest,
   ) {
+    const designMap = await this.designMapRepository.findOneOrFail({
+      id: newGame.designMapId,
+    });
+
     const game = this.gameRepository.create({
       name: newGame.name,
-      map: newGame.map,
+      designMap,
       status: GameStatus.OPEN,
       owner: user,
     });
@@ -50,6 +65,8 @@ export class GameController {
     const playerInGame = this.playerInGameRepository.create({
       user,
       game,
+      order: 1,
+      nation: Nation.RED_STAR,
     });
 
     this.gameRepository.persist(game);
@@ -59,7 +76,7 @@ export class GameController {
     return game;
   }
 
-  @Get(':id')
+  @Get('@:id')
   async getGameById(@Param('id', ParseIntPipe) id: number) {
     return await this.gameRepository.findOneOrFail(
       { id },
@@ -77,7 +94,7 @@ export class GameController {
   }
 
   @Protected()
-  @Delete(':id')
+  @Delete('@:id')
   @HttpCode(HttpStatus.NO_CONTENT)
   async deleteGame(
     @LoggedUser() loggedUser: User,
@@ -96,7 +113,7 @@ export class GameController {
   }
 
   @Protected()
-  @Put(':id')
+  @Put('@:id')
   async updateGame(
     @LoggedUser() loggedUser: User,
     @Param('id', ParseIntPipe) id: number,
@@ -119,41 +136,72 @@ export class GameController {
       game.name = updates.name;
     }
 
+    if (isDefined(updates.designMapId)) {
+      const designMap = await this.designMapRepository.findOneOrFail({
+        id: updates.designMapId,
+      });
+
+      const players = await game.getPlayers();
+      const playersInExcess = players.slice(designMap.maxPlayers);
+
+      for (const player of playersInExcess) {
+        this.playerInGameRepository.remove(player);
+      }
+
+      game.designMap = designMap;
+    }
+
     await this.gameRepository.flush();
 
     return game;
   }
 
   @Protected()
-  @Post(':id/players/self')
+  @Post('@:id/players/self')
   async joinGame(
     @LoggedUser() loggedUser: User,
     @Param('id', ParseIntPipe) id: number,
   ) {
     const game = await this.gameRepository.findOneOrFail(
       { id },
-      { populate: gameFieldsToPopulate },
+      { populate: [...gameFieldsToPopulate] },
     );
 
-    const existingPlayerInGame = await this.playerInGameRepository.findOne({
+    if (game.status !== GameStatus.OPEN) {
+      throw new BadRequestException('Game is not open');
+    }
+
+    const players = await game.getPlayers();
+
+    if (players.length === game.designMap.maxPlayers) {
+      throw new BadRequestException('Game is full');
+    }
+
+    if (players.some((player) => player.user.id === loggedUser.id)) {
+      return game;
+    }
+
+    const order = 1 + Math.max(0, ...players.map((player) => player.order));
+    const nation = await this.getFirstAvailableNation(game);
+
+    if (!nation) {
+      throw new InternalServerErrorException(`No nations available`);
+    }
+
+    const playerInGame = this.playerInGameRepository.create({
       game,
       user: loggedUser,
+      order,
+      nation,
     });
 
-    if (!existingPlayerInGame) {
-      const playerInGame = this.playerInGameRepository.create({
-        game,
-        user: loggedUser,
-      });
-
-      await this.playerInGameRepository.persistAndFlush(playerInGame);
-    }
+    await this.playerInGameRepository.persistAndFlush(playerInGame);
 
     return game;
   }
 
   @Protected()
-  @Put(':id/players/self')
+  @Put('@:id/players/self')
   async updatePlayer(
     @LoggedUser() loggedUser: User,
     @Param('id', ParseIntPipe) id: number,
@@ -164,18 +212,32 @@ export class GameController {
       { populate: gameFieldsToPopulate },
     );
 
+    if (game.status !== GameStatus.OPEN) {
+      throw new BadRequestException('Game is not open');
+    }
+
     const existingPlayerInGame = await this.playerInGameRepository.findOne({
       game,
       user: loggedUser,
     });
 
     if (!existingPlayerInGame) {
-      throw new BadRequestException({
-        message: 'You are not in this game',
-      });
+      throw new BadRequestException('You are not in this game');
     }
 
-    existingPlayerInGame.ready = body.ready;
+    if (isDefined(body.ready)) {
+      existingPlayerInGame.ready = body.ready;
+    }
+
+    if (isDefined(body.nation)) {
+      const availableNations = await game.availableNations();
+
+      if (!availableNations.includes(body.nation)) {
+        throw new BadRequestException('Nation not available');
+      }
+
+      existingPlayerInGame.nation = body.nation;
+    }
 
     await this.playerInGameRepository.persistAndFlush(existingPlayerInGame);
 
@@ -183,7 +245,7 @@ export class GameController {
   }
 
   @Protected()
-  @Delete(':id/players/self')
+  @Delete('@:id/players/self')
   @HttpCode(HttpStatus.NO_CONTENT)
   async leaveGame(
     @LoggedUser() loggedUser: User,
@@ -205,12 +267,25 @@ export class GameController {
 
     this.playerInGameRepository.remove(playerInGame);
 
-    if (game.players.length === 0) {
+    const players = await game.getPlayers();
+
+    if (players.length === 0) {
       this.gameRepository.remove(game);
     } else if (game.owner.id === loggedUser.id) {
-      game.owner = game.players.getItems()[0].user;
+      game.owner = players[0].user;
     }
 
     await this.gameRepository.flush();
+  }
+
+  async getFirstAvailableNation(game: Game) {
+    const nations = await game.availableNations();
+    const nation = first(nations);
+
+    if (!nation) {
+      throw new InternalServerErrorException(`No nations available`);
+    }
+
+    return nation;
   }
 }

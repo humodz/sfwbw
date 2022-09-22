@@ -1,6 +1,6 @@
 import {
+  IsInt,
   IsNotEmpty,
-  IsObject,
   IsOptional,
   IsString,
   MaxLength,
@@ -14,6 +14,6 @@ export class UpdateGameRequest {
   name?: string | null;
 
   @IsOptional()
-  @IsObject()
-  map?: any | null;
+  @IsInt()
+  designMapId?: number | null;
 }

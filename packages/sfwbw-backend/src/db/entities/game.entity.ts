@@ -7,7 +7,9 @@ import {
   PrimaryKey,
   Property,
 } from '@mikro-orm/core';
+import { Nation } from '@sfwbw/sfwbw-core';
 import { Expose } from 'class-transformer';
+import { DesignMap } from './design-map.entity';
 import { PlayerInGame } from './player-in-game.entity';
 import { User } from './user.entity';
 
@@ -32,8 +34,8 @@ export class Game {
   status!: GameStatus;
 
   @Expose()
-  @Property({ type: 'json' })
-  map!: any;
+  @ManyToOne({ entity: () => DesignMap })
+  designMap!: DesignMap;
 
   @Expose()
   @ManyToOne({ entity: () => User, inversedBy: 'ownedGames' })
@@ -42,8 +44,10 @@ export class Game {
   @OneToMany({ entity: () => PlayerInGame, mappedBy: 'game' })
   players = new Collection<PlayerInGame>(this);
 
+  // Methods
+
   @Expose({ name: 'players' })
-  getPlayers() {
+  jsonGetPlayers() {
     if (!this.players.isInitialized()) {
       return null;
     }
@@ -52,5 +56,19 @@ export class Game {
       ...(it as any),
       game: undefined,
     }));
+  }
+
+  async getPlayers() {
+    return (await this.players.init()).getItems();
+  }
+
+  async availableNations() {
+    const players = await this.getPlayers();
+
+    const nations = Object.values(Nation).filter((nation) =>
+      players.every((player) => player.nation !== nation),
+    );
+
+    return nations;
   }
 }

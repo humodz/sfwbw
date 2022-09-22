@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsObject, IsString, MaxLength } from 'class-validator';
+import { IsInt, IsNotEmpty, IsString, MaxLength } from 'class-validator';
 
 export class CreateGameRequest {
   @IsString()
@@ -6,6 +6,6 @@ export class CreateGameRequest {
   @MaxLength(64)
   name!: string;
 
-  @IsObject()
-  map!: any;
+  @IsInt()
+  designMapId!: number;
 }

@@ -1,6 +1,7 @@
 import { EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -34,7 +35,7 @@ export class DesignMapController {
     });
   }
 
-  @Get(':id')
+  @Get('@:id')
   async getMapById(@Param('id', ParseIntPipe) id: number) {
     return await this.designMapRepository.findOneOrFail(
       { id },
@@ -52,6 +53,12 @@ export class DesignMapController {
       body.tiles.flat().map((tile) => tile.player),
     );
 
+    if (maxPlayers <= 0 || maxPlayers > 4) {
+      throw new BadRequestException(
+        'A design map must have from 1 to 4 players',
+      );
+    }
+
     const designMap = this.designMapRepository.create({
       name: body.name,
       author: user,
@@ -66,12 +73,12 @@ export class DesignMapController {
     return designMap;
   }
 
-  @Put(':id')
+  @Put('@:id')
   async updateMap() {
     throw new NotImplementedException();
   }
 
-  @Delete(':id')
+  @Delete('@:id')
   @HttpCode(HttpStatus.NO_CONTENT)
   async deleteMap(@LoggedUser() user: User, @Param('id') id: number) {
     const designMap = await this.designMapRepository.findOneOrFail(

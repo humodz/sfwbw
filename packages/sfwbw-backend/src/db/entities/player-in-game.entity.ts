@@ -5,6 +5,7 @@ import {
   PrimaryKeyType,
   Property,
 } from '@mikro-orm/core';
+import { Nation } from '@sfwbw/sfwbw-core';
 import { Game } from './game.entity';
 import { User } from './user.entity';
 
@@ -27,6 +28,9 @@ export class PlayerInGame {
   @Property({ type: Boolean, default: false })
   ready = false;
 
-  // TODO - order
-  // TODO - nation
+  @Property({ type: 'int' })
+  order!: number;
+
+  @Property({ type: String })
+  nation!: Nation;
 }
