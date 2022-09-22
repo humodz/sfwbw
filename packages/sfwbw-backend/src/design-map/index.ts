@@ -1,0 +1,10 @@
+import { Module } from '@nestjs/common';
+import { AuthModule } from 'src/auth';
+import { EntitiesModule } from 'src/db';
+import { DesignMapController } from './design-map.controller';
+
+@Module({
+  imports: [AuthModule, EntitiesModule],
+  controllers: [DesignMapController],
+})
+export class DesignMapModule {}

@@ -1,6 +1,6 @@
 import { IsBoolean } from 'class-validator';
 
-export class UdpatePlayerRequest {
+export class UpdatePlayerRequest {
   @IsBoolean()
   ready!: boolean;
 }

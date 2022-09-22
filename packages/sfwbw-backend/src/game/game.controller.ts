@@ -21,8 +21,7 @@ import { LoggedUser, Protected } from '../auth';
 import { Game, User } from '../db/entities';
 import { CreateGameRequest } from './dto/create-game.request';
 import { UpdateGameRequest } from './dto/update-game.request';
-import { isDefined } from '../utils/validation';
-import { UdpatePlayerRequest as UpdatePlayerRequest } from './dto/update-player.request';
+import { UpdatePlayerRequest } from './dto/update-player.request';
 
 const gameFieldsToPopulate = ['owner', 'players', 'players.user'] as const;
 

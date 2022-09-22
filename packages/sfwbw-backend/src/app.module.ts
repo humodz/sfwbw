@@ -3,6 +3,7 @@ import { AppController } from './app.controller';
 import { AuthModule } from './auth';
 import { ConfigModule } from './config';
 import { DatabaseModule, EntitiesModule } from './db';
+import { DesignMapModule } from './design-map';
 import { GameModule } from './game';
 import { UserModule } from './user';
 
@@ -14,6 +15,7 @@ import { UserModule } from './user';
     UserModule,
     AuthModule,
     GameModule,
+    DesignMapModule,
   ],
   controllers: [AppController],
   providers: [],
