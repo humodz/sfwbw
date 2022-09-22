@@ -12,11 +12,6 @@
   --disabled: #111;
 }
 
-img,
-video {
-  opacity: 0.8;
-}
-
 /** Make layout friendly to the root element */
 body {
   display: unset;

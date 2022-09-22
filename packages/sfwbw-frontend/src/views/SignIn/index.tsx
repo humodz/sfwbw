@@ -16,11 +16,11 @@ export function SignIn() {
   return (
     <main className={styles.content}>
       <article>
-        <h4 className={styles.header}>Sign In</h4>
+        <h4>Sign In</h4>
         <SignInForm />
       </article>
       <article>
-        <h4 className={styles.header}>New User?</h4>
+        <h4>New User?</h4>
         <RegisterForm />
       </article>
     </main>

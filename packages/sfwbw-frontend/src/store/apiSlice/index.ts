@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { selectAccessToken } from '../authSlice';
-import { Session, User } from './models';
+import { Game, Session, UserSelf } from './models';
 import { RegisterRequest, SignInRequest } from './requests';
 
 
@@ -19,7 +19,7 @@ export const apiSlice = createApi({
     },
   }),
   endpoints: builder => ({
-    currentUser: builder.query<User | null, {}>({
+    currentUser: builder.query<UserSelf, {}>({
       query: () => ({
         url: '/users/self',
       }),
@@ -31,12 +31,19 @@ export const apiSlice = createApi({
         body,
       }),
     }),
-    register: builder.mutation<User, RegisterRequest>({
+    register: builder.mutation<UserSelf, RegisterRequest>({
       query: (body) => ({
         url: '/users',
         method: 'POST',
         body,
       }),
+    }),
+
+    listGames: builder.query<{ games: Game[] }, {}>({
+      query: () => ({
+        url: '/games',
+        method: 'GET',
+      })
     }),
   }),
 });
@@ -46,4 +53,5 @@ export const {
   useLazyCurrentUserQuery,
   useSignInMutation,
   useRegisterMutation,
+  useListGamesQuery,
 } = apiSlice;

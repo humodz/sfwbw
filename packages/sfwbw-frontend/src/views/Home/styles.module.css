@@ -1,0 +1,25 @@
+.searchGames {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.searchGames select {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-right: none;
+}
+
+.searchGames input {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.searchGames button {
+  margin-top: 0;
+  margin-left: 0.5rem;
+}
+
+.searchQuery {
+  flex-grow: 1;
+}
