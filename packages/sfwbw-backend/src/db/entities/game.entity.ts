@@ -27,16 +27,6 @@ export class Game {
   @Property({ type: String })
   name!: string;
 
-  // TODO what's this for?
-  // 1. hide from games list
-  // 2. require invite link to join
-  @Expose()
-  @Property({ type: Boolean })
-  isPrivate!: boolean;
-
-  @Property({ type: String, nullable: true })
-  password!: string | null;
-
   @Expose()
   @Enum(() => GameStatus)
   status!: GameStatus;
@@ -44,10 +34,6 @@ export class Game {
   @Expose()
   @Property({ type: 'json' })
   map!: any;
-
-  @Expose()
-  @Property({ type: 'int', nullable: true })
-  maxTurns!: number | null;
 
   @Expose()
   @ManyToOne({ entity: () => User, inversedBy: 'ownedGames' })

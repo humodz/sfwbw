@@ -22,7 +22,7 @@ import { Game, User } from '../db/entities';
 import { CreateGameRequest } from './dto/create-game.request';
 import { UpdateGameRequest } from './dto/update-game.request';
 import { isDefined } from '../utils/validation';
-import { UdpatePlayerRequest } from './dto/update-player.request';
+import { UdpatePlayerRequest as UpdatePlayerRequest } from './dto/update-player.request';
 
 const gameFieldsToPopulate = ['owner', 'players', 'players.user'] as const;
 
@@ -43,9 +43,6 @@ export class GameController {
   ) {
     const game = this.gameRepository.create({
       name: newGame.name,
-      isPrivate: newGame.isPrivate,
-      password: newGame.password,
-      maxTurns: newGame.maxTurns,
       map: newGame.map,
       status: GameStatus.OPEN,
       owner: user,
@@ -123,29 +120,16 @@ export class GameController {
       game.name = updates.name;
     }
 
-    if (isDefined(updates.isPrivate)) {
-      game.isPrivate = updates.isPrivate;
-    }
-
-    if (updates.password !== undefined) {
-      game.password = updates.password;
-    }
-
-    if (updates.maxTurns !== undefined) {
-      game.maxTurns = updates.maxTurns;
-    }
-
     await this.gameRepository.flush();
 
     return game;
   }
 
   @Protected()
-  @Put(':id/players/self')
+  @Post(':id/players/self')
   async joinGame(
     @LoggedUser() loggedUser: User,
     @Param('id', ParseIntPipe) id: number,
-    @Body() body: UdpatePlayerRequest,
   ) {
     const game = await this.gameRepository.findOneOrFail(
       { id },
@@ -157,22 +141,44 @@ export class GameController {
       user: loggedUser,
     });
 
-    if (
-      !existingPlayerInGame &&
-      loggedUser.role !== UserRole.ADMIN &&
-      isDefined(game.password) &&
-      game.password !== body.password
-    ) {
-      throw new ForbiddenException();
+    if (!existingPlayerInGame) {
+      const playerInGame = this.playerInGameRepository.create({
+        game,
+        user: loggedUser,
+      });
+
+      await this.playerInGameRepository.persistAndFlush(playerInGame);
     }
 
-    const playerInGame = this.playerInGameRepository.create({
+    return game;
+  }
+
+  @Protected()
+  @Put(':id/players/self')
+  async updatePlayer(
+    @LoggedUser() loggedUser: User,
+    @Param('id', ParseIntPipe) id: number,
+    @Body() body: UpdatePlayerRequest,
+  ) {
+    const game = await this.gameRepository.findOneOrFail(
+      { id },
+      { populate: gameFieldsToPopulate },
+    );
+
+    const existingPlayerInGame = await this.playerInGameRepository.findOne({
       game,
       user: loggedUser,
-      ready: body.ready,
     });
 
-    await this.playerInGameRepository.persistAndFlush(playerInGame);
+    if (!existingPlayerInGame) {
+      throw new BadRequestException({
+        message: 'You are not in this game',
+      });
+    }
+
+    existingPlayerInGame.ready = body.ready;
+
+    await this.playerInGameRepository.persistAndFlush(existingPlayerInGame);
 
     return game;
   }
