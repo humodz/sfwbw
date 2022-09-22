@@ -5,7 +5,7 @@ import { InjectRepository } from '@mikro-orm/nestjs';
 import { User } from '../db/entities';
 import { EntityRepository } from '@mikro-orm/core';
 import { TokenPayload } from './auth.service';
-import { AuthConfig } from 'src/config';
+import { AuthConfig } from '../config';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {

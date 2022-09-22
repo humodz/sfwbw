@@ -15,10 +15,10 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { LoggedUser, Protected } from 'src/auth';
-import { DesignMap, User } from 'src/db/entities';
-import { UserRole } from 'src/db/entities/user.entity';
-import { countUnique } from 'src/utils/array';
+import { LoggedUser, Protected } from '../auth';
+import { DesignMap, User } from '../db/entities';
+import { UserRole } from '../db/entities/user.entity';
+import { countUnique } from '../utils/array';
 import { CreateDesignMapRequest } from './dto/create-design-map.request';
 
 @Controller('/design-maps')

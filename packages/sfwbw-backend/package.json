@@ -8,7 +8,7 @@
   "scripts": {
     "add": "cd ../.. && lerna add --scope=\"$npm_package_name\"",
     "prebuild": "rimraf dist",
-    "build": "nest build --webpack",
+    "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",

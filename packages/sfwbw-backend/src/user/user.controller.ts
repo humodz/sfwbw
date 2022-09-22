@@ -15,7 +15,7 @@ import { CreateUserRequest } from './dto/create-user.request';
 import { AuthService } from '../auth/auth.service';
 import { LoggedUser, Protected } from '../auth';
 import { UpdateUserRequest } from './dto/update-user.request';
-import { UserRole } from 'src/db/entities/user.entity';
+import { UserRole } from '../db/entities/user.entity';
 
 @Controller('/users')
 export class UserController {

@@ -23,9 +23,9 @@ import { DesignMap, Game, User } from '../db/entities';
 import { CreateGameRequest } from './dto/create-game.request';
 import { UpdateGameRequest } from './dto/update-game.request';
 import { UpdatePlayerRequest } from './dto/update-player.request';
-import { isDefined } from 'src/utils/validation';
+import { isDefined } from '../utils/validation';
 import { Nation } from '@sfwbw/sfwbw-core';
-import { first } from 'src/utils/array';
+import { first } from '../utils/array';
 
 const gameFieldsToPopulate = [
   'owner',
@@ -90,7 +90,7 @@ export class GameController {
       populate: gameFieldsToPopulate,
     });
 
-    return { games };
+    return games;
   }
 
   @Protected()

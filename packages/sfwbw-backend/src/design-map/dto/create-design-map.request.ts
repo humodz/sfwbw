@@ -6,7 +6,7 @@ import {
   MaxLength,
   ValidateNested,
 } from 'class-validator';
-import { Is2dArray } from 'src/utils/validation';
+import { Is2dArray } from '../../utils/validation';
 import { TileDto } from './tile.dto';
 import { IsValidTileData } from './validation';
 
