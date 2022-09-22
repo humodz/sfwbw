@@ -1,14 +1,14 @@
 import produce from 'immer';
 import { useState } from 'react';
 import { Pallette } from '../../components/Palette';
-import { Nation, Terrain, Tile } from '@sfwbw/sfwbw-core';
+import { Nation, PLAYER_NEUTRAL, Terrain, Tile } from '@sfwbw/sfwbw-core';
 import { getTileImage } from '../../game/assets';
 import { repeat, saveFile } from '../../utils';
 
 import styles from './styles.module.css';
 
 function createBoard(size: { width: number, height: number }): Tile[][] {
-  return repeat(size.height, repeat(size.width, { type: Terrain.PLAINS, nation: Nation.NEUTRAL }));
+  return repeat(size.height, repeat(size.width, { type: Terrain.PLAINS, player: PLAYER_NEUTRAL }));
 }
 
 export function Editor() {
@@ -19,7 +19,7 @@ export function Editor() {
 
   const [selectedTile, setSelectedTile] = useState<Tile>({
     type: Terrain.PLAINS,
-    nation: Nation.NEUTRAL,
+    player: PLAYER_NEUTRAL,
   });
 
   const updateBoard = (y: number, x: number, newTile: Tile) => {
@@ -31,9 +31,7 @@ export function Editor() {
   const saveMap = () => {
     const data = {
       name,
-      width: board[0].length,
-      height: board.length,
-      board,
+      tiles: board,
     };
 
     const rawData = JSON.stringify(data, null, 2);

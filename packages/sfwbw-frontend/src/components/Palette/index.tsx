@@ -19,19 +19,19 @@ const nationNames = Object.values(Nation);
 
 export function Pallette({ tile, onTileChange }: PaletteProps) {
   const selectedTileType = tileTypes.indexOf(tile.type);
-  const selectedNation = nationNames.indexOf(tile.nation);
+  const selectedPlayer = tile.player
 
   const updateTileType = (i: number) => {
     onTileChange?.({
       type: tileTypes[i],
-      nation: tile.nation,
+      player: tile.player,
     });
   };
 
   const updateNation = (i: number) => {
     onTileChange?.({
       type: tile.type,
-      nation: nationNames[i],
+      player: i,
     });
   };
 
@@ -46,7 +46,7 @@ export function Pallette({ tile, onTileChange }: PaletteProps) {
               className={cls({
                 [styles.selected]: selectedTileType === i,
               })}
-              src={getTileImage({ type: tileType, nation: nationNames[selectedNation] })}
+              src={getTileImage({ type: tileType, player: selectedPlayer })}
               draggable={false}
             />
           ))
@@ -60,7 +60,7 @@ export function Pallette({ tile, onTileChange }: PaletteProps) {
               key={i}
               onClick={() => updateNation(i)}
               className={cls({
-                [styles.selected]: selectedNation === i,
+                [styles.selected]: selectedPlayer === i,
               })}
               src={nations[nation]}
               draggable={false}
