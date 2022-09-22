@@ -1,5 +1,5 @@
 import { Nation } from '@sfwbw/sfwbw-core';
-import { IsBoolean, IsEnum, IsOptional } from 'class-validator';
+import { IsBoolean, IsEnum, IsOptional, NotEquals } from 'class-validator';
 
 export class UpdatePlayerRequest {
   @IsBoolean()
@@ -7,6 +7,7 @@ export class UpdatePlayerRequest {
   ready!: boolean;
 
   @IsEnum(Nation)
+  @NotEquals(Nation.NEUTRAL)
   @IsOptional()
   nation!: Nation;
 }

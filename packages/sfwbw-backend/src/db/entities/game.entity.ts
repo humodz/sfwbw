@@ -65,8 +65,10 @@ export class Game {
   async availableNations() {
     const players = await this.getPlayers();
 
-    const nations = Object.values(Nation).filter((nation) =>
-      players.every((player) => player.nation !== nation),
+    const nations = Object.values(Nation).filter(
+      (nation) =>
+        nation !== Nation.NEUTRAL &&
+        players.every((player) => player.nation !== nation),
     );
 
     return nations;

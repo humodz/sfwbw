@@ -15,6 +15,7 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
+import { Nation } from '@sfwbw/sfwbw-core';
 import { LoggedUser, Protected } from '../auth';
 import { DesignMap, User } from '../db/entities';
 import { UserRole } from '../db/entities/user.entity';
@@ -49,11 +50,13 @@ export class DesignMapController {
     @LoggedUser() user: User,
     @Body() body: CreateDesignMapRequest,
   ) {
-    const maxPlayers = countUnique(
+    const mapMaxPlayers = countUnique(
       body.tiles.flat().map((tile) => tile.player),
     );
 
-    if (maxPlayers <= 0 || maxPlayers > 4) {
+    const maxPlayers = Object.values(Nation).length - 1;
+
+    if (mapMaxPlayers <= 0 || mapMaxPlayers > maxPlayers) {
       throw new BadRequestException(
         'A design map must have from 1 to 4 players',
       );
@@ -62,7 +65,7 @@ export class DesignMapController {
     const designMap = this.designMapRepository.create({
       name: body.name,
       author: user,
-      maxPlayers,
+      maxPlayers: mapMaxPlayers,
       rows: body.tiles.length,
       columns: body.tiles[0].length,
       tiles: body.tiles,
@@ -73,11 +76,13 @@ export class DesignMapController {
     return designMap;
   }
 
+  @Protected()
   @Put('@:id')
   async updateMap() {
     throw new NotImplementedException();
   }
 
+  @Protected()
   @Delete('@:id')
   @HttpCode(HttpStatus.NO_CONTENT)
   async deleteMap(@LoggedUser() user: User, @Param('id') id: number) {

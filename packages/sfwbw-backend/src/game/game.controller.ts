@@ -109,6 +109,10 @@ export class GameController {
       throw new ForbiddenException();
     }
 
+    if (game.status !== GameStatus.OPEN) {
+      throw new BadRequestException('Game is not open');
+    }
+
     await this.gameRepository.removeAndFlush(game);
   }
 
@@ -229,7 +233,7 @@ export class GameController {
       existingPlayerInGame.ready = body.ready;
     }
 
-    if (isDefined(body.nation)) {
+    if (isDefined(body.nation) && body.nation !== existingPlayerInGame.nation) {
       const availableNations = await game.availableNations();
 
       if (!availableNations.includes(body.nation)) {
