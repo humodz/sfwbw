@@ -18,7 +18,12 @@ export class CreateDesignMapRequest {
 
   @Type(() => TileDto)
   @ValidateNested()
-  @Is2dArray()
+  @Is2dArray({
+    minRows: 5,
+    maxRows: 50,
+    minColumns: 5,
+    maxColumns: 50,
+  })
   @IsValidTileData()
   tiles!: Tile[][];
 }

@@ -1,4 +1,4 @@
-import { ArgumentsHost, Type } from '@nestjs/common';
+import { ArgumentsHost } from '@nestjs/common';
 import { Response } from 'express';
 
 export function getResponse(host: ArgumentsHost) {
