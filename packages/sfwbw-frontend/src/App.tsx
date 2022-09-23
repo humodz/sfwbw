@@ -7,6 +7,8 @@ import { Home } from './views/Home';
 import { Profile } from './views/Profile';
 import { SignIn } from './views/SignIn';
 
+import { Logo } from './components/Logo';
+
 export function App() {
   const dispatch = useAppDispatch();
 
@@ -33,9 +35,7 @@ export function App() {
           )) ||
             (Else && <Link to="/sign-in">Sign In</Link>)}
         </nav>
-
-        <h1>Super Famicom Wars by Web</h1>
-        {/* <p>subtitle</p> */}
+        <Logo />
       </header>
       <Routes>
         <Route path="/" element={<Home />} />

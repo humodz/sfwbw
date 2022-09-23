@@ -1,0 +1,23 @@
+.logo {
+  width: fit-content;
+  margin: auto;
+  position: relative;
+}
+
+.logo img {
+  image-rendering: pixelated;
+  height: 182px;
+}
+
+.logo strong {
+  font-size: 1.5rem;
+  position: absolute;
+  bottom: 0;
+  right: 0.5rem;
+}
+
+@media only screen and (max-width: 576px) {
+  .logo img {
+    height: 91px;
+  }
+}
