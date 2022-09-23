@@ -14,6 +14,7 @@ import {
   ParseIntPipe,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 import { GameStatus } from '../db/entities/game.entity';
 import { PlayerInGame } from '../db/entities/player-in-game.entity';
@@ -47,17 +48,15 @@ export class GameController {
 
   @Post()
   @Protected()
-  async createGame(
-    @LoggedUser() user: User,
-    @Body() newGame: CreateGameRequest,
-  ) {
+  async createGame(@LoggedUser() user: User, @Body() body: CreateGameRequest) {
     const designMap = await this.designMapRepository.findOneOrFail({
-      id: newGame.designMapId,
+      id: body.designMapId,
     });
 
     const game = this.gameRepository.create({
-      name: newGame.name,
+      name: body.name,
       designMap,
+      password: body.password,
       status: GameStatus.OPEN,
       owner: user,
     });
@@ -140,6 +139,10 @@ export class GameController {
       game.name = updates.name;
     }
 
+    if (updates.password !== undefined) {
+      game.password = updates.password;
+    }
+
     if (isDefined(updates.designMapId)) {
       const designMap = await this.designMapRepository.findOneOrFail({
         id: updates.designMapId,
@@ -165,6 +168,7 @@ export class GameController {
   async joinGame(
     @LoggedUser() loggedUser: User,
     @Param('id', ParseIntPipe) id: number,
+    @Query('password') password?: string,
   ) {
     const game = await this.gameRepository.findOneOrFail(
       { id },
@@ -173,6 +177,10 @@ export class GameController {
 
     if (game.status !== GameStatus.OPEN) {
       throw new BadRequestException('Game is not open');
+    }
+
+    if (isDefined(game.password) && game.password !== password) {
+      throw new ForbiddenException('Wrong password');
     }
 
     const players = await game.getPlayers();
@@ -209,7 +217,7 @@ export class GameController {
   async updatePlayer(
     @LoggedUser() loggedUser: User,
     @Param('id', ParseIntPipe) id: number,
-    @Body() body: UpdatePlayerRequest,
+    @Body() updates: UpdatePlayerRequest,
   ) {
     const game = await this.gameRepository.findOneOrFail(
       { id },
@@ -229,18 +237,21 @@ export class GameController {
       throw new BadRequestException('You are not in this game');
     }
 
-    if (isDefined(body.ready)) {
-      existingPlayerInGame.ready = body.ready;
+    if (isDefined(updates.ready)) {
+      existingPlayerInGame.ready = updates.ready;
     }
 
-    if (isDefined(body.nation) && body.nation !== existingPlayerInGame.nation) {
+    if (
+      isDefined(updates.nation) &&
+      updates.nation !== existingPlayerInGame.nation
+    ) {
       const availableNations = await game.availableNations();
 
-      if (!availableNations.includes(body.nation)) {
+      if (!availableNations.includes(updates.nation)) {
         throw new BadRequestException('Nation not available');
       }
 
-      existingPlayerInGame.nation = body.nation;
+      existingPlayerInGame.nation = updates.nation;
     }
 
     await this.playerInGameRepository.persistAndFlush(existingPlayerInGame);

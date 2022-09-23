@@ -1,11 +1,13 @@
-import { IsInt, IsNotEmpty, IsString, MaxLength } from 'class-validator';
+import { IsInt } from 'class-validator';
+import { IsGameName, IsGamePassword } from './validation';
 
 export class CreateGameRequest {
-  @IsString()
-  @IsNotEmpty()
-  @MaxLength(64)
+  @IsGameName()
   name!: string;
 
   @IsInt()
   designMapId!: number;
+
+  @IsGamePassword()
+  password?: string | null;
 }

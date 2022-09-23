@@ -1,19 +1,16 @@
-import {
-  IsInt,
-  IsNotEmpty,
-  IsOptional,
-  IsString,
-  MaxLength,
-} from 'class-validator';
+import { IsInt, IsOptional } from 'class-validator';
+import { IsGameName, IsGamePassword } from './validation';
 
 export class UpdateGameRequest {
   @IsOptional()
-  @IsString()
-  @IsNotEmpty()
-  @MaxLength(64)
+  @IsGameName()
   name?: string | null;
 
   @IsOptional()
   @IsInt()
   designMapId?: number | null;
+
+  @IsOptional()
+  @IsGamePassword()
+  password?: string | null;
 }

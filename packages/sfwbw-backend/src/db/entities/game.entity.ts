@@ -29,6 +29,9 @@ export class Game {
   @Property({ type: String })
   name!: string;
 
+  @Property({ type: String, nullable: true })
+  password!: string | null;
+
   @Expose()
   @Enum(() => GameStatus)
   status!: GameStatus;
