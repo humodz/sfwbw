@@ -12,7 +12,22 @@
   --disabled: #111;
 }
 
-/** Make layout friendly to the root element */
+/* Make nav buttons look the same as links */
+header > nav button {
+  line-height: 2;
+  background-color: unset;
+
+  /* From simpledotcss */
+  margin: 0 0.5rem 1rem 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  color: var(--text);
+  display: inline-block;
+  padding: 0.1rem 1rem;
+  text-decoration: none;
+}
+
+/* Make layout friendly to the root element */
 body {
   display: unset;
 }

@@ -21,17 +21,17 @@ export function App() {
       <header>
         <nav>
           <Link to="/">Home</Link>
-          {(If(currentUser) && (
-            <>
-              <Link to="/profile">Profile</Link>
-              <a onClick={signOut}>Sign Out</a>
-            </>
-          )) ||
-            (Else && <Link to="/sign-in">Sign In</Link>)}
           <Link to="/editor">Editor</Link>
           <a target="_blank" href="https://github.com/humodz" rel="noreferrer">
             GitHub
           </a>
+          {(If(currentUser) && (
+            <>
+              <Link to="/profile">Profile</Link>
+              <button onClick={signOut}>Sign Out</button>
+            </>
+          )) ||
+            (Else && <Link to="/sign-in">Sign In</Link>)}
         </nav>
 
         <h1>Super Famicom Wars by Web</h1>
