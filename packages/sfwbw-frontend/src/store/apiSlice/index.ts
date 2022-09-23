@@ -6,7 +6,7 @@ import { RegisterRequest, SignInRequest } from './requests';
 export const apiSlice = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://localhost:3000',
+    baseUrl: `http://${window.location.hostname}:3000`,
     prepareHeaders: (headers, { getState }) => {
       const accessToken = selectAccessToken(getState() as any);
 
@@ -38,7 +38,7 @@ export const apiSlice = createApi({
       }),
     }),
 
-    listGames: builder.query<{ games: Game[] }, Record<string, never>>({
+    listGames: builder.query<Game[], Record<string, never>>({
       query: () => ({
         url: '/games',
         method: 'GET',

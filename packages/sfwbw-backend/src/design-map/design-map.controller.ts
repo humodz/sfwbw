@@ -50,9 +50,8 @@ export class DesignMapController {
     @LoggedUser() user: User,
     @Body() body: CreateDesignMapRequest,
   ) {
-    const mapMaxPlayers = countUnique(
-      body.tiles.flat().map((tile) => tile.player),
-    );
+    const mapMaxPlayers =
+      countUnique(body.tiles.flat().map((tile) => tile.player)) - 1;
 
     const maxPlayers = Object.values(Nation).length - 1;
 

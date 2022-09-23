@@ -1,3 +1,5 @@
+import { Nation } from '@sfwbw/sfwbw-core';
+
 export interface User {
   username: string;
 }
@@ -16,13 +18,19 @@ export interface Game {
   isPrivate: boolean;
   password: string | null;
   status: string; // TODO
-  map: any; // TODO
+  designMap: DesignMap; // TODO
   maxTurns: number | null;
   owner: User;
   players: Player[];
 }
 
+export interface DesignMap {
+  name: string;
+  maxPlayers: number;
+}
+
 export interface Player {
   user: User;
+  nation: Nation;
   ready: boolean;
 }
