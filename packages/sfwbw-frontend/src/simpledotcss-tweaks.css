@@ -12,10 +12,14 @@
   --disabled: #111;
 }
 
+header > nav a,
+header > nav button {
+  background-color: var(--accent-bg);
+}
+
 /* Make nav buttons look the same as links */
 header > nav button {
   line-height: 2;
-  background-color: unset;
 
   /* From simpledotcss */
   margin: 0 0.5rem 1rem 0.5rem;

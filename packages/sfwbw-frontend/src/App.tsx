@@ -7,6 +7,9 @@ import { Home } from './views/Home';
 import { Profile } from './views/Profile';
 import { SignIn } from './views/SignIn';
 
+import banner from './assets/banner.png';
+console.log(banner);
+
 export function App() {
   const dispatch = useAppDispatch();
 
@@ -18,7 +21,14 @@ export function App() {
 
   return (
     <>
-      <header>
+      <header
+        style={{
+          backgroundImage: `url(${banner})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          imageRendering: 'pixelated',
+        }}
+      >
         <nav>
           <Link to="/">Home</Link>
           <Link to="/editor">Editor</Link>
