@@ -1,3 +1,5 @@
+import styles from './styles.module.css';
+
 import crown from '../../assets/icons/crown.png';
 import { Game, Player, User } from '../../store/apiSlice/models';
 import { If } from '../../utils/jsx-conditionals';
@@ -5,13 +7,21 @@ import { If } from '../../utils/jsx-conditionals';
 import { nations } from '@sfwbw/sfwbw-assets';
 import { Nation } from '@sfwbw/sfwbw-core';
 import { FormSelect } from '../forms/FormSelect';
+import React, { useState } from 'react';
 
 interface GamePreviewProps {
   user: User | null;
   game: Game;
+  onJoin?: (password: string) => void;
+  onLeave?: () => void;
+  onDelete?: () => void;
+  onPlayerNationChange?: (nation: Nation) => void;
+  onPlayerReadyChange?: (ready: boolean) => void;
 }
 
 export function GamePreview(props: GamePreviewProps) {
+  const [passwordAttempt, setPasswordAttempt] = useState('');
+
   const userIsOwner = props.user?.username === props.game.owner.username;
 
   const userIsInGame = props.game.players.some(
@@ -21,29 +31,19 @@ export function GamePreview(props: GamePreviewProps) {
   const gameIsFull =
     props.game.players.length >= props.game.designMap.maxPlayers;
 
-  return (
-    <article>
-      <h5 style={{ marginBottom: '0.5rem' }}>{props.game.name}</h5>
-      <small>{props.game.designMap.name}</small>
-      <div
-        style={{
-          display: 'flex',
-          gap: '0.5rem',
-          flexWrap: 'wrap',
-          justifyContent: 'center',
-        }}
-      >
-        <div
-          style={{
-            backgroundColor: 'var(--accent-bg)',
-            width: '10rem',
-            height: '10rem',
-          }}
-        >
-          map goes here
-        </div>
+  const onJoin = (event: React.FormEvent) => {
+    event.preventDefault();
+    props.onJoin?.(passwordAttempt);
+  };
 
-        <div style={{ flexGrow: 1, flexBasis: 0 }}>
+  return (
+    <article className={styles.gamePreview}>
+      <h5>{props.game.name}</h5>
+      <small>{props.game.designMap.name}</small>
+      <div className={styles.content}>
+        <div className={styles.mapPreview}>map goes here</div>
+
+        <div className={styles.players}>
           <div>
             Players: {props.game.players.length} /{' '}
             {props.game.designMap.maxPlayers}
@@ -52,46 +52,49 @@ export function GamePreview(props: GamePreviewProps) {
           {props.game.players.map((player) => (
             <PlayerStatus
               key={player.user.username}
-              isLoggedUser={props.user?.username === player.user.username}
+              isEditable={props.user?.username === player.user.username}
               isOwner={props.game.owner.username === player.user.username}
               player={player}
+              onReadyChange={props.onPlayerReadyChange}
+              onNationChange={props.onPlayerNationChange}
             />
           ))}
         </div>
-
-        <div style={{ flexGrow: 1, flexBasis: 0 }}></div>
       </div>
-      <form
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'end',
-          columnGap: '0.5rem',
-        }}
-      >
-        {If(userIsInGame) && <button type="button">Leave</button>}
+      <form className={styles.buttons} onSubmit={onJoin}>
+        {If(userIsInGame) && (
+          <button type="button" onClick={props.onLeave}>
+            Leave
+          </button>
+        )}
         {If(!userIsInGame && !gameIsFull) && (
           <>
             <input
               type="password"
               placeholder="Password"
-              style={{ margin: '0.5rem 0' }}
               required={true}
+              value={passwordAttempt}
+              onChange={(e) => setPasswordAttempt(e.target.value)}
             />
             <button type="submit">Join</button>
           </>
         )}
-        {If(userIsOwner) && <button type="button">Delete</button>}
+        {If(userIsOwner) && (
+          <button type="button" onClick={props.onDelete}>
+            Delete
+          </button>
+        )}
       </form>
     </article>
   );
 }
 
 interface PlayerStatusProps {
-  isLoggedUser: boolean;
+  isEditable: boolean;
   isOwner: boolean;
   player: Player;
-  onReadyChange?: (newValue: boolean) => void;
+  onNationChange?: (nation: Nation) => void;
+  onReadyChange?: (ready: boolean) => void;
 }
 
 function PlayerStatus(props: PlayerStatusProps) {
@@ -105,45 +108,33 @@ function PlayerStatus(props: PlayerStatusProps) {
   ];
 
   return (
-    <div
-      style={{ display: 'flex', marginBottom: '0.5rem' }}
-      key={props.player.user.username}
-    >
+    <div className={styles.playerStatus} key={props.player.user.username}>
       <div
+        className={styles.nation}
         style={{
           backgroundImage: `url(${nationImage})`,
-          imageRendering: 'pixelated',
-          backgroundSize: 'contain',
-          width: '2rem',
-          height: '2rem',
-          marginRight: '0.5rem',
         }}
       >
-        <FormSelect
-          options={nationSelectOptions}
-          style={{ cursor: 'pointer', opacity: 0, height: '100%' }}
-        />
+        {If(props.isEditable) && (
+          <FormSelect
+            options={nationSelectOptions}
+            value={props.player.nation}
+            onChange={(value) => props.onNationChange?.(value)}
+          />
+        )}
       </div>
-      <div style={{ marginRight: 'auto' }}>
+      <div className={styles.username}>
         {props.player.user.username}
         {If(props.isOwner) && (
-          <>
-            &nbsp;
-            <img
-              src={crown}
-              alt="game owner"
-              title="game owner"
-              style={{ width: '1em', height: '1em' }}
-            />
-          </>
+          <img src={crown} alt="game owner" title="game owner" />
         )}
       </div>
       <input
+        className={styles.ready}
         type="checkbox"
         checked={props.player.ready}
-        disabled={!props.isLoggedUser}
+        disabled={!props.isEditable}
         title={props.player.ready ? 'ready' : 'not ready'}
-        style={{ marginLeft: '1rem' }}
         onChange={(e) => props.onReadyChange?.(e.target.checked)}
       ></input>
     </div>

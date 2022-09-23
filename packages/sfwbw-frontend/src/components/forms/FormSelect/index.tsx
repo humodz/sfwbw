@@ -3,15 +3,16 @@ type SelectProps = React.DetailedHTMLProps<
   HTMLSelectElement
 >;
 
-interface FormSelectProps extends Omit<SelectProps, 'onChange'> {
-  options: { label: string; value: string }[];
+interface FormSelectProps<T extends string>
+  extends Omit<SelectProps, 'onChange'> {
+  options: { label: string; value: T }[];
   value?: string;
-  onChange?: (newValue: string) => void;
+  onChange?: (newValue: T) => void;
 }
 
-export function FormSelect(props: FormSelectProps) {
+export function FormSelect<T extends string>(props: FormSelectProps<T>) {
   return (
-    <select {...props} onChange={(e) => props.onChange?.(e.target.value)}>
+    <select {...props} onChange={(e) => props.onChange?.(e.target.value as T)}>
       {props.options.map((option) => (
         <option value={option.value} key={option.value}>
           {option.label}

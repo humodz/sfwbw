@@ -1,0 +1,67 @@
+.gamePreview h5 {
+  margin-bottom: 0.5rem;
+}
+
+.gamePreview .content {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.gamePreview .mapPreview {
+  background-color: var(--accent-bg);
+  width: 10rem;
+  height: 10rem;
+}
+
+.gamePreview .players {
+  flex-grow: 1;
+  flex-basis: 0;
+}
+
+.gamePreview .buttons {
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  column-gap: 0.5rem;
+}
+
+.gamePreview .buttons > * {
+  margin: 0.5rem 0;
+}
+
+
+.playerStatus {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    column-gap: 0.5rem;
+}
+
+.playerStatus .nation {
+  image-rendering: pixelated;
+  background-size: contain;
+  width: 2rem;
+  height: 2rem;
+}
+
+.playerStatus .nation select {
+  height: 100%;
+  cursor: pointer;
+  opacity: 0;
+}
+
+.playerStatus .username {
+  margin-right: auto;
+}
+
+.playerStatus .username img {
+  width: 1em;
+  height: 1em;
+  margin-left: 0.5em;
+}
+
+.playerStatus .ready {
+  margin-left: 1em;
+}
