@@ -11,7 +11,6 @@ import { isErrorResponse } from '../../utils';
 import { useAppDispatch } from '../../store/hooks';
 import { useNavigate } from 'react-router-dom';
 
-
 export function SignIn() {
   return (
     <main className={styles.content}>
@@ -76,13 +75,7 @@ function SignInForm() {
         </FormButton>
       </div>
 
-      {
-        If(error) && (
-          <ErrorMessage>
-            {(error as any).data.message}
-          </ErrorMessage>
-        )
-      }
+      {If(error) && <ErrorMessage>{(error as any).data.message}</ErrorMessage>}
     </form>
   );
 }
@@ -96,7 +89,8 @@ function RegisterForm() {
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
   const [email, setEmail] = useState('');
 
-  const [passwordConfirmationError, setPasswordConfirmationError] = useState('');
+  const [passwordConfirmationError, setPasswordConfirmationError] =
+    useState('');
 
   useEffect(() => {
     if (password === passwordConfirmation && passwordConfirmationError) {
@@ -145,11 +139,19 @@ function RegisterForm() {
     <form onSubmit={onRegister}>
       <FormField
         id="register-username"
-        label={<>Username<br />(only letters, numbers and the following: . _ -)</>}
+        label={
+          <>
+            Username
+            <br />
+            (only letters, numbers and the following: . _ -)
+          </>
+        }
         value={username}
         setValue={setUsername}
         extras={{
-          required: true, minLength: 4, pattern: '^[-_.a-zA-Z0-9]+$',
+          required: true,
+          minLength: 4,
+          pattern: '^[-_.a-zA-Z0-9]+$',
           disabled: isLoading,
         }}
       />
@@ -186,13 +188,7 @@ function RegisterForm() {
         </FormButton>
       </div>
 
-      {
-        If(error) && (
-          <ErrorMessage>
-            {(error as any).data.message}
-          </ErrorMessage>
-        )
-      }
+      {If(error) && <ErrorMessage>{(error as any).data.message}</ErrorMessage>}
     </form>
   );
 }

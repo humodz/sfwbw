@@ -11,11 +11,14 @@ export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 export function useCurrentUser() {
   const accessToken = useSelector(selectAccessToken);
 
-  const { data, refetch, isSuccess } = useCurrentUserQuery({}, { skip: !accessToken });
+  const { data, refetch, isSuccess } = useCurrentUserQuery(
+    {},
+    { skip: !accessToken },
+  );
 
   useEffect(() => {
     refetch();
-  }, [accessToken]);
+  }, [refetch, accessToken]);
 
   if (!accessToken || !isSuccess) {
     return null;

@@ -33,7 +33,7 @@ export function FormField(props: FormFieldProps) {
         id={props.id}
         name={props.id}
         value={props.value || ''}
-        onChange={e => props.setValue?.(e.target.value)}
+        onChange={(e) => props.setValue?.(e.target.value)}
         {...(props.extras || {})}
       />
     </div>

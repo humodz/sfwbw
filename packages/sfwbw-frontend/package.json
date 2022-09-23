@@ -6,10 +6,14 @@
     "add": "cd ../.. && lerna add --scope=\"$npm_package_name\"",
     "start": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "lint": "eslint --fix",
+    "lint:all": "eslint \"src/**/*.{ts,tsx}\" --fix"
   },
   "eslintConfig": {
     "extends": [
+      "plugin:@typescript-eslint/recommended",
+      "plugin:prettier/recommended",
       "react-app",
       "react-app/jest"
     ]
@@ -31,9 +35,11 @@
     "@reduxjs/toolkit": "^1.8.5",
     "@sfwbw/sfwbw-assets": "*",
     "@sfwbw/sfwbw-core": "*",
-    "@types/node": "^17.0.45",
-    "@types/react": "^18.0.18",
-    "@types/react-dom": "^18.0.6",
+    "eslint": "^8.0.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-config-react-app": "^7.0.1",
+    "eslint-plugin-prettier": "^4.0.0",
+    "prettier": "^2.3.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-popper": "^2.3.0",
@@ -43,6 +49,9 @@
     "typescript": "^4.8.2"
   },
   "devDependencies": {
+    "@types/node": "^17.0.45",
+    "@types/react": "^18.0.18",
+    "@types/react-dom": "^18.0.6",
     "@vitejs/plugin-react": "^2.1.0",
     "vite": "^3.1.0",
     "vite-plugin-svgr": "^2.2.1",

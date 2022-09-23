@@ -1,7 +1,8 @@
 import { Else, If } from '../../../utils/jsx-conditionals';
 import { LoadingIcon } from '../../LoadingIcon';
 
-interface FormButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface FormButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   loading?: boolean;
 }
 
@@ -10,14 +11,7 @@ export function FormButton(props: FormButtonProps) {
 
   return (
     <button disabled={props.loading} {...buttonProps}>
-      {
-        If(!props.loading) && (
-          props.children
-        ) || Else && (
-          <LoadingIcon />
-        )
-      }
+      {(If(!props.loading) && props.children) || (Else && <LoadingIcon />)}
     </button>
   );
 }
-

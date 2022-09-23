@@ -21,32 +21,30 @@ export function App() {
       <header>
         <nav>
           <Link to="/">Home</Link>
-          {
-            If(currentUser) && (
-              <>
-                <Link to="/profile">Profile</Link>
-                <a onClick={signOut}>Sign Out</a>
-              </>
-            ) || Else && (
-              <Link to="/sign-in">Sign In</Link>
-            )
-          }
+          {(If(currentUser) && (
+            <>
+              <Link to="/profile">Profile</Link>
+              <a onClick={signOut}>Sign Out</a>
+            </>
+          )) ||
+            (Else && <Link to="/sign-in">Sign In</Link>)}
           <Link to="/editor">Editor</Link>
-          <a target="_blank" href="https://github.com/humodz">GitHub</a>
+          <a target="_blank" href="https://github.com/humodz" rel="noreferrer">
+            GitHub
+          </a>
         </nav>
 
         <h1>Super Famicom Wars by Web</h1>
         {/* <p>subtitle</p> */}
       </header>
       <Routes>
-        <Route path="/" element={<Home />}/>
-        <Route path="/profile" element={<Profile />}/>
-        <Route path="/sign-in" element={<SignIn />}/>
-        <Route path="/editor" element={<Editor />}/>
-        <Route path="*" element={<Navigate to="/" />}/>
+        <Route path="/" element={<Home />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/sign-in" element={<SignIn />} />
+        <Route path="/editor" element={<Editor />} />
+        <Route path="*" element={<Navigate to="/" />} />
       </Routes>
-      <footer>
-      </footer>
+      <footer></footer>
     </>
   );
 }

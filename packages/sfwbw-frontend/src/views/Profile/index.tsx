@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FormField } from '../../components/forms/FormField';
-import { useCurrentUser } from '../../store/hooks'
+import { useCurrentUser } from '../../store/hooks';
 
 export function Profile() {
   const navigate = useNavigate();
@@ -11,7 +11,7 @@ export function Profile() {
     if (!currentUser) {
       navigate('/sign-in');
     }
-  }, [currentUser]);
+  }, [navigate, currentUser]);
 
   const updateUser = (event: React.FormEvent) => {
     event.preventDefault();
@@ -32,5 +32,5 @@ export function Profile() {
         </form>
       </article>
     </main>
-  )
+  );
 }

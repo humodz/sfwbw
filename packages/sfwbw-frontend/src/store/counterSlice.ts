@@ -15,7 +15,7 @@ export const incrementAsync = createAsyncThunk(
   'counter/fetchCount',
   async (amount: number) => {
     return amount + 1;
-  }
+  },
 );
 
 export const counterSlice = createSlice({

@@ -12,7 +12,7 @@ export function ErrorMessage(props: ErrorMessageProps) {
         borderLeft: '5px solid var(--code)',
         borderRadius: '2px',
         padding: '0.5rem',
-        backgroundColor: 'var(--accent-bg)'
+        backgroundColor: 'var(--accent-bg)',
       }}
     >
       <img
@@ -36,5 +36,5 @@ export function ErrorMessage(props: ErrorMessageProps) {
         {props.children}
       </div>
     </div>
-  )
+  );
 }

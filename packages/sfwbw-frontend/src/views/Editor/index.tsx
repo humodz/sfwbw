@@ -1,21 +1,26 @@
+import { PLAYER_NEUTRAL, Terrain, Tile } from '@sfwbw/sfwbw-core';
 import produce from 'immer';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Pallette } from '../../components/Palette';
-import { Nation, PLAYER_NEUTRAL, Terrain, Tile } from '@sfwbw/sfwbw-core';
 import { getTileImage } from '../../game/assets';
 import { repeat, saveFile } from '../../utils';
 
 import styles from './styles.module.css';
 
-function createBoard(size: { width: number, height: number }): Tile[][] {
-  return repeat(size.height, repeat(size.width, { type: Terrain.PLAINS, player: PLAYER_NEUTRAL }));
+function createBoard(size: { width: number; height: number }): Tile[][] {
+  return repeat(
+    size.height,
+    repeat(size.width, { type: Terrain.PLAINS, player: PLAYER_NEUTRAL }),
+  );
 }
 
 export function Editor() {
   const [height, setHeight] = useState(9);
   const [width, setWidth] = useState(15);
   const [name, setName] = useState('untitled');
-  const [board, setBoard] = useState<Tile[][]>(() => createBoard({ height, width }));
+  const [board, setBoard] = useState<Tile[][]>(() =>
+    createBoard({ height, width }),
+  );
 
   const [selectedTile, setSelectedTile] = useState<Tile>({
     type: Terrain.PLAINS,
@@ -23,9 +28,11 @@ export function Editor() {
   });
 
   const updateBoard = (y: number, x: number, newTile: Tile) => {
-    setBoard(produce(draft => {
-      draft[y][x] = newTile;
-    }));
+    setBoard(
+      produce((draft) => {
+        draft[y][x] = newTile;
+      }),
+    );
   };
 
   const saveMap = () => {
@@ -42,14 +49,14 @@ export function Editor() {
     '--rows': String(board.length),
     '--columns': String(board[0].length),
     '--tile-size': '32px',
-  };
+  } as React.CSSProperties;
 
   return (
     <main className={styles.editor}>
       <h2>Map Editor</h2>
 
       <form
-        onSubmit={e => {
+        onSubmit={(e) => {
           e.preventDefault();
           saveMap();
         }}
@@ -61,7 +68,7 @@ export function Editor() {
             name="editor-width"
             id="editor-width"
             value={width}
-            onChange={e => setWidth(Number(e.target.value))}
+            onChange={(e) => setWidth(Number(e.target.value))}
           />
         </p>
 
@@ -72,7 +79,7 @@ export function Editor() {
             name="editor-height"
             id="editor-height"
             value={height}
-            onChange={e => setHeight(Number(e.target.value))}
+            onChange={(e) => setHeight(Number(e.target.value))}
           />
         </p>
 
@@ -83,7 +90,7 @@ export function Editor() {
             name="editor-name"
             id="editor-name"
             value={name}
-            onChange={e => setName(e.target.value)}
+            onChange={(e) => setName(e.target.value)}
           />
         </p>
 
@@ -103,29 +110,25 @@ export function Editor() {
 
       <hr />
 
-      <Pallette
-        tile={selectedTile}
-        onTileChange={setSelectedTile}
-      ></Pallette>
+      <Pallette tile={selectedTile} onTileChange={setSelectedTile}></Pallette>
 
-      <div className={styles.editorMap} style={cssVariables as any}>
-        {
-          board.map((row, y) => (
-            row.map((tile, x) => (
-              <img
-                key={`${y}-${x}`}
-                onMouseDown={() => updateBoard(y, x, selectedTile)}
-                onMouseOver={event => {
-                  if (event.buttons === 1) {
-                    updateBoard(y, x, selectedTile);
-                  }
-                }}
-                src={getTileImage(tile)}
-                draggable={false}
-              />
-            ))
-          ))
-        }
+      <div className={styles.editorMap} style={cssVariables}>
+        {board.map((row, y) =>
+          row.map((tile, x) => (
+            <img
+              key={`${y}-${x}`}
+              onMouseDown={() => updateBoard(y, x, selectedTile)}
+              onMouseOver={(event) => {
+                if (event.buttons === 1) {
+                  updateBoard(y, x, selectedTile);
+                }
+              }}
+              alt=""
+              src={getTileImage(tile)}
+              draggable={false}
+            />
+          )),
+        )}
       </div>
     </main>
   );

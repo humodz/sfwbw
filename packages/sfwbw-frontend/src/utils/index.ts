@@ -3,8 +3,7 @@ export function repeat<T>(length: number, value: T): T[] {
 }
 
 export function cls(classes: Record<string, any>): string {
-  return Object
-    .entries(classes)
+  return Object.entries(classes)
     .filter(([_name, enabled]) => enabled)
     .map(([name, _enabled]) => name)
     .join(' ');

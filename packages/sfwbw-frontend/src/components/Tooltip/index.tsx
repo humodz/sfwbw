@@ -18,17 +18,21 @@ export function Tooltip(props: TooltipProps) {
   const [popperElement, setPopperElement] = useState<HTMLElement | null>(null);
   const [arrowElement, setArrowElement] = useState<HTMLElement | null>(null);
 
-  const { styles: popperStyles, attributes } = usePopper(props.anchor, popperElement, {
-    modifiers: [
-      { name: 'arrow', options: { element: arrowElement } },
-      {
-        name: 'offset',
-        options: {
-          offset: [0, 8],
+  const { styles: popperStyles, attributes } = usePopper(
+    props.anchor,
+    popperElement,
+    {
+      modifiers: [
+        { name: 'arrow', options: { element: arrowElement } },
+        {
+          name: 'offset',
+          options: {
+            offset: [0, 8],
+          },
         },
-      }
-    ],
-  });
+      ],
+    },
+  );
 
   return (
     <>
@@ -39,7 +43,11 @@ export function Tooltip(props: TooltipProps) {
         {...attributes.popper}
       >
         {props.children}
-        <div className={styles.arrow} ref={setArrowElement} style={popperStyles.arrow} />
+        <div
+          className={styles.arrow}
+          ref={setArrowElement}
+          style={popperStyles.arrow}
+        />
       </div>
     </>
   );

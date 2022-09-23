@@ -7,7 +7,7 @@ export interface AuthState {
 }
 
 const initialState: AuthState = {
-  accessToken: localStorage.getItem(ACCESS_TOKEN)
+  accessToken: localStorage.getItem(ACCESS_TOKEN),
 };
 
 export const authSlice = createSlice({
@@ -30,6 +30,7 @@ export const authSlice = createSlice({
 
 export const { setAccessToken } = authSlice.actions;
 
-export const selectAccessToken = (state: { auth: AuthState }) => state.auth.accessToken;
+export const selectAccessToken = (state: { auth: AuthState }) =>
+  state.auth.accessToken;
 
 export const authReducer: Reducer<AuthState> = authSlice.reducer;

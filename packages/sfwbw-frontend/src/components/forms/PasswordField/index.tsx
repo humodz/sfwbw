@@ -11,12 +11,17 @@ export function PasswordField(props: PasswordFieldProps) {
     <FormField
       id={props.id}
       type={showPassword ? 'text' : 'password'}
-      label={<>
-        {props.label} {' '}
-        <span className={styles.showPasswordButton} onClick={() => setShowPassword(show => !show)}>
-          {showPassword ? '[Hide]' : '[Show]'}
-        </span>
-      </>}
+      label={
+        <>
+          {props.label}{' '}
+          <span
+            className={styles.showPasswordButton}
+            onClick={() => setShowPassword((show) => !show)}
+          >
+            {showPassword ? '[Hide]' : '[Show]'}
+          </span>
+        </>
+      }
       value={props.value}
       setValue={props.setValue}
       extras={props.extras}

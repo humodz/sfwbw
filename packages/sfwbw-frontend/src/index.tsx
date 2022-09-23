@@ -9,8 +9,12 @@ import { store } from './store';
 import { App } from './App';
 import { HashRouter } from 'react-router-dom';
 
+const container = document.getElementById('root');
 
-const container = document.getElementById('root')!;
+if (!container) {
+  throw new Error('Root not found');
+}
+
 const root = createRoot(container);
 
 root.render(
@@ -20,5 +24,5 @@ root.render(
         <App />
       </Provider>
     </HashRouter>
-  </React.StrictMode>
+  </React.StrictMode>,
 );
