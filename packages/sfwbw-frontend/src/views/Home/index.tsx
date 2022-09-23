@@ -1,13 +1,12 @@
 import styles from './styles.module.css';
 
-import { useListGamesQuery } from '../../store/apiSlice';
-import { useCurrentUser } from '../../store/hooks';
 import React, { useEffect, useState } from 'react';
-import { FormButton } from '../../components/forms/FormButton';
-import { Game, Player, User } from '../../store/apiSlice/models';
-import { If } from '../../utils/jsx-conditionals';
 import crown from '../../assets/icons/crown.png';
-import { FormField } from '../../components/forms/FormField';
+import { FormButton } from '../../components/forms/FormButton';
+import { useListGamesQuery } from '../../store/apiSlice';
+import { Game, Player, User } from '../../store/apiSlice/models';
+import { useCurrentUser } from '../../store/hooks';
+import { If } from '../../utils/jsx-conditionals';
 
 export function Home() {
   const user = useCurrentUser();
