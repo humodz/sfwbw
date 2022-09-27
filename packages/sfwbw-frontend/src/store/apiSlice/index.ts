@@ -1,7 +1,13 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { Deleted, transformResponseDeleted } from '../../utils/deleted';
 import { selectAccessToken } from '../authSlice';
 import { Game, Session, UserSelf } from './models';
-import { RegisterRequest, SignInRequest } from './requests';
+import {
+  JoinGameRequest,
+  RegisterRequest,
+  SignInRequest,
+  UpdatePlayerRequest,
+} from './requests';
 
 export const apiSlice = createApi({
   reducerPath: 'api',
@@ -44,6 +50,43 @@ export const apiSlice = createApi({
         method: 'GET',
       }),
     }),
+    deleteGame: builder.mutation<Deleted<number>, { gameId: number }>({
+      query: (params) => ({
+        url: `games/@${params.gameId}`,
+        method: 'DELETE',
+      }),
+      transformResponse: (_response, _meta, args) => ({
+        id: args.gameId,
+        deleted: true,
+      }),
+    }),
+
+    joinGame: builder.mutation<Game, JoinGameRequest>({
+      query: (params) => ({
+        url: `/games/@${params.gameId}/players/self`,
+        method: 'POST',
+        body: {
+          password: params.password,
+        },
+      }),
+    }),
+    leaveGame: builder.mutation<Game | Deleted<number>, { gameId: number }>({
+      query: (params) => ({
+        url: `/games/@${params.gameId}/players/self`,
+        method: 'DELETE',
+      }),
+      transformResponse: transformResponseDeleted((args) => args.gameId),
+    }),
+    updatePlayer: builder.mutation<Game, UpdatePlayerRequest>({
+      query: (params) => ({
+        url: `/games/@${params.gameId}/players/self`,
+        method: 'PUT',
+        body: {
+          nation: params.nation,
+          ready: params.ready,
+        },
+      }),
+    }),
   }),
 });
 
@@ -53,4 +96,8 @@ export const {
   useSignInMutation,
   useRegisterMutation,
   useListGamesQuery,
+  useJoinGameMutation,
+  useLeaveGameMutation,
+  useUpdatePlayerMutation,
+  useDeleteGameMutation,
 } = apiSlice;

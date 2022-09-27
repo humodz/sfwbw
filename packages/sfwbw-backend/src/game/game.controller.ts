@@ -261,14 +261,13 @@ export class GameController {
 
   @Protected()
   @Delete('@:id/players/self')
-  @HttpCode(HttpStatus.NO_CONTENT)
   async leaveGame(
     @LoggedUser() loggedUser: User,
     @Param('id', ParseIntPipe) id: number,
   ) {
     const game = await this.gameRepository.findOneOrFail(
       { id },
-      { populate: ['owner', 'players'] },
+      { populate: gameFieldsToPopulate },
     );
 
     const playerInGame = await this.playerInGameRepository.findOne({
@@ -291,6 +290,11 @@ export class GameController {
     }
 
     await this.gameRepository.flush();
+
+    if (players.length === 0) {
+      return undefined;
+    }
+    return game;
   }
 
   async getFirstAvailableNation(game: Game) {

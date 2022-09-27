@@ -9,6 +9,8 @@ import {
 } from '@mikro-orm/core';
 import { Nation } from '@sfwbw/sfwbw-core';
 import { Expose } from 'class-transformer';
+import { by } from 'src/utils/sort';
+import { removeSymbols } from 'src/utils/types';
 import { DesignMap } from './design-map.entity';
 import { PlayerInGame } from './player-in-game.entity';
 import { User } from './user.entity';
@@ -58,10 +60,14 @@ export class Game {
       return null;
     }
 
-    return this.players.getItems().map((it) => ({
-      ...(it as any),
-      game: undefined,
-    }));
+    // TODO - use class-transformer groups?
+    return this.players
+      .getItems()
+      .map((player) => ({
+        ...removeSymbols(player),
+        game: undefined,
+      }))
+      .sort(by((player) => player.order));
   }
 
   async getPlayers() {

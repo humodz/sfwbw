@@ -8,10 +8,11 @@ import { nations } from '@sfwbw/sfwbw-assets';
 import { Nation } from '@sfwbw/sfwbw-core';
 import { FormSelect } from '../forms/FormSelect';
 import React, { useState } from 'react';
+import { isDeleted } from '../../utils/deleted';
 
 interface GamePreviewProps {
   user: User | null;
-  game: Game;
+  game: Game & { deleted?: boolean };
   onJoin?: (password: string) => void;
   onLeave?: () => void;
   onDelete?: () => void;
@@ -22,6 +23,7 @@ interface GamePreviewProps {
 export function GamePreview(props: GamePreviewProps) {
   const [passwordAttempt, setPasswordAttempt] = useState('');
 
+  const gameIsDeleted = isDeleted(props.game);
   const userIsOwner = props.user?.username === props.game.owner.username;
 
   const userIsInGame = props.game.players.some(
@@ -36,9 +38,22 @@ export function GamePreview(props: GamePreviewProps) {
     props.onJoin?.(passwordAttempt);
   };
 
+  const onDelete = () => {
+    const wantsToDelete = window.confirm('Are you sure?');
+    if (wantsToDelete) {
+      props.onDelete?.();
+    }
+  };
+
   return (
-    <article className={styles.gamePreview}>
-      <h5>{props.game.name}</h5>
+    <article
+      className={styles.gamePreview}
+      style={{ opacity: gameIsDeleted ? 0.5 : 1 }}
+    >
+      <h5>
+        {gameIsDeleted ? <strong>[DELETED] </strong> : ''}
+        {props.game.name}
+      </h5>
       <small>{props.game.designMap.name}</small>
       <div className={styles.content}>
         <div>
@@ -54,8 +69,10 @@ export function GamePreview(props: GamePreviewProps) {
           {props.game.players.map((player) => (
             <PlayerStatus
               key={player.user.username}
-              isEditable={props.user?.username === player.user.username}
-              isOwner={props.game.owner.username === player.user.username}
+              isEditable={
+                !gameIsDeleted && props.user?.username === player.user.username
+              }
+              isOwner={userIsOwner}
               player={player}
               availableNations={getAvailableNations(player, props.game.players)}
               onReadyChange={props.onPlayerReadyChange}
@@ -68,7 +85,11 @@ export function GamePreview(props: GamePreviewProps) {
       </div>
       <form className={styles.buttons} onSubmit={onJoin}>
         {If(userIsInGame) ? (
-          <button type="button" onClick={props.onLeave}>
+          <button
+            type="button"
+            onClick={props.onLeave}
+            disabled={gameIsDeleted}
+          >
             Leave
           </button>
         ) : ElseIf(!gameIsFull) ? (
@@ -79,6 +100,7 @@ export function GamePreview(props: GamePreviewProps) {
                 placeholder="Password"
                 required={true}
                 value={passwordAttempt}
+                disabled={gameIsDeleted}
                 onChange={(e) => setPasswordAttempt(e.target.value)}
               />
             )}
@@ -86,7 +108,7 @@ export function GamePreview(props: GamePreviewProps) {
           </>
         ) : null}
         {If(userIsOwner) && (
-          <button type="button" onClick={props.onDelete}>
+          <button type="button" onClick={onDelete} disabled={gameIsDeleted}>
             Delete
           </button>
         )}
@@ -99,7 +121,10 @@ function getAvailableNations(player: Player, players: Player[]) {
   return Object.values(Nation).filter(
     (nation) =>
       nation !== Nation.NEUTRAL &&
-      players.some((it) => it !== player && it.nation !== nation),
+      players.every(
+        (it) =>
+          it.user.username === player.user.username || it.nation !== nation,
+      ),
   );
 }
 
@@ -107,7 +132,7 @@ interface PlayerStatusProps {
   isEditable: boolean;
   isOwner: boolean;
   player: Player;
-  availableNations?: Nation[];
+  availableNations: Nation[];
   onNationChange?: (nation: Nation) => void;
   onReadyChange?: (ready: boolean) => void;
 }
@@ -122,9 +147,8 @@ function PlayerStatus(props: PlayerStatusProps) {
     { label: 'Yellow Comet', value: Nation.YELLOW_COMET },
   ];
 
-  const nationSelectOptions = allNations.filter(
-    (it) =>
-      !props.availableNations || props.availableNations.includes(it.value),
+  const nationSelectOptions = allNations.filter((it) =>
+    props.availableNations.includes(it.value),
   );
 
   return (

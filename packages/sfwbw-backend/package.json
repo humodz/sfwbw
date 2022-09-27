@@ -37,6 +37,7 @@
     "@nestjs/jwt": "^9.0.0",
     "@nestjs/passport": "^9.0.0",
     "@nestjs/platform-express": "^9.0.0",
+    "@sfwbw/sfwbw-core": "*",
     "@types/passport-jwt": "^3.0.6",
     "@types/passport-local": "^1.0.34",
     "class-transformer": "^0.5.1",
@@ -46,8 +47,7 @@
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0",
-    "scrypt-kdf": "^2.0.1",
-    "@sfwbw/sfwbw-core": "*"
+    "scrypt-kdf": "^2.0.1"
   },
   "devDependencies": {
     "@nestjs/cli": "^9.0.0",

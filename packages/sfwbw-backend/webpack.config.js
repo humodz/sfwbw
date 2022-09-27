@@ -1,4 +1,4 @@
-// eslint-disable-next-line @typescript-eslint/no-var-requires
+/* eslint-disable @typescript-eslint/no-var-requires */
 const webpack = require('webpack');
 
 module.exports = (config) => {
@@ -11,7 +11,7 @@ module.exports = (config) => {
 function ignoreMissingOptionalDependencies() {
   return new webpack.IgnorePlugin({
     checkResource(resource) {
-      if (resource.startsWith('.')) {
+      if (resource.startsWith('.') || resource.startsWith('src')) {
         return false;
       }
 

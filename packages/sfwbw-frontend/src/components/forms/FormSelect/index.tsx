@@ -11,8 +11,17 @@ interface FormSelectProps<T extends string>
 }
 
 export function FormSelect<T extends string>(props: FormSelectProps<T>) {
+  const selectProps = {
+    ...props,
+    options: undefined,
+    onChange: undefined,
+  };
+
   return (
-    <select {...props} onChange={(e) => props.onChange?.(e.target.value as T)}>
+    <select
+      {...selectProps}
+      onChange={(e) => props.onChange?.(e.target.value as T)}
+    >
       {props.options.map((option) => (
         <option value={option.value} key={option.value}>
           {option.label}

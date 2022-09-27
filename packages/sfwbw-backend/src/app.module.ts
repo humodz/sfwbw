@@ -1,4 +1,11 @@
-import { Module } from '@nestjs/common';
+import {
+  ClassSerializerInterceptor,
+  Module,
+  ValidationPipe,
+} from '@nestjs/common';
+import { APP_INTERCEPTOR, APP_PIPE, Reflector } from '@nestjs/core';
+import { AppController } from './app.controller';
+import { NoContentInterceptor } from './app/no-content.interceptor';
 import { AuthModule } from './auth';
 import { ConfigModule } from './config';
 import { DatabaseModule, EntitiesModule } from './db';
@@ -16,7 +23,29 @@ import { UserModule } from './user';
     GameModule,
     DesignMapModule,
   ],
-  controllers: [],
-  providers: [],
+  controllers: [AppController],
+  providers: [
+    {
+      provide: APP_PIPE,
+      useValue: new ValidationPipe({
+        transform: true,
+        forbidNonWhitelisted: true,
+        validationError: { target: false },
+      }),
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      inject: [Reflector],
+      useFactory(reflector: any) {
+        return new ClassSerializerInterceptor(reflector, {
+          excludeExtraneousValues: true,
+        });
+      },
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: NoContentInterceptor,
+    },
+  ],
 })
 export class AppModule {}

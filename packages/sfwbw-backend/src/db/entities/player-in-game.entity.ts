@@ -14,7 +14,12 @@ export class PlayerInGame {
   [PrimaryKeyType]?: [number, number];
   [OptionalProps]?: 'ready';
 
-  @ManyToOne({ entity: () => Game, inversedBy: 'players', primary: true })
+  @ManyToOne({
+    entity: () => Game,
+    inversedBy: 'players',
+    primary: true,
+    onDelete: 'cascade',
+  })
   game!: Game;
 
   @ManyToOne({
