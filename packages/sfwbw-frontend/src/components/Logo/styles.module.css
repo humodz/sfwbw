@@ -3,6 +3,7 @@
   width: fit-content;
   margin: auto;
   position: relative;
+  user-select: none;
 }
 
 .logo img {

@@ -16,17 +16,17 @@ import {
   Put,
   Query,
 } from '@nestjs/common';
+import { Nation } from '@sfwbw/sfwbw-core';
+import { LoggedUser, Protected } from '../auth';
+import { DesignMap, Game, User } from '../db/entities';
 import { GameStatus } from '../db/entities/game.entity';
 import { PlayerInGame } from '../db/entities/player-in-game.entity';
 import { UserRole } from '../db/entities/user.entity';
-import { LoggedUser, Protected } from '../auth';
-import { DesignMap, Game, User } from '../db/entities';
+import { first } from '../utils/array';
+import { isDefined } from '../utils/validation';
 import { CreateGameRequest } from './dto/create-game.request';
 import { UpdateGameRequest } from './dto/update-game.request';
 import { UpdatePlayerRequest } from './dto/update-player.request';
-import { isDefined } from '../utils/validation';
-import { Nation } from '@sfwbw/sfwbw-core';
-import { first } from '../utils/array';
 
 const gameFieldsToPopulate = [
   'owner',
@@ -84,8 +84,18 @@ export class GameController {
   }
 
   @Get()
-  async listGames() {
-    const games = await this.gameRepository.findAll({
+  async listGames(@Query('search') rawSearchTerm = '') {
+    const searchTerm = rawSearchTerm.replace(/[_%]/g, '\\$1');
+
+    const where = rawSearchTerm
+      ? {
+          name: {
+            $ilike: `%${searchTerm}%`,
+          },
+        }
+      : {};
+
+    const games = await this.gameRepository.find(where, {
       populate: gameFieldsToPopulate,
     });
 

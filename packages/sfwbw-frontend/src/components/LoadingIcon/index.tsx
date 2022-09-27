@@ -1,14 +1,13 @@
 import { icons } from '@sfwbw/sfwbw-assets';
 
-export function LoadingIcon() {
+export function LoadingIcon(props: React.ImgHTMLAttributes<HTMLImageElement>) {
   return (
     <img
       src={icons.loading}
       alt="Loading"
-      style={{
-        height: '20px',
-        width: '20px',
-      }}
+      height="20px"
+      width="20px"
+      {...props}
     />
   );
 }

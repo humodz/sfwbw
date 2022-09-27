@@ -5,46 +5,56 @@ import { FormButton } from '../../components/forms/FormButton';
 import {
   useDeleteGameMutation,
   useJoinGameMutation,
+  useLazySearchGamesQuery,
   useLeaveGameMutation,
-  useListGamesQuery,
   useUpdatePlayerMutation,
 } from '../../store/apiSlice';
 import { useCurrentUser } from '../../store/hooks';
 import { If } from '../../utils/jsx-conditionals';
 
+import { Link } from 'react-router-dom';
 import { GamePreview } from '../../components/GamePreview';
 import { Game } from '../../store/apiSlice/models';
 import { Deleted, isDeleted, MaybeDeleted } from '../../utils/deleted';
 
 export function Home() {
-  const [games, setGames] = useState<MaybeDeleted<Game>[]>([]);
-
   const user = useCurrentUser();
 
-  const listGamesResult = useListGamesQuery({});
-  const [joinGame, joinGameResult] = useJoinGameMutation();
-  useUpdateGame(setGames, joinGameResult);
-
-  const [leaveGame, leaveGameResult] = useLeaveGameMutation();
-  useUpdateGame(setGames, leaveGameResult);
-
-  const [deleteGame, deleteGameResult] = useDeleteGameMutation();
-  useUpdateGame(setGames, deleteGameResult);
-
-  const [updatePlayer, updatePlayerResult] = useUpdatePlayerMutation();
-  useUpdateGame(setGames, updatePlayerResult);
+  const [games, setGames] = useState<MaybeDeleted<Game>[]>([]);
+  const [searchGames, searchGamesResult] = useLazySearchGamesQuery();
 
   useEffect(() => {
-    if (listGamesResult.isSuccess) {
-      setGames(listGamesResult.data);
+    searchGames('');
+  }, [searchGames]);
+
+  useEffect(() => {
+    const games = searchGamesResult.data;
+
+    if (games) {
+      setGames(games);
     }
-  }, [listGamesResult]);
+  }, [searchGamesResult.data]);
+
+  const [joinGame, joinGameResult] = useJoinGameMutation();
+  useUpdateGamesList(setGames, joinGameResult);
+
+  const [leaveGame, leaveGameResult] = useLeaveGameMutation();
+  useUpdateGamesList(setGames, leaveGameResult);
+
+  const [deleteGame, deleteGameResult] = useDeleteGameMutation();
+  useUpdateGamesList(setGames, deleteGameResult);
+
+  const [updatePlayer, updatePlayerResult] = useUpdatePlayerMutation();
+  useUpdateGamesList(setGames, updatePlayerResult);
 
   return (
     <main>
-      <SearchGamesForm />
+      <SearchGamesForm
+        loading={searchGamesResult.isFetching}
+        onSearch={(searchTerm) => searchGames(searchTerm)}
+      />
       <div className={styles.gamesList}>
-        {If(listGamesResult.isSuccess) &&
+        {If(searchGamesResult.isSuccess) &&
           games.map((game) => (
             <GamePreview
               key={game.id}
@@ -68,9 +78,18 @@ export function Home() {
   );
 }
 
-function SearchGamesForm() {
+interface SearchGamesFormProps {
+  disabled?: boolean;
+  loading?: boolean;
+  onSearch?: (searchTerm: string) => void;
+}
+
+function SearchGamesForm(props: SearchGamesFormProps) {
+  const [searchTerm, setSearchTerm] = useState('');
+
   const onSubmit = (event: React.FormEvent) => {
     event.preventDefault();
+    props.onSearch?.(searchTerm);
   };
 
   return (
@@ -79,16 +98,23 @@ function SearchGamesForm() {
         type="text"
         placeholder="Search games..."
         className={styles.searchQuery}
+        disabled={props.disabled}
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
       ></input>
       <div className={styles.searchGamesButtons}>
-        <FormButton type="submit">Search</FormButton>
-        <FormButton type="button">New Game</FormButton>
+        <FormButton type="submit" loading={props.loading}>
+          Search
+        </FormButton>
+        <Link to="/new-game" role="button">
+          New Game
+        </Link>
       </div>
     </form>
   );
 }
 
-function useUpdateGame(
+function useUpdateGamesList(
   setGames: (fn: (games: MaybeDeleted<Game>[]) => MaybeDeleted<Game>[]) => void,
   apiResult:
     | { isSuccess: true; data: Game | Deleted<number> }

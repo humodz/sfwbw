@@ -24,36 +24,37 @@ export const apiSlice = createApi({
     },
   }),
   endpoints: (builder) => ({
-    currentUser: builder.query<UserSelf, Record<string, never>>({
+    currentUser: builder.query<UserSelf, unknown>({
       query: () => ({
         url: '/users/self',
       }),
     }),
     signIn: builder.mutation<Session, SignInRequest>({
       query: (body) => ({
-        url: '/auth/session',
         method: 'POST',
+        url: '/auth/session',
         body,
       }),
     }),
     register: builder.mutation<UserSelf, RegisterRequest>({
       query: (body) => ({
-        url: '/users',
         method: 'POST',
+        url: '/users',
         body,
       }),
     }),
 
-    listGames: builder.query<Game[], Record<string, never>>({
-      query: () => ({
-        url: '/games',
+    searchGames: builder.query<Game[], string>({
+      query: (param) => ({
         method: 'GET',
+        url: '/games',
+        params: { search: param },
       }),
     }),
     deleteGame: builder.mutation<Deleted<number>, { gameId: number }>({
       query: (params) => ({
-        url: `games/@${params.gameId}`,
         method: 'DELETE',
+        url: `games/@${params.gameId}`,
       }),
       transformResponse: (_response, _meta, args) => ({
         id: args.gameId,
@@ -63,8 +64,8 @@ export const apiSlice = createApi({
 
     joinGame: builder.mutation<Game, JoinGameRequest>({
       query: (params) => ({
-        url: `/games/@${params.gameId}/players/self`,
         method: 'POST',
+        url: `/games/@${params.gameId}/players/self`,
         body: {
           password: params.password,
         },
@@ -72,15 +73,15 @@ export const apiSlice = createApi({
     }),
     leaveGame: builder.mutation<Game | Deleted<number>, { gameId: number }>({
       query: (params) => ({
-        url: `/games/@${params.gameId}/players/self`,
         method: 'DELETE',
+        url: `/games/@${params.gameId}/players/self`,
       }),
       transformResponse: transformResponseDeleted((args) => args.gameId),
     }),
     updatePlayer: builder.mutation<Game, UpdatePlayerRequest>({
       query: (params) => ({
-        url: `/games/@${params.gameId}/players/self`,
         method: 'PUT',
+        url: `/games/@${params.gameId}/players/self`,
         body: {
           nation: params.nation,
           ready: params.ready,
@@ -95,9 +96,10 @@ export const {
   useLazyCurrentUserQuery,
   useSignInMutation,
   useRegisterMutation,
-  useListGamesQuery,
+  useSearchGamesQuery,
   useJoinGameMutation,
   useLeaveGameMutation,
   useUpdatePlayerMutation,
   useDeleteGameMutation,
+  useLazySearchGamesQuery,
 } = apiSlice;

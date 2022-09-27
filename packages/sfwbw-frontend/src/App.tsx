@@ -8,6 +8,7 @@ import { Profile } from './views/Profile';
 import { SignIn } from './views/SignIn';
 
 import { Logo } from './components/Logo';
+import { NewGame } from './views/NewGame';
 
 export function App() {
   const dispatch = useAppDispatch();
@@ -27,13 +28,14 @@ export function App() {
           <a target="_blank" href="https://github.com/humodz" rel="noreferrer">
             GitHub
           </a>
-          {(If(currentUser) && (
+          {If(currentUser) ? (
             <>
               <Link to="/profile">Profile</Link>
               <button onClick={signOut}>Sign Out</button>
             </>
-          )) ||
-            (Else && <Link to="/sign-in">Sign In</Link>)}
+          ) : (
+            Else(<Link to="/sign-in">Sign In</Link>)
+          )}
         </nav>
         <Logo />
       </header>
@@ -42,6 +44,7 @@ export function App() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/sign-in" element={<SignIn />} />
         <Route path="/editor" element={<Editor />} />
+        <Route path="/new-game" element={<NewGame />} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
       <footer></footer>
