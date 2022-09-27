@@ -1,31 +1,29 @@
 import styles from './styles.module.css';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { FormButton } from '../../components/forms/FormButton';
 import {
   useDeleteGameMutation,
   useJoinGameMutation,
-  useLazySearchGamesQuery,
   useLeaveGameMutation,
+  useSearchGamesQuery,
   useUpdatePlayerMutation,
 } from '../../store/apiSlice';
 import { useCurrentUser } from '../../store/hooks';
 import { If } from '../../utils/jsx-conditionals';
 
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { GamePreview } from '../../components/GamePreview';
 import { Game } from '../../store/apiSlice/models';
 import { Deleted, isDeleted, MaybeDeleted } from '../../utils/deleted';
 
 export function Home() {
+  const navigate = useNavigate();
+  const { q: searchTerm } = useQueryParams();
   const user = useCurrentUser();
 
   const [games, setGames] = useState<MaybeDeleted<Game>[]>([]);
-  const [searchGames, searchGamesResult] = useLazySearchGamesQuery();
-
-  useEffect(() => {
-    searchGames('');
-  }, [searchGames]);
+  const searchGamesResult = useSearchGamesQuery(searchTerm || '');
 
   useEffect(() => {
     const games = searchGamesResult.data;
@@ -50,8 +48,11 @@ export function Home() {
   return (
     <main>
       <SearchGamesForm
+        searchTerm={searchTerm || ''}
         loading={searchGamesResult.isFetching}
-        onSearch={(searchTerm) => searchGames(searchTerm)}
+        onSearch={(searchTerm) => {
+          navigate({ search: toQueryString({ q: searchTerm }) });
+        }}
       />
       <div className={styles.gamesList}>
         {If(searchGamesResult.isSuccess) &&
@@ -81,11 +82,16 @@ export function Home() {
 interface SearchGamesFormProps {
   disabled?: boolean;
   loading?: boolean;
+  searchTerm: string;
   onSearch?: (searchTerm: string) => void;
 }
 
 function SearchGamesForm(props: SearchGamesFormProps) {
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState(props.searchTerm || '');
+
+  useEffect(() => {
+    setSearchTerm(props.searchTerm);
+  }, [props.searchTerm]);
 
   const onSubmit = (event: React.FormEvent) => {
     event.preventDefault();
@@ -138,4 +144,36 @@ function useUpdateGamesList(
       );
     }
   }, [setGames, apiResult]);
+}
+
+function useQueryParams() {
+  const { search } = useLocation();
+
+  return useMemo(() => {
+    const urlSearchParams = new URLSearchParams(search);
+
+    const query: Record<string, string | undefined> = {};
+
+    for (const key of urlSearchParams.keys()) {
+      const value = urlSearchParams.get(key);
+
+      if (value !== null) {
+        query[key] = value;
+      }
+    }
+
+    return query;
+  }, [search]);
+}
+
+function toQueryString(query: Record<string, string>) {
+  const urlSearchParams = new URLSearchParams();
+
+  for (const [key, value] of Object.entries(query)) {
+    if (value !== null && value !== undefined) {
+      urlSearchParams.set(key, value);
+    }
+  }
+
+  return urlSearchParams.toString();
 }
