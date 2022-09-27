@@ -47,7 +47,10 @@ export class Game {
   @OneToMany({ entity: () => PlayerInGame, mappedBy: 'game' })
   players = new Collection<PlayerInGame>(this);
 
-  // Methods
+  @Expose({ name: 'hasPassword' })
+  jsonHasPassword() {
+    return Boolean(this.password);
+  }
 
   @Expose({ name: 'players' })
   jsonGetPlayers() {

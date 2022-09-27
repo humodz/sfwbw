@@ -67,13 +67,13 @@ export function GamePreview(props: GamePreviewProps) {
         <div className={styles.details}>Game Details (max turns etc)</div>
       </div>
       <form className={styles.buttons} onSubmit={onJoin}>
-        {(If(userIsInGame) && (
+        {If(userIsInGame) ? (
           <button type="button" onClick={props.onLeave}>
             Leave
           </button>
-        )) ||
-          (ElseIf(!gameIsFull) && (
-            <>
+        ) : ElseIf(!gameIsFull) ? (
+          <>
+            {If(props.game.hasPassword) && (
               <input
                 type="password"
                 placeholder="Password"
@@ -81,9 +81,10 @@ export function GamePreview(props: GamePreviewProps) {
                 value={passwordAttempt}
                 onChange={(e) => setPasswordAttempt(e.target.value)}
               />
-              <button type="submit">Join</button>
-            </>
-          ))}
+            )}
+            <button type="submit">Join</button>
+          </>
+        ) : null}
         {If(userIsOwner) && (
           <button type="button" onClick={props.onDelete}>
             Delete

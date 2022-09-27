@@ -6,7 +6,7 @@ import { useListGamesQuery } from '../../store/apiSlice';
 import { useCurrentUser } from '../../store/hooks';
 import { If } from '../../utils/jsx-conditionals';
 
-import { GamePreview } from '../../components/GameSummary';
+import { GamePreview } from '../../components/GamePreview';
 
 export function Home() {
   const user = useCurrentUser();

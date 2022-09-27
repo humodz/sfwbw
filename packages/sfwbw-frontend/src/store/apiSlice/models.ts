@@ -15,11 +15,9 @@ export interface Session {
 export interface Game {
   id: number;
   name: string;
-  isPrivate: boolean;
-  password: string | null;
+  hasPassword: string;
   status: string; // TODO
   designMap: DesignMap; // TODO
-  maxTurns: number | null;
   owner: User;
   players: Player[];
 }

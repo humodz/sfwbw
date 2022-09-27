@@ -1,7 +1,8 @@
 import { icons } from '@sfwbw/sfwbw-assets';
+import { ReactNode } from 'react';
 
 interface ErrorMessageProps {
-  children: string | JSX.Element;
+  children: ReactNode;
 }
 
 export function ErrorMessage(props: ErrorMessageProps) {
