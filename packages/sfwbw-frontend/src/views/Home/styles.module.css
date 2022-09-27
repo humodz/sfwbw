@@ -1,25 +1,27 @@
-.searchGames {
+.searchGames, .searchGamesButtons {
   display: flex;
-  align-items: center;
   flex-wrap: wrap;
+  flex-direction: row;
+  align-items: stretch;
+  gap: 0.5rem;
 }
 
-.searchGames select {
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
-  border-right: none;
-}
-
-.searchGames input {
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
-}
-
-.searchGames button {
-  margin-top: 0;
-  margin-left: 0.5rem;
+.searchGames > *,
+.searchGamesButtons > * {
+  margin: 0;
 }
 
 .searchQuery {
-  flex-grow: 1;
+  flex: 1;
+}
+
+@media only screen and (max-width: 576px) {
+  .searchGames {
+    flex-direction: column;
+  }
+
+  .searchGamesButtons > * {
+    flex: 1;
+    white-space: nowrap;
+  }
 }

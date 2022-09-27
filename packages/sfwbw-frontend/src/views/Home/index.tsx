@@ -1,6 +1,6 @@
 import styles from './styles.module.css';
 
-import React, { useState } from 'react';
+import React from 'react';
 import { FormButton } from '../../components/forms/FormButton';
 import { useListGamesQuery } from '../../store/apiSlice';
 import { useCurrentUser } from '../../store/hooks';
@@ -28,29 +28,21 @@ export function Home() {
 }
 
 function SearchGamesForm() {
-  const [searchField, setSearchField] = useState('name');
-
   const onSubmit = (event: React.FormEvent) => {
     event.preventDefault();
   };
 
   return (
     <form className={styles.searchGames} onSubmit={onSubmit}>
-      <FormSelect
-        selected={searchField}
-        onChange={setSearchField}
-        options={[
-          { label: 'Name', value: 'name' },
-          { label: 'Owner', value: 'owner' },
-        ]}
-      ></FormSelect>
       <input
         type="text"
         placeholder="Search games..."
         className={styles.searchQuery}
       ></input>
-      <FormButton type="submit">Search</FormButton>
-      <FormButton type="button">New Game</FormButton>
+      <div className={styles.searchGamesButtons}>
+        <FormButton type="submit">Search</FormButton>
+        <FormButton type="button">New Game</FormButton>
+      </div>
     </form>
   );
 }
