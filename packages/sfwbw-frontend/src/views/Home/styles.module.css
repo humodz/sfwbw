@@ -1,3 +1,7 @@
+.searchGames {
+  margin-bottom: 2rem;
+}
+
 .searchGames, .searchGamesButtons {
   display: flex;
   flex-wrap: wrap;

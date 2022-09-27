@@ -31,7 +31,7 @@ header > nav button {
   text-decoration: none;
 }
 
-@media only screen and (max-width: 720px) {
+@media (max-width: 720px) {
   header > nav button {
     border: none;
     padding: 0;

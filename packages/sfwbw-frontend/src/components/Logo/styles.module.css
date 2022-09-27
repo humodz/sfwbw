@@ -28,7 +28,7 @@
   stroke-linejoin: round;
 }
 
-@media only screen and (max-width: 576px) {
+@media (max-width: 576px) {
   .logo {
     --scale: 1;
   }

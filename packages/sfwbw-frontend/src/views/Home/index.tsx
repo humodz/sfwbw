@@ -17,12 +17,12 @@ export function Home() {
   return (
     <main>
       <SearchGamesForm />
-      <section>
+      <div className={styles.gamesList}>
         {If(isSuccess) &&
           games.map((game) => (
             <GamePreview key={game.id} user={user} game={game} />
           ))}
-      </section>
+      </div>
     </main>
   );
 }
