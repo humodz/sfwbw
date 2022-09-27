@@ -6,18 +6,18 @@
   display: flex;
   gap: 0.5rem;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: space-around;
+}
+
+.content > * {
+  flex-grow: 1;
 }
 
 .gamePreview .mapPreview {
   background-color: var(--accent-bg);
   width: 10rem;
   height: 10rem;
-}
-
-.gamePreview .players {
-  flex-grow: 1;
-  flex-basis: 0;
+  margin: auto;
 }
 
 .gamePreview .buttons {
@@ -44,6 +44,7 @@
   background-size: contain;
   width: 2rem;
   height: 2rem;
+  flex-shrink: 0;
 }
 
 .playerStatus .nation select {
@@ -54,14 +55,20 @@
 
 .playerStatus .username {
   margin-right: auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .playerStatus .username img {
   width: 1em;
   height: 1em;
-  margin-left: 0.5em;
 }
 
 .playerStatus .ready {
-  margin-left: 1em;
+  margin-left: 0.5em;
+}
+
+@media only screen and (max-width: 576px) {
+
 }

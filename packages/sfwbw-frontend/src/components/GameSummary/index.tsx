@@ -2,7 +2,7 @@ import styles from './styles.module.css';
 
 import crown from '../../assets/icons/crown.png';
 import { Game, Player, User } from '../../store/apiSlice/models';
-import { If } from '../../utils/jsx-conditionals';
+import { ElseIf, If } from '../../utils/jsx-conditionals';
 
 import { nations } from '@sfwbw/sfwbw-assets';
 import { Nation } from '@sfwbw/sfwbw-core';
@@ -41,7 +41,9 @@ export function GamePreview(props: GamePreviewProps) {
       <h5>{props.game.name}</h5>
       <small>{props.game.designMap.name}</small>
       <div className={styles.content}>
-        <div className={styles.mapPreview}>map goes here</div>
+        <div>
+          <div className={styles.mapPreview}>map goes here</div>
+        </div>
 
         <div className={styles.players}>
           <div>
@@ -55,30 +57,33 @@ export function GamePreview(props: GamePreviewProps) {
               isEditable={props.user?.username === player.user.username}
               isOwner={props.game.owner.username === player.user.username}
               player={player}
+              availableNations={getAvailableNations(player, props.game.players)}
               onReadyChange={props.onPlayerReadyChange}
               onNationChange={props.onPlayerNationChange}
             />
           ))}
         </div>
+
+        <div className={styles.details}>Game Details (max turns etc)</div>
       </div>
       <form className={styles.buttons} onSubmit={onJoin}>
-        {If(userIsInGame) && (
+        {(If(userIsInGame) && (
           <button type="button" onClick={props.onLeave}>
             Leave
           </button>
-        )}
-        {If(!userIsInGame && !gameIsFull) && (
-          <>
-            <input
-              type="password"
-              placeholder="Password"
-              required={true}
-              value={passwordAttempt}
-              onChange={(e) => setPasswordAttempt(e.target.value)}
-            />
-            <button type="submit">Join</button>
-          </>
-        )}
+        )) ||
+          (ElseIf(!gameIsFull) && (
+            <>
+              <input
+                type="password"
+                placeholder="Password"
+                required={true}
+                value={passwordAttempt}
+                onChange={(e) => setPasswordAttempt(e.target.value)}
+              />
+              <button type="submit">Join</button>
+            </>
+          ))}
         {If(userIsOwner) && (
           <button type="button" onClick={props.onDelete}>
             Delete
@@ -89,10 +94,19 @@ export function GamePreview(props: GamePreviewProps) {
   );
 }
 
+function getAvailableNations(player: Player, players: Player[]) {
+  return Object.values(Nation).filter(
+    (nation) =>
+      nation !== Nation.NEUTRAL &&
+      players.some((it) => it !== player && it.nation !== nation),
+  );
+}
+
 interface PlayerStatusProps {
   isEditable: boolean;
   isOwner: boolean;
   player: Player;
+  availableNations?: Nation[];
   onNationChange?: (nation: Nation) => void;
   onReadyChange?: (ready: boolean) => void;
 }
@@ -100,12 +114,17 @@ interface PlayerStatusProps {
 function PlayerStatus(props: PlayerStatusProps) {
   const nationImage = nations[props.player.nation];
 
-  const nationSelectOptions = [
+  const allNations = [
     { label: 'Red Star', value: Nation.RED_STAR },
     { label: 'Blue Moon', value: Nation.BLUE_MOON },
     { label: 'Green Earth', value: Nation.GREEN_EARTH },
     { label: 'Yellow Comet', value: Nation.YELLOW_COMET },
   ];
+
+  const nationSelectOptions = allNations.filter(
+    (it) =>
+      !props.availableNations || props.availableNations.includes(it.value),
+  );
 
   return (
     <div className={styles.playerStatus} key={props.player.user.username}>
@@ -124,10 +143,10 @@ function PlayerStatus(props: PlayerStatusProps) {
         )}
       </div>
       <div className={styles.username}>
-        {props.player.user.username}
         {If(props.isOwner) && (
           <img src={crown} alt="game owner" title="game owner" />
-        )}
+        )}{' '}
+        <span>{props.player.user.username}</span>
       </div>
       <input
         className={styles.ready}
