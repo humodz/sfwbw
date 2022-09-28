@@ -1,0 +1,36 @@
+.playerStatus {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  column-gap: 0.5rem;
+}
+
+.playerStatus .nation {
+image-rendering: pixelated;
+background-size: contain;
+width: 2rem;
+height: 2rem;
+flex-shrink: 0;
+}
+
+.playerStatus .nation select {
+height: 100%;
+cursor: pointer;
+opacity: 0;
+}
+
+.playerStatus .username {
+margin-right: auto;
+overflow: hidden;
+text-overflow: ellipsis;
+white-space: nowrap;
+}
+
+.playerStatus .username img {
+width: 1em;
+height: 1em;
+}
+
+.playerStatus .ready {
+margin-left: 0.5em;
+}

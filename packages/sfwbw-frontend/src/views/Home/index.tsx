@@ -16,6 +16,9 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { GamePreview } from '../../components/GamePreview';
 import { Game } from '../../store/apiSlice/models';
 import { Deleted, isDeleted, MaybeDeleted } from '../../utils/deleted';
+import { UseMutationStateResult } from '@reduxjs/toolkit/dist/query/react/buildHooks';
+import { SerializedError } from '@reduxjs/toolkit';
+import { FetchBaseQueryError } from '@reduxjs/toolkit/dist/query';
 
 export function Home() {
   const navigate = useNavigate();
@@ -35,6 +38,7 @@ export function Home() {
 
   const [joinGame, joinGameResult] = useJoinGameMutation();
   useUpdateGamesList(setGames, joinGameResult);
+  useErrorPopup(joinGameResult);
 
   const [leaveGame, leaveGameResult] = useLeaveGameMutation();
   useUpdateGamesList(setGames, leaveGameResult);
@@ -144,6 +148,17 @@ function useUpdateGamesList(
       );
     }
   }, [setGames, apiResult]);
+}
+
+function useErrorPopup(
+  apiResult: { isError: true; error: any } | { isError: false },
+) {
+  useEffect(() => {
+    if (apiResult.isError) {
+      const message = apiResult.error.data?.message || 'Unknown error';
+      alert(message);
+    }
+  }, [apiResult]);
 }
 
 function useQueryParams() {

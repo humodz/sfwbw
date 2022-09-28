@@ -1,4 +1,4 @@
-import { Nation } from '@sfwbw/sfwbw-core';
+import { Nation, Tile } from '@sfwbw/sfwbw-core';
 
 export interface User {
   username: string;
@@ -25,6 +25,7 @@ export interface Game {
 export interface DesignMap {
   name: string;
   maxPlayers: number;
+  tiles: Tile[][];
 }
 
 export interface Player {

@@ -66,7 +66,7 @@ export const apiSlice = createApi({
       query: (params) => ({
         method: 'POST',
         url: `/games/@${params.gameId}/players/self`,
-        body: {
+        params: {
           password: params.password,
         },
       }),

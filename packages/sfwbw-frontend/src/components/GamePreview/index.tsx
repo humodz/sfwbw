@@ -1,14 +1,12 @@
 import styles from './styles.module.css';
 
-import crown from '../../assets/icons/crown.png';
 import { Game, Player, User } from '../../store/apiSlice/models';
 import { ElseIf, If } from '../../utils/jsx-conditionals';
 
-import { nations } from '@sfwbw/sfwbw-assets';
 import { Nation } from '@sfwbw/sfwbw-core';
-import { FormSelect } from '../forms/FormSelect';
 import React, { useState } from 'react';
 import { isDeleted } from '../../utils/deleted';
+import { PlayerStatus } from './PlayerStatus';
 
 interface GamePreviewProps {
   user: User | null;
@@ -125,62 +123,5 @@ function getAvailableNations(player: Player, players: Player[]) {
         (it) =>
           it.user.username === player.user.username || it.nation !== nation,
       ),
-  );
-}
-
-interface PlayerStatusProps {
-  isEditable: boolean;
-  isOwner: boolean;
-  player: Player;
-  availableNations: Nation[];
-  onNationChange?: (nation: Nation) => void;
-  onReadyChange?: (ready: boolean) => void;
-}
-
-function PlayerStatus(props: PlayerStatusProps) {
-  const nationImage = nations[props.player.nation];
-
-  const allNations = [
-    { label: 'Red Star', value: Nation.RED_STAR },
-    { label: 'Blue Moon', value: Nation.BLUE_MOON },
-    { label: 'Green Earth', value: Nation.GREEN_EARTH },
-    { label: 'Yellow Comet', value: Nation.YELLOW_COMET },
-  ];
-
-  const nationSelectOptions = allNations.filter((it) =>
-    props.availableNations.includes(it.value),
-  );
-
-  return (
-    <div className={styles.playerStatus} key={props.player.user.username}>
-      <div
-        className={styles.nation}
-        style={{
-          backgroundImage: `url(${nationImage})`,
-        }}
-      >
-        {If(props.isEditable) && (
-          <FormSelect
-            options={nationSelectOptions}
-            value={props.player.nation}
-            onChange={(value) => props.onNationChange?.(value)}
-          />
-        )}
-      </div>
-      <div className={styles.username}>
-        {If(props.isOwner) && (
-          <img src={crown} alt="game owner" title="game owner" />
-        )}{' '}
-        <span>{props.player.user.username}</span>
-      </div>
-      <input
-        className={styles.ready}
-        type="checkbox"
-        checked={props.player.ready}
-        disabled={!props.isEditable}
-        title={props.player.ready ? 'ready' : 'not ready'}
-        onChange={(e) => props.onReadyChange?.(e.target.checked)}
-      ></input>
-    </div>
   );
 }
