@@ -6,6 +6,7 @@
     "add": "cd ../.. && lerna add --scope=\"$npm_package_name\"",
     "start": "vite",
     "build": "vite build",
+    "typecheck": "tsc --noEmit",
     "preview": "vite preview",
     "lint": "eslint --fix",
     "lint:all": "eslint \"src/**/*.{ts,tsx}\" --fix"

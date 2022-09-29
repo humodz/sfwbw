@@ -1,7 +1,7 @@
 import styles from './styles.module.css';
 
 import crown from '../../../assets/icons/crown.png';
-import { Player } from '../../../store/api/models';
+import { Player } from '../../../store/api';
 import { If } from '../../../utils/jsxConditionals';
 
 import { nations } from '@sfwbw/sfwbw-assets';
