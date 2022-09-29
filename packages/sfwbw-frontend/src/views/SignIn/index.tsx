@@ -2,7 +2,7 @@ import styles from './styles.module.css';
 import { useState, useEffect } from 'react';
 import { FormField } from '../../components/forms/FormField';
 import { PasswordField } from '../../components/forms/PasswordField';
-import { If } from '../../utils/jsx-conditionals';
+import { If } from '../../utils/jsxConditionals';
 import { useRegisterMutation, useSignInMutation } from '../../store/api';
 import { ErrorMessage } from '../../components/ErrorMessage';
 import { FormButton } from '../../components/forms/FormButton';
@@ -75,7 +75,7 @@ function SignInForm() {
         </FormButton>
       </div>
 
-      {If(error) && <ErrorMessage>{(error as any).data.message}</ErrorMessage>}
+      {If(error) && <ErrorMessage error={error}></ErrorMessage>}
     </form>
   );
 }
@@ -188,7 +188,7 @@ function RegisterForm() {
         </FormButton>
       </div>
 
-      {If(error) && <ErrorMessage>{(error as any).data.message}</ErrorMessage>}
+      {If(error) && <ErrorMessage error={error}></ErrorMessage>}
     </form>
   );
 }

@@ -10,7 +10,9 @@ import { getResponse } from '../../utils/nest';
 @Catch(UniqueConstraintViolationException)
 export class UniqueConstraintFilter implements ExceptionFilter {
   catch(exception: ConstraintError, host: ArgumentsHost) {
-    const property = exception.constraint.split('_')[1];
+    const property = exception.constraint
+      .replace(exception.table + '_', '')
+      .replace('_unique', '');
 
     getResponse(host)
       .status(HttpStatus.CONFLICT)
@@ -23,6 +25,7 @@ export class UniqueConstraintFilter implements ExceptionFilter {
 interface ConstraintError {
   detail: string;
   constraint: string;
+  table: string;
 }
 
 function capitalize(text: string) {

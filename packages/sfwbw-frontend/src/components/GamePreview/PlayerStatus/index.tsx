@@ -2,7 +2,7 @@ import styles from './styles.module.css';
 
 import crown from '../../../assets/icons/crown.png';
 import { Player } from '../../../store/api/models';
-import { If } from '../../../utils/jsx-conditionals';
+import { If } from '../../../utils/jsxConditionals';
 
 import { nations } from '@sfwbw/sfwbw-assets';
 import { Nation } from '@sfwbw/sfwbw-core';

@@ -1,7 +1,6 @@
 import styles from './styles.module.css';
 
-import React, { useEffect, useMemo, useState } from 'react';
-import { FormButton } from '../../components/forms/FormButton';
+import { useEffect, useState } from 'react';
 import {
   useDeleteGameMutation,
   useJoinGameMutation,
@@ -10,12 +9,15 @@ import {
   useUpdatePlayerMutation,
 } from '../../store/api';
 import { useCurrentUser } from '../../store/hooks';
-import { If } from '../../utils/jsx-conditionals';
+import { If } from '../../utils/jsxConditionals';
 
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { GamePreview } from '../../components/GamePreview';
+import { SearchGamesForm } from '../../components/SearchGamesForm';
 import { Game } from '../../store/api';
 import { Deleted, isDeleted, MaybeDeleted } from '../../utils/deleted';
+import { toQueryString, useQueryParams } from '../../utils/router';
+import { useErrorPopup } from '../../utils/errors';
 
 export function Home() {
   const navigate = useNavigate();
@@ -27,7 +29,7 @@ export function Home() {
 
   useEffect(() => {
     const games = searchGamesResult.data;
-
+    
     if (games) {
       setGames(games);
     }
@@ -80,47 +82,6 @@ export function Home() {
   );
 }
 
-interface SearchGamesFormProps {
-  disabled?: boolean;
-  loading?: boolean;
-  searchTerm: string;
-  onSearch?: (searchTerm: string) => void;
-}
-
-function SearchGamesForm(props: SearchGamesFormProps) {
-  const [searchTerm, setSearchTerm] = useState(props.searchTerm || '');
-
-  useEffect(() => {
-    setSearchTerm(props.searchTerm);
-  }, [props.searchTerm]);
-
-  const onSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
-    props.onSearch?.(searchTerm);
-  };
-
-  return (
-    <form className={styles.searchGames} onSubmit={onSubmit}>
-      <input
-        type="text"
-        placeholder="Search games..."
-        className={styles.searchQuery}
-        disabled={props.disabled}
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-      ></input>
-      <div className={styles.searchGamesButtons}>
-        <FormButton type="submit" loading={props.loading}>
-          Search
-        </FormButton>
-        <Link to="/new-game" role="button">
-          New Game
-        </Link>
-      </div>
-    </form>
-  );
-}
-
 function useUpdateGamesList(
   setGames: (fn: (games: MaybeDeleted<Game>[]) => MaybeDeleted<Game>[]) => void,
   apiResult:
@@ -145,47 +106,4 @@ function useUpdateGamesList(
       );
     }
   }, [setGames, apiResult]);
-}
-
-function useErrorPopup(
-  apiResult: { isError: true; error: any } | { isError: false },
-) {
-  useEffect(() => {
-    if (apiResult.isError) {
-      const message = apiResult.error.data?.message || 'Unknown error';
-      alert(message);
-    }
-  }, [apiResult]);
-}
-
-function useQueryParams() {
-  const { search } = useLocation();
-
-  return useMemo(() => {
-    const urlSearchParams = new URLSearchParams(search);
-
-    const query: Record<string, string | undefined> = {};
-
-    for (const key of urlSearchParams.keys()) {
-      const value = urlSearchParams.get(key);
-
-      if (value !== null) {
-        query[key] = value;
-      }
-    }
-
-    return query;
-  }, [search]);
-}
-
-function toQueryString(query: Record<string, string>) {
-  const urlSearchParams = new URLSearchParams();
-
-  for (const [key, value] of Object.entries(query)) {
-    if (value !== null && value !== undefined) {
-      urlSearchParams.set(key, value);
-    }
-  }
-
-  return urlSearchParams.toString();
 }

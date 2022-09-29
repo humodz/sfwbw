@@ -1,7 +1,7 @@
 import styles from './styles.module.css';
 
 import { Game, Player, User } from '../../store/api/models';
-import { ElseIf, If } from '../../utils/jsx-conditionals';
+import { ElseIf, If } from '../../utils/jsxConditionals';
 
 import { Nation } from '@sfwbw/sfwbw-core';
 import React, { useState } from 'react';

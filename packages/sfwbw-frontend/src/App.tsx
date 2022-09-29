@@ -1,7 +1,7 @@
 import { Link, Navigate, Route, Routes } from 'react-router-dom';
 import { setAccessToken } from './store/authSlice';
 import { useAppDispatch, useCurrentUser } from './store/hooks';
-import { Else, If } from './utils/jsx-conditionals';
+import { Else, If } from './utils/jsxConditionals';
 import { Editor } from './views/Editor';
 import { Home } from './views/Home';
 import { Profile } from './views/Profile';

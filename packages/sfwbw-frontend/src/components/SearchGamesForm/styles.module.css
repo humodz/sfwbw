@@ -1,0 +1,31 @@
+.searchGames {
+  margin-bottom: 2rem;
+}
+
+.searchGames, .searchGamesButtons {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  align-items: stretch;
+  gap: 0.5rem;
+}
+
+.searchGames > *,
+.searchGamesButtons > * {
+  margin: 0;
+}
+
+.searchQuery {
+  flex: 1;
+}
+
+@media only screen and (max-width: 576px) {
+  .searchGames {
+    flex-direction: column;
+  }
+
+  .searchGamesButtons > * {
+    flex: 1;
+    white-space: nowrap;
+  }
+}
