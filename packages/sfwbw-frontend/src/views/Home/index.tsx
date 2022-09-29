@@ -16,9 +16,6 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { GamePreview } from '../../components/GamePreview';
 import { Game } from '../../store/apiSlice/models';
 import { Deleted, isDeleted, MaybeDeleted } from '../../utils/deleted';
-import { UseMutationStateResult } from '@reduxjs/toolkit/dist/query/react/buildHooks';
-import { SerializedError } from '@reduxjs/toolkit';
-import { FetchBaseQueryError } from '@reduxjs/toolkit/dist/query';
 
 export function Home() {
   const navigate = useNavigate();

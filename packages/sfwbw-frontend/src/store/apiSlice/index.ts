@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { Deleted, transformResponseDeleted } from '../../utils/deleted';
+import { Deleted, makeDeleted } from '../../utils/deleted';
 import { selectAccessToken } from '../authSlice';
-import { Game, Session, UserSelf } from './models';
+import { deserializeGame, Game, RawGame, Session, UserSelf } from './models';
 import {
   JoinGameRequest,
   RegisterRequest,
@@ -50,16 +50,17 @@ export const apiSlice = createApi({
         url: '/games',
         params: { search: param },
       }),
+      transformResponse(response: RawGame[]) {
+        return response.map(deserializeGame);
+      },
     }),
     deleteGame: builder.mutation<Deleted<number>, { gameId: number }>({
       query: (params) => ({
         method: 'DELETE',
         url: `games/@${params.gameId}`,
       }),
-      transformResponse: (_response, _meta, args) => ({
-        id: args.gameId,
-        deleted: true,
-      }),
+      transformResponse: (_response, _meta, params) =>
+        makeDeleted(params.gameId),
     }),
 
     joinGame: builder.mutation<Game, JoinGameRequest>({
@@ -70,13 +71,20 @@ export const apiSlice = createApi({
           password: params.password,
         },
       }),
+      transformResponse: deserializeGame,
     }),
     leaveGame: builder.mutation<Game | Deleted<number>, { gameId: number }>({
       query: (params) => ({
         method: 'DELETE',
         url: `/games/@${params.gameId}/players/self`,
       }),
-      transformResponse: transformResponseDeleted((args) => args.gameId),
+      transformResponse(response: RawGame, _meta, args) {
+        if (!response) {
+          return makeDeleted(args.gameId);
+        } else {
+          return deserializeGame(response);
+        }
+      },
     }),
     updatePlayer: builder.mutation<Game, UpdatePlayerRequest>({
       query: (params) => ({
