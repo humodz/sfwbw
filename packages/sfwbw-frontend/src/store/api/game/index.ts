@@ -1,49 +1,16 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { Deleted, makeDeleted } from '../../utils/deleted';
-import { selectAccessToken } from '../authSlice';
-import { deserializeGame, Game, RawGame, Session, UserSelf } from './models';
-import {
-  JoinGameRequest,
-  RegisterRequest,
-  SignInRequest,
-  UpdatePlayerRequest,
-} from './requests';
+import { createApi } from '@reduxjs/toolkit/query/react';
+import { Deleted, makeDeleted } from '../../../utils/deleted';
+import { baseQuery } from '../baseQuery';
+import { deserializeGame, Game, RawGame } from './models';
+import { JoinGameRequest, UpdatePlayerRequest } from './requests';
 
-export const apiSlice = createApi({
-  reducerPath: 'api',
-  baseQuery: fetchBaseQuery({
-    baseUrl: `http://${window.location.hostname}:3000`,
-    prepareHeaders: (headers, { getState }) => {
-      const accessToken = selectAccessToken(getState() as any);
+export * from './models';
+export * from './requests';
 
-      if (accessToken) {
-        headers.set('Authorization', `Bearer ${accessToken}`);
-      }
-
-      return headers;
-    },
-  }),
+export const apiGameSlice = createApi({
+  reducerPath: 'apiGame',
+  baseQuery,
   endpoints: (builder) => ({
-    currentUser: builder.query<UserSelf, unknown>({
-      query: () => ({
-        url: '/users/self',
-      }),
-    }),
-    signIn: builder.mutation<Session, SignInRequest>({
-      query: (body) => ({
-        method: 'POST',
-        url: '/auth/session',
-        body,
-      }),
-    }),
-    register: builder.mutation<UserSelf, RegisterRequest>({
-      query: (body) => ({
-        method: 'POST',
-        url: '/users',
-        body,
-      }),
-    }),
-
     searchGames: builder.query<Game[], string>({
       query: (param) => ({
         method: 'GET',
@@ -100,14 +67,10 @@ export const apiSlice = createApi({
 });
 
 export const {
-  useCurrentUserQuery,
-  useLazyCurrentUserQuery,
-  useSignInMutation,
-  useRegisterMutation,
   useSearchGamesQuery,
   useJoinGameMutation,
   useLeaveGameMutation,
   useUpdatePlayerMutation,
   useDeleteGameMutation,
   useLazySearchGamesQuery,
-} = apiSlice;
+} = apiGameSlice;

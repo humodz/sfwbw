@@ -1,16 +1,6 @@
 import { deserializeTiles, Nation, Tile } from '@sfwbw/sfwbw-core';
+import { User } from '../user/models';
 
-export interface User {
-  username: string;
-}
-export interface UserSelf {
-  username: string;
-  email: string | null;
-}
-
-export interface Session {
-  accessToken: string;
-}
 export interface Game {
   id: number;
   name: string;

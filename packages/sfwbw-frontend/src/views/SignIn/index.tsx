@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { FormField } from '../../components/forms/FormField';
 import { PasswordField } from '../../components/forms/PasswordField';
 import { If } from '../../utils/jsx-conditionals';
-import { useRegisterMutation, useSignInMutation } from '../../store/apiSlice';
+import { useRegisterMutation, useSignInMutation } from '../../store/api';
 import { ErrorMessage } from '../../components/ErrorMessage';
 import { FormButton } from '../../components/forms/FormButton';
 import { setAccessToken } from '../../store/authSlice';

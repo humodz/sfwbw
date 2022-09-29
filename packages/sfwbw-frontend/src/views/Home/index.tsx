@@ -8,13 +8,13 @@ import {
   useLeaveGameMutation,
   useSearchGamesQuery,
   useUpdatePlayerMutation,
-} from '../../store/apiSlice';
+} from '../../store/api';
 import { useCurrentUser } from '../../store/hooks';
 import { If } from '../../utils/jsx-conditionals';
 
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { GamePreview } from '../../components/GamePreview';
-import { Game } from '../../store/apiSlice/models';
+import { Game } from '../../store/api';
 import { Deleted, isDeleted, MaybeDeleted } from '../../utils/deleted';
 
 export function Home() {

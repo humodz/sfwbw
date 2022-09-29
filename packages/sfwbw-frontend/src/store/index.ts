@@ -1,5 +1,5 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
-import { apiSlice } from './apiSlice';
+import { apiGameSlice, apiUserSlice } from './api';
 import { authReducer } from './authSlice';
 import { counterReducer } from './counterSlice';
 
@@ -7,10 +7,13 @@ export const store = configureStore({
   reducer: {
     counter: counterReducer,
     auth: authReducer,
-    [apiSlice.reducerPath]: apiSlice.reducer,
+    [apiUserSlice.reducerPath]: apiUserSlice.reducer,
+    [apiGameSlice.reducerPath]: apiGameSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(apiSlice.middleware),
+    getDefaultMiddleware()
+      .concat(apiUserSlice.middleware)
+      .concat(apiGameSlice.middleware),
 });
 
 export type AppDispatch = typeof store.dispatch;

@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import type { RootState, AppDispatch } from '.';
-import { useCurrentUserQuery } from './apiSlice';
+import { useCurrentUserQuery } from './api';
 import { selectAccessToken } from './authSlice';
 
 // Use throughout your app instead of plain `useDispatch` and `useSelector`

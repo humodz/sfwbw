@@ -1,6 +1,6 @@
 import styles from './styles.module.css';
 
-import { Game, Player, User } from '../../store/apiSlice/models';
+import { Game, Player, User } from '../../store/api/models';
 import { ElseIf, If } from '../../utils/jsx-conditionals';
 
 import { Nation } from '@sfwbw/sfwbw-core';
