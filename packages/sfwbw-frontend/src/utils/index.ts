@@ -1,3 +1,5 @@
+import React from 'react';
+
 export function repeat<T>(length: number, value: T): T[] {
   return Array(length).fill(value);
 }
@@ -7,6 +9,12 @@ export function cls(classes: Record<string, any>): string {
     .filter(([_name, enabled]) => enabled)
     .map(([name, _enabled]) => name)
     .join(' ');
+}
+
+export function cssVars<T extends React.CSSProperties>(
+  vars: T & Record<string, string | number>,
+): React.CSSProperties {
+  return vars as any;
 }
 
 export function saveFile(filename: string, content: string, type = 'text') {

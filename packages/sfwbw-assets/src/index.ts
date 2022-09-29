@@ -11,6 +11,7 @@ import loading from './icons/loading.gif';
 import error from './icons/error.png';
 
 import caroline from './cos/co-caroline.png';
+export { default as tilePreviews } from './tile-previews.png';
 
 export const tiles = {
   terrain,

@@ -13,12 +13,6 @@
   flex-grow: 1;
 }
 
-.gamePreview .mapPreview {
-  background-color: var(--accent-bg);
-  width: 10rem;
-  height: 10rem;
-  margin: auto;
-}
 
 .gamePreview .buttons {
   display: flex;

@@ -62,6 +62,7 @@ export const apiGameSlice = createApi({
           ready: params.ready,
         },
       }),
+      transformResponse: deserializeGame,
     }),
   }),
 });

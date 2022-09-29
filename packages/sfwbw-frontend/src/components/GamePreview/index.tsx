@@ -6,6 +6,7 @@ import { ElseIf, If } from '../../utils/jsxConditionals';
 import { Nation } from '@sfwbw/sfwbw-core';
 import React, { useState } from 'react';
 import { isDeleted } from '../../utils/deleted';
+import { MapPreview } from './MapPreview';
 import { PlayerStatus } from './PlayerStatus';
 
 interface GamePreviewProps {
@@ -55,7 +56,7 @@ export function GamePreview(props: GamePreviewProps) {
       <small>{props.game.designMap.name}</small>
       <div className={styles.content}>
         <div>
-          <div className={styles.mapPreview}>map goes here</div>
+          <MapPreview tiles={props.game.designMap.tiles} />
         </div>
 
         <div className={styles.players}>
@@ -115,8 +116,10 @@ export function GamePreview(props: GamePreviewProps) {
   );
 }
 
+const nationValues = Object.values(Nation);
+
 function getAvailableNations(player: Player, players: Player[]) {
-  return Object.values(Nation).filter(
+  return nationValues.filter(
     (nation) =>
       nation !== Nation.NEUTRAL &&
       players.every(

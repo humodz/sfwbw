@@ -3,7 +3,7 @@ import produce from 'immer';
 import React, { useState } from 'react';
 import { Pallette } from '../../components/Palette';
 import { getTileImage } from '../../game/assets';
-import { repeat, saveFile } from '../../utils';
+import { cssVars, repeat, saveFile } from '../../utils';
 
 import styles from './styles.module.css';
 
@@ -45,11 +45,11 @@ export function Editor() {
     saveFile(`${name}.sfw-map.json`, rawData);
   };
 
-  const cssVariables = {
+  const cssVariables = cssVars({
     '--rows': String(board.length),
     '--columns': String(board[0].length),
     '--tile-size': '32px',
-  } as React.CSSProperties;
+  });
 
   return (
     <main className={styles.editor}>
