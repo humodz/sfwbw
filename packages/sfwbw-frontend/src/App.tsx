@@ -7,8 +7,9 @@ import { Home } from './views/Home';
 import { Profile } from './views/Profile';
 import { SignIn } from './views/SignIn';
 
-import { Logo } from './components/Logo';
+import { Logo } from './components/header/Logo';
 import { NewGame } from './views/NewGame';
+import { Header } from './components/header/Header';
 
 export function App() {
   const dispatch = useAppDispatch();
@@ -21,24 +22,7 @@ export function App() {
 
   return (
     <>
-      <header>
-        <nav>
-          <Link to="/">Home</Link>
-          <Link to="/editor">Editor</Link>
-          <a target="_blank" href="https://github.com/humodz" rel="noreferrer">
-            GitHub
-          </a>
-          {If(currentUser) ? (
-            <>
-              <Link to="/profile">Profile</Link>
-              <button onClick={signOut}>Sign Out</button>
-            </>
-          ) : (
-            Else(<Link to="/sign-in">Sign In</Link>)
-          )}
-        </nav>
-        <Logo />
-      </header>
+      <Header isLoggedIn={!!currentUser} signOut={signOut} />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/profile" element={<Profile />} />

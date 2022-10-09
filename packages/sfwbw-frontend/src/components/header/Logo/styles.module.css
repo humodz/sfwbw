@@ -1,5 +1,6 @@
 .logo {
   --scale: 2;
+  display: block;
   width: fit-content;
   margin: auto;
   position: relative;

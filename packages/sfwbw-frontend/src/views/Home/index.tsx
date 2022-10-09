@@ -29,7 +29,7 @@ export function Home() {
 
   useEffect(() => {
     const games = searchGamesResult.data;
-    
+
     if (games) {
       setGames(games);
     }
