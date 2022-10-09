@@ -10,6 +10,8 @@ import { SignIn } from './views/SignIn';
 import { Logo } from './components/header/Logo';
 import { NewGame } from './views/NewGame';
 import { Header } from './components/header/Header';
+import { ReactNode } from 'react';
+import { Footer } from './components/Footer';
 
 export function App() {
   const dispatch = useAppDispatch();
@@ -31,7 +33,7 @@ export function App() {
         <Route path="/new-game" element={<NewGame />} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
-      <footer></footer>
+      <Footer />
     </>
   );
 }
