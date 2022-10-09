@@ -238,10 +238,11 @@ export class GameController {
       throw new BadRequestException('Game is not open');
     }
 
-    const existingPlayerInGame = await this.playerInGameRepository.findOne({
-      game,
-      user: loggedUser,
-    });
+    const players = await game.getPlayers();
+
+    const existingPlayerInGame = players.find(
+      (player) => player.user.username === loggedUser.username,
+    );
 
     if (!existingPlayerInGame) {
       throw new BadRequestException('You are not in this game');
@@ -263,6 +264,8 @@ export class GameController {
 
       existingPlayerInGame.nation = updates.nation;
     }
+
+    await this.startGameIfEveryoneReady(game);
 
     await this.playerInGameRepository.persistAndFlush(existingPlayerInGame);
 
@@ -299,6 +302,7 @@ export class GameController {
       game.owner = players[0].user;
     }
 
+    await this.startGameIfEveryoneReady(game);
     await this.gameRepository.flush();
 
     if (players.length === 0) {
@@ -316,5 +320,13 @@ export class GameController {
     }
 
     return nation;
+  }
+
+  async startGameIfEveryoneReady(game: Game) {
+    const players = await game.getPlayers();
+
+    if (players.every((player) => player.ready)) {
+      game.status = GameStatus.PLAYING;
+    }
   }
 }
