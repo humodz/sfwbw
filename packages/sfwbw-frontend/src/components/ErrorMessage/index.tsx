@@ -8,35 +8,18 @@ interface ErrorMessageProps {
   children?: ReactNode;
 }
 
+const classes = {
+  container:
+    'flex bg-accent-bg p-2 rounded border-solid border-0 border-l-4 border-code',
+  image: 'grow-0 basis-0 h-16 w-16',
+  text: 'grow-1 ml-4',
+};
+
 export function ErrorMessage(props: ErrorMessageProps) {
   return (
-    <div
-      style={{
-        display: 'flex',
-        borderLeft: '5px solid var(--code)',
-        borderRadius: '2px',
-        padding: '0.5rem',
-        backgroundColor: 'var(--accent-bg)',
-      }}
-    >
-      <img
-        src={icons.error}
-        alt="Error"
-        style={{
-          imageRendering: 'pixelated',
-          height: '64px',
-          width: '64px',
-          borderRadius: 0,
-          flexBasis: 0,
-          flexGrow: 0,
-        }}
-      />
-      <div
-        style={{
-          marginLeft: '1rem',
-          flexGrow: 1,
-        }}
-      >
+    <div className={classes.container}>
+      <img className={classes.image} src={icons.error} alt="Error" />
+      <div className={classes.text}>
         {If(props.error) ? getErrorMessage(props.error) : props.children}
       </div>
     </div>

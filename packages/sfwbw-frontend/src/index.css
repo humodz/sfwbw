@@ -1,7 +1,16 @@
+/* @tailwind base; */
+/* @tailwind components; */
+@tailwind utilities;
+
 nav a {
   user-select: none;
 }
 
 article > :first-child:is(h1,h2,h3,h4,h5) {
   margin-top: 0;
+}
+
+img {
+  image-rendering: pixelated;
+  border-radius: 0;
 }
