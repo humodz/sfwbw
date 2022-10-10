@@ -11,14 +11,20 @@ interface ErrorMessageProps {
 const classes = {
   container:
     'flex bg-accent-bg p-2 rounded border-solid border-0 border-l-4 border-code',
-  image: 'grow-0 basis-0 h-16 w-16',
+  image: 'grow-0 basis-0 pixelated',
   text: 'grow-1 ml-4',
 };
 
 export function ErrorMessage(props: ErrorMessageProps) {
   return (
     <div className={classes.container}>
-      <img className={classes.image} src={icons.error} alt="Error" />
+      <img
+        className={classes.image}
+        width="64px"
+        height="64px"
+        src={icons.error}
+        alt="Error"
+      />
       <div className={classes.text}>
         {If(props.error) ? getErrorMessage(props.error) : props.children}
       </div>

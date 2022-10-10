@@ -1,4 +1,3 @@
-import styles from './styles.module.css';
 import { useEffect, useState } from 'react';
 import { FormButton } from '../forms/FormButton';
 import { Link } from 'react-router-dom';
@@ -9,6 +8,13 @@ interface SearchGamesFormProps {
   searchTerm: string;
   onSearch?: (searchTerm: string) => void;
 }
+
+const classes = {
+  container: 'mb-8 flex flex-wrap items-stretch gap-2 sm:flex-row flex-col',
+  input: 'flex-1 m-0',
+  buttons: 'flex flex-wrap items-stretch gap-2',
+  button: 'flex-1 m-0 whitespace-nowrap',
+};
 
 export function SearchGamesForm(props: SearchGamesFormProps) {
   const [searchTerm, setSearchTerm] = useState(props.searchTerm || '');
@@ -23,20 +29,24 @@ export function SearchGamesForm(props: SearchGamesFormProps) {
   };
 
   return (
-    <form className={styles.searchGames} onSubmit={onSubmit}>
+    <form className={classes.container} onSubmit={onSubmit}>
       <input
         type="text"
         placeholder="Search games..."
-        className={styles.searchQuery}
+        className={classes.input}
         disabled={props.disabled}
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
       ></input>
-      <div className={styles.searchGamesButtons}>
-        <FormButton type="submit" loading={props.loading}>
+      <div className={classes.buttons}>
+        <FormButton
+          type="submit"
+          loading={props.loading}
+          className={classes.button}
+        >
           Search
         </FormButton>
-        <Link to="/new-game" role="button">
+        <Link to="/new-game" role="button" className={classes.button}>
           New Game
         </Link>
       </div>

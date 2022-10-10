@@ -1,7 +1,6 @@
-import styles from './styles.module.css';
-
 import { LoadingIcon } from '../../LoadingIcon';
 import { cls } from '../../../utils';
+import { If } from '../../../utils/jsxConditionals';
 
 interface FormButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -14,14 +13,15 @@ export function FormButton(props: FormButtonProps) {
   return (
     <button
       disabled={props.loading}
-      className={cls({
-        [styles.formButton]: true,
-        [styles.loading]: props.loading,
-      })}
+      className={cls(props.className, 'relative')}
       {...buttonProps}
     >
-      <span>{props.children}</span>
-      <LoadingIcon />
+      <span className={cls({ 'text-transparent': props.loading })}>
+        {props.children}
+      </span>
+      {If(props.loading) && (
+        <LoadingIcon className="absolute inset-1/2 -translate-x-1/2 -translate-y-1/2" />
+      )}
     </button>
   );
 }

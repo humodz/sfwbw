@@ -1,5 +1,4 @@
-/* @tailwind base; */
-/* @tailwind components; */
+@tailwind base;
 @tailwind utilities;
 
 nav a {
@@ -11,6 +10,9 @@ article > :first-child:is(h1,h2,h3,h4,h5) {
 }
 
 img {
-  image-rendering: pixelated;
   border-radius: 0;
+}
+
+img.pixelated {
+  image-rendering: pixelated;
 }

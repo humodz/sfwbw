@@ -27,8 +27,8 @@ export function FormField(props: FormFieldProps) {
     <div>
       <label htmlFor={props.id}>{props.label}</label>
       <input
-        style={{ width: '100%' }}
         ref={ref}
+        className="w-full"
         type={props.type || 'text'}
         id={props.id}
         name={props.id}

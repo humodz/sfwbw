@@ -15,6 +15,7 @@
 /* Anchors as buttons should not be underlined */
 a[role=button] {
   text-decoration: none;
+  text-align: center;
 }
 
 a[role=button]:visited {

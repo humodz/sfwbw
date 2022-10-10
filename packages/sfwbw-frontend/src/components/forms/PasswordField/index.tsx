@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { FormField, FormFieldProps } from '../FormField';
-import styles from './styles.module.css';
 
 export type PasswordFieldProps = Omit<FormFieldProps, 'type'>;
 
@@ -15,7 +14,8 @@ export function PasswordField(props: PasswordFieldProps) {
         <>
           {props.label}{' '}
           <span
-            className={styles.showPasswordButton}
+            className="text-accent underline cursor-pointer"
+            // className={styles.showPasswordButton}
             onClick={() => setShowPassword((show) => !show)}
           >
             {showPassword ? '[Hide]' : '[Show]'}
