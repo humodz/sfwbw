@@ -1,4 +1,3 @@
-import styles from './styles.module.css';
 import { useState, useEffect } from 'react';
 import { FormField } from '../../components/forms/FormField';
 import { PasswordField } from '../../components/forms/PasswordField';
@@ -13,7 +12,7 @@ import { useNavigate } from 'react-router-dom';
 
 export function SignIn() {
   return (
-    <main className={styles.content}>
+    <main className="w-fit m-auto">
       <article>
         <h4>Sign In</h4>
         <SignInForm />

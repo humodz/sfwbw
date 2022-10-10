@@ -1,5 +1,3 @@
-import styles from './styles.module.css';
-
 import { useEffect, useState } from 'react';
 import {
   useDeleteGameMutation,
@@ -57,7 +55,7 @@ export function Home() {
           navigate({ search: toQueryString({ q: searchTerm }) });
         }}
       />
-      <div className={styles.gamesList}>
+      <div>
         {If(searchGamesResult.isSuccess) &&
           games.map((game) => (
             <GamePreview
