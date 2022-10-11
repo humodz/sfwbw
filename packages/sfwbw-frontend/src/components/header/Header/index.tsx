@@ -1,4 +1,5 @@
 import { NavLink } from 'react-router-dom';
+import { navActiveClass } from '../../../utils';
 import { Else, If } from '../../../utils/jsxConditionals';
 import { Logo } from '../Logo';
 
@@ -8,7 +9,7 @@ interface Props {
 }
 
 const classes = {
-  navLink: (props: { isActive: boolean }) => (props.isActive ? 'active' : ''),
+  navLink: navActiveClass(),
 };
 
 export function Header(props: Props) {

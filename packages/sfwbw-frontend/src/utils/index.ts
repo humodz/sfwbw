@@ -58,3 +58,13 @@ export function isSuccessResponse(response: any): response is { data: any } {
 export function isErrorResponse(response: any): response is { error: any } {
   return 'error' in response;
 }
+
+export function navActiveClass(otherClasses = '') {
+  return (props: { isActive: boolean }) => {
+    if (props.isActive) {
+      return `active ${otherClasses}`;
+    } else {
+      return otherClasses;
+    }
+  };
+}

@@ -16,7 +16,7 @@ import { useErrorPopup } from '../../../utils/errors';
 import { If } from '../../../utils/jsxConditionals';
 import { useQueryParams, toQueryString } from '../../../utils/router';
 
-export function SearchGames() {
+export function BrowseGames() {
   const navigate = useNavigate();
   const { q: searchTerm } = useQueryParams();
   const user = useCurrentUser();
