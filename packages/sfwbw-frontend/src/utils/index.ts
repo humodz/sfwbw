@@ -51,7 +51,7 @@ export function saveFile(filename: string, content: string, type = 'text') {
   }, 0);
 }
 
-export function isSuccessResponse(response: any): response is { data: any } {
+export function isSuccessResponse<T>(response: any): response is { data: T } {
   return 'data' in response;
 }
 

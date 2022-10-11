@@ -1,6 +1,6 @@
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { setAccessToken } from './store/authSlice';
-import { useAppDispatch, useCurrentUser } from './store/hooks';
+import { useCurrentUser } from './store/authSlice';
 import { Games } from './views/Games';
 import { Profile } from './views/Profile';
 import { SignIn } from './views/SignIn';
@@ -9,6 +9,7 @@ import { Footer } from './components/Footer';
 import { Header } from './components/header/Header';
 import { Home } from './views/Home';
 import { Maps } from './views/Maps';
+import { useAppDispatch } from './store/hooks';
 
 export function App() {
   const dispatch = useAppDispatch();
