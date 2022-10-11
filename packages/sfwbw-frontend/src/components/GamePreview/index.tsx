@@ -6,7 +6,7 @@ import { ElseIf, If } from '../../utils/jsxConditionals';
 import { Nation } from '@sfwbw/sfwbw-core';
 import React, { useState } from 'react';
 import { isDeleted } from '../../utils/deleted';
-import { MapPreview } from './MapPreview';
+import { MiniMap } from '../MiniMap';
 import { PlayerStatus } from './PlayerStatus';
 
 interface GamePreviewProps {
@@ -56,7 +56,7 @@ export function GamePreview(props: GamePreviewProps) {
       <small>{props.game.designMap.name}</small>
       <div className={styles.content}>
         <div>
-          <MapPreview tiles={props.game.designMap.tiles} />
+          <MiniMap tiles={props.game.designMap.tiles} />
         </div>
 
         <div className={styles.players}>

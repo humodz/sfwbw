@@ -1,4 +1,4 @@
-.mapPreview {
+.miniMap {
   background-color: var(--accent-bg);
   margin: auto;
 
@@ -8,7 +8,7 @@
   height: min(10rem, calc( 10rem * var(--rows) / var(--columns) ));
 }
 
-.mapPreview > div {
+.miniMap > div {
   image-rendering: pixelated;
   background-image: var(--tile-previews);
   background-size: calc(10 * 100%) calc(2 * 100%);

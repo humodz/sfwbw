@@ -3,26 +3,26 @@ import styles from './styles.module.css';
 import { tilePreviews } from '@sfwbw/sfwbw-assets';
 import { isTerrain, Terrain, Tile } from '@sfwbw/sfwbw-core';
 import React from 'react';
-import { cssVars } from '../../../utils';
+import { cssVars } from '../../utils';
 
-interface MapPreviewProps {
+interface Props {
   tiles: Tile[][];
 }
 
-export const MapPreview = React.memo(MapPreviewOriginal);
+export const MiniMap = React.memo(MiniMapOriginal);
 
-function MapPreviewOriginal(props: MapPreviewProps) {
+function MiniMapOriginal(props: Props) {
   const rows = props.tiles.length;
   const columns = props.tiles[0].length;
 
-  const mapPreviewVars = cssVars({
+  const miniMapVars = cssVars({
     '--tile-previews': `url(${tilePreviews}`,
     '--rows': rows,
     '--columns': columns,
   });
 
   return (
-    <div className={styles.mapPreview} style={mapPreviewVars}>
+    <div className={styles.miniMap} style={miniMapVars}>
       {props.tiles.flatMap((row, y) =>
         row.map((tile, x) => (
           <div
