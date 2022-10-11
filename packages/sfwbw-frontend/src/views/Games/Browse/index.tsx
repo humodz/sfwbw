@@ -1,24 +1,24 @@
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import {
+  ControlledSearchForm,
+  useSearchTerm,
+} from '../../../components/forms/SearchForm/controlled';
 import { GamePreview } from '../../../components/GamePreview';
-import { SearchForm } from '../../../components/forms/SearchForm';
 import {
   Game,
-  useSearchGamesQuery,
+  useDeleteGameMutation,
   useJoinGameMutation,
   useLeaveGameMutation,
-  useDeleteGameMutation,
+  useSearchGamesQuery,
   useUpdatePlayerMutation,
 } from '../../../store/api';
 import { useCurrentUser } from '../../../store/hooks';
 import { Deleted, isDeleted, MaybeDeleted } from '../../../utils/deleted';
 import { useErrorPopup } from '../../../utils/errors';
 import { If } from '../../../utils/jsxConditionals';
-import { useQueryParams, toQueryString } from '../../../utils/router';
 
 export function BrowseGames() {
-  const navigate = useNavigate();
-  const { q: searchTerm } = useQueryParams();
+  const searchTerm = useSearchTerm();
   const user = useCurrentUser();
 
   const [games, setGames] = useState<MaybeDeleted<Game>[]>([]);
@@ -47,13 +47,7 @@ export function BrowseGames() {
 
   return (
     <>
-      <SearchForm
-        searchTerm={searchTerm || ''}
-        loading={searchGamesResult.isFetching}
-        onSearch={(searchTerm) => {
-          navigate({ search: toQueryString({ q: searchTerm }) });
-        }}
-      />
+      <ControlledSearchForm isLoading={searchGamesResult.isFetching} />
       <div>
         {If(searchGamesResult.isSuccess) &&
           games.map((game) => (
@@ -74,6 +68,9 @@ export function BrowseGames() {
               }
             />
           ))}
+        {If(searchGamesResult.isSuccess && games.length === 0) && (
+          <p className="text-center mt-8">No games found.</p>
+        )}
       </div>
     </>
   );

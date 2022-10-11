@@ -3,7 +3,7 @@ import { FormButton } from '../FormButton';
 
 interface Props {
   disabled?: boolean;
-  loading?: boolean;
+  isLoading?: boolean;
   searchTerm: string;
   onSearch?: (searchTerm: string) => void;
 }
@@ -38,7 +38,7 @@ export function SearchForm(props: Props) {
       ></input>
       <FormButton
         type="submit"
-        loading={props.loading}
+        loading={props.isLoading}
         className={classes.searchButton}
       >
         Search
