@@ -1,6 +1,7 @@
 import { NavLink, Route, Routes } from 'react-router-dom';
 import { navActiveClass } from '../../utils';
 import { BrowseMaps } from './Browse';
+import { NewMap } from './NewMap';
 
 const classes = {
   nav: 'mb-8 grid grid-cols-2 md:grid-cols-3 gap-2',
@@ -24,7 +25,7 @@ export function Maps() {
       </nav>
       <Routes>
         <Route path="/" element={<BrowseMaps />} />
-        <Route path="/new" element={'WIP NEW MAP'} />
+        <Route path="/new" element={<NewMap />} />
         <Route path="/my-maps" element={'WIP MY-MAPS'} />
       </Routes>
     </main>

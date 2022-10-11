@@ -30,7 +30,7 @@ export function BrowseMaps() {
 interface Props {
   user: User | null;
   designMap: DesignMap;
-  onDelete: () => void;
+  onDelete?: () => void;
 }
 
 export function MapPreview(props: Props) {
