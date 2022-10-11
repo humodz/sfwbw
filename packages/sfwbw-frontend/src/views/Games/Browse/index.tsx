@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { GamePreview } from '../../../components/GamePreview';
-import { SearchGamesForm } from '../../../components/SearchGamesForm';
+import { SearchForm } from '../../../components/forms/SearchForm';
 import {
   Game,
   useSearchGamesQuery,
@@ -47,7 +47,7 @@ export function BrowseGames() {
 
   return (
     <>
-      <SearchGamesForm
+      <SearchForm
         searchTerm={searchTerm || ''}
         loading={searchGamesResult.isFetching}
         onSearch={(searchTerm) => {

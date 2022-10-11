@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
-import { FormButton } from '../forms/FormButton';
-import { Link } from 'react-router-dom';
+import { FormButton } from '../FormButton';
 
-interface SearchGamesFormProps {
+interface Props {
   disabled?: boolean;
   loading?: boolean;
   searchTerm: string;
@@ -15,7 +14,7 @@ const classes = {
   searchButton: 'm-0 whitespace-nowrap',
 };
 
-export function SearchGamesForm(props: SearchGamesFormProps) {
+export function SearchForm(props: Props) {
   const [searchTerm, setSearchTerm] = useState(props.searchTerm || '');
 
   useEffect(() => {
