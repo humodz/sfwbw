@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { Else, If } from '../../../utils/jsxConditionals';
 import { Logo } from '../Logo';
 
@@ -7,19 +7,33 @@ interface Props {
   signOut: () => void;
 }
 
+const classes = {
+  navLink: (props: { isActive: boolean }) => (props.isActive ? 'active' : ''),
+};
+
 export function Header(props: Props) {
   return (
     <header>
       <nav>
-        <Link to="/games">Games</Link>
-        <Link to="/maps">Maps</Link>
+        <NavLink to="/games" className={classes.navLink}>
+          Games
+        </NavLink>
+        <NavLink to="/maps" className={classes.navLink}>
+          Maps
+        </NavLink>
         {If(props.isLoggedIn) ? (
           <>
-            <Link to="/profile">Profile</Link>
+            <NavLink to="/profile" className={classes.navLink}>
+              Profile
+            </NavLink>
             <button onClick={props.signOut}>Sign Out</button>
           </>
         ) : (
-          Else(<Link to="/sign-in">Sign In</Link>)
+          Else(
+            <NavLink to="/sign-in" className={classes.navLink}>
+              Sign In
+            </NavLink>,
+          )
         )}
       </nav>
       <Logo />

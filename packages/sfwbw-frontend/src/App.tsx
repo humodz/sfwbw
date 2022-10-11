@@ -1,17 +1,14 @@
-import { Link, Navigate, Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { setAccessToken } from './store/authSlice';
 import { useAppDispatch, useCurrentUser } from './store/hooks';
-import { Else, If } from './utils/jsxConditionals';
-import { Editor } from './views/Editor';
-import { Home } from './views/Home';
+import { Games } from './views/Games';
 import { Profile } from './views/Profile';
 import { SignIn } from './views/SignIn';
 
-import { Logo } from './components/header/Logo';
-import { NewGame } from './views/NewGame';
-import { Header } from './components/header/Header';
-import { ReactNode } from 'react';
 import { Footer } from './components/Footer';
+import { Header } from './components/header/Header';
+import { Home } from './views/Home';
+import { Maps } from './views/Maps';
 
 export function App() {
   const dispatch = useAppDispatch();
@@ -27,13 +24,29 @@ export function App() {
       <Header isLoggedIn={!!currentUser} signOut={signOut} />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/games/*" element={<Games />} />
+        <Route path="/maps/*" element={<Maps />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/sign-in" element={<SignIn />} />
-        <Route path="/editor" element={<Editor />} />
-        <Route path="/new-game" element={<NewGame />} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
+      <RemoveTrailingSlash />
       <Footer />
     </>
   );
+}
+
+function RemoveTrailingSlash() {
+  const location = useLocation();
+
+  if (location.pathname === '/' || !location.pathname.endsWith('/')) {
+    return null;
+  }
+
+  const newLocation = {
+    pathname: location.pathname.slice(0, -1),
+    search: location.search,
+  };
+
+  return <Navigate replace to={newLocation} />;
 }

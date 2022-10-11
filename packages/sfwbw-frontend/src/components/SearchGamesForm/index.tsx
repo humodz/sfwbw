@@ -10,10 +10,9 @@ interface SearchGamesFormProps {
 }
 
 const classes = {
-  container: 'mb-8 flex flex-wrap items-stretch gap-2 sm:flex-row flex-col',
-  input: 'flex-1 m-0',
-  buttons: 'flex flex-wrap items-stretch gap-2',
-  button: 'flex-1 m-0 whitespace-nowrap',
+  container: 'mb-4 flex flex-wrap items-stretch gap-2 sm:flex-row flex-col',
+  searchField: 'flex-1 m-0',
+  searchButton: 'm-0 whitespace-nowrap',
 };
 
 export function SearchGamesForm(props: SearchGamesFormProps) {
@@ -33,23 +32,18 @@ export function SearchGamesForm(props: SearchGamesFormProps) {
       <input
         type="text"
         placeholder="Search games..."
-        className={classes.input}
+        className={classes.searchField}
         disabled={props.disabled}
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
       ></input>
-      <div className={classes.buttons}>
-        <FormButton
-          type="submit"
-          loading={props.loading}
-          className={classes.button}
-        >
-          Search
-        </FormButton>
-        <Link to="/new-game" role="button" className={classes.button}>
-          New Game
-        </Link>
-      </div>
+      <FormButton
+        type="submit"
+        loading={props.loading}
+        className={classes.searchButton}
+      >
+        Search
+      </FormButton>
     </form>
   );
 }

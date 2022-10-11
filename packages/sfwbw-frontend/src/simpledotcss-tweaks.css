@@ -12,14 +12,38 @@
   --disabled: #111;
 }
 
-/* Anchors as buttons should not be underlined */
+/* Button links */
 a[role=button] {
+  display: inline-block;
   text-decoration: none;
   text-align: center;
 }
 
 a[role=button]:visited {
   color: var(--bg);
+}
+
+/* Nav links */
+nav > a {
+  line-height: 2;
+  /* margin: 0 0.5rem 1rem 0.5rem; */
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  color: var(--text) !important;
+  display: inline-block;
+  padding: 0.1rem 1rem;
+  text-decoration: none;
+  text-align: center;
+}
+
+nav > a.active {
+  background-color: var(--accent-bg);
+  border-color: var(--text) !important;
+}
+
+nav > a:hover {
+  filter: brightness(1.4);
+  cursor: pointer;
 }
 
 /* Make nav buttons look the same as links */
