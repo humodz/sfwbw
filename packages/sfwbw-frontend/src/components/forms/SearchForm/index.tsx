@@ -30,7 +30,6 @@ export function SearchForm(props: Props) {
     <form className={classes.container} onSubmit={onSubmit}>
       <input
         type="text"
-        placeholder="Search games..."
         className={classes.searchField}
         disabled={props.disabled}
         value={searchTerm}

@@ -14,6 +14,7 @@ import {
   ParseIntPipe,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 import { Nation } from '@sfwbw/sfwbw-core';
 import { LoggedUser, Protected } from '../auth';
@@ -30,8 +31,18 @@ export class DesignMapController {
   ) {}
 
   @Get()
-  async listMaps() {
-    return await this.designMapRepository.findAll({
+  async listMaps(@Query('search') rawSearchTerm = '') {
+    const searchTerm = rawSearchTerm.replace(/[_%]/g, '\\$1');
+
+    const where = rawSearchTerm
+      ? {
+          name: {
+            $ilike: `%${searchTerm}%`,
+          },
+        }
+      : {};
+
+    return await this.designMapRepository.find(where, {
       populate: ['author'],
     });
   }

@@ -1,4 +1,5 @@
-import { deserializeTiles, Nation, Tile } from '@sfwbw/sfwbw-core';
+import { Nation } from '@sfwbw/sfwbw-core';
+import { deserializeDesignMap, DesignMap, RawDesignMap } from '../design-map';
 import { User } from '../user/models';
 
 export interface Game {
@@ -11,16 +12,8 @@ export interface Game {
   players: Player[];
 }
 
-export interface DesignMap {
-  name: string;
-  maxPlayers: number;
-  tiles: Tile[][];
-}
-
 export interface RawGame extends Omit<Game, 'designMap'> {
-  designMap: Omit<DesignMap, 'tiles'> & {
-    tiles: string;
-  };
+  designMap: RawDesignMap;
 }
 
 export interface Player {
@@ -30,15 +23,8 @@ export interface Player {
 }
 
 export function deserializeGame(rawGame: RawGame): Game {
-  const tiles = deserializeTiles(rawGame.designMap.tiles);
-
-  const designMap = {
-    ...rawGame.designMap,
-    tiles,
-  };
-
   return {
     ...rawGame,
-    designMap,
+    designMap: deserializeDesignMap(rawGame.designMap),
   };
 }

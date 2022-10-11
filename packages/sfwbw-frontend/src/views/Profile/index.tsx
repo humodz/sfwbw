@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FormField } from '../../components/forms/FormField';
-import { useCurrentUser } from '../../store/hooks';
+import { useCurrentUser } from '../../store/authSlice';
 
 export function Profile() {
   const navigate = useNavigate();

@@ -1,4 +1,7 @@
 import { createSlice, PayloadAction, Reducer } from '@reduxjs/toolkit';
+import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { useCurrentUserQuery } from './api';
 
 const ACCESS_TOKEN = '/auth/accessToken';
 
@@ -32,5 +35,24 @@ export const { setAccessToken } = authSlice.actions;
 
 export const selectAccessToken = (state: { auth: AuthState }) =>
   state.auth.accessToken;
+
+export function useCurrentUser() {
+  const accessToken = useSelector(selectAccessToken);
+
+  const { data, refetch, isSuccess } = useCurrentUserQuery(
+    {},
+    { skip: !accessToken },
+  );
+
+  useEffect(() => {
+    refetch();
+  }, [refetch, accessToken]);
+
+  if (!accessToken || !isSuccess) {
+    return null;
+  }
+
+  return data || null;
+}
 
 export const authReducer: Reducer<AuthState> = authSlice.reducer;

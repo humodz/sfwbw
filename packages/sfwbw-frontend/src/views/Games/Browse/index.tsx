@@ -12,7 +12,7 @@ import {
   useSearchGamesQuery,
   useUpdatePlayerMutation,
 } from '../../../store/api';
-import { useCurrentUser } from '../../../store/hooks';
+import { useCurrentUser } from '../../../store/authSlice';
 import { Deleted, isDeleted, MaybeDeleted } from '../../../utils/deleted';
 import { useErrorPopup } from '../../../utils/errors';
 import { If } from '../../../utils/jsxConditionals';
