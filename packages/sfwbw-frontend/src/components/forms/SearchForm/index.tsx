@@ -9,7 +9,7 @@ interface Props {
 }
 
 const classes = {
-  container: 'mb-4 flex flex-wrap items-stretch gap-2 sm:flex-row flex-col',
+  container: 'mb-4 flex flex-wrap items-stretch gap-2',
   searchField: 'flex-1 m-0',
   searchButton: 'm-0 whitespace-nowrap',
 };

@@ -15,6 +15,7 @@ export class DesignMap {
   @PrimaryKey()
   id!: number;
 
+  @Expose()
   @ManyToOne({ entity: () => User, inversedBy: 'designMaps' })
   author!: User;
 

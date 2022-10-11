@@ -14,7 +14,8 @@
 
 /* Button links */
 a[role=button] {
-  display: inline-block;
+  display: flex;
+  align-items: center;
   text-decoration: none;
   text-align: center;
 }
@@ -39,6 +40,12 @@ nav > a {
 nav > a.active {
   background-color: var(--accent-bg);
   border-color: var(--text) !important;
+}
+
+@media (max-width: 576px) {
+  header nav > a.active {
+    font-weight: bold !important;
+  }
 }
 
 nav > a:hover {

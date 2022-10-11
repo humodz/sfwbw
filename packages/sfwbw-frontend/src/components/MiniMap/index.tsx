@@ -22,17 +22,19 @@ function MiniMapOriginal(props: Props) {
   });
 
   return (
-    <div className={styles.miniMap} style={miniMapVars}>
-      {props.tiles.flatMap((row, y) =>
-        row.map((tile, x) => (
-          <div
-            key={`${y}-${x}`}
-            style={{
-              backgroundPosition: getBackgroundPosition(tile),
-            }}
-          ></div>
-        )),
-      )}
+    <div style={{ width: '6rem' }}>
+      <div className={styles.miniMap} style={miniMapVars}>
+        {props.tiles.flatMap((row, y) =>
+          row.map((tile, x) => (
+            <div
+              key={`${y}-${x}`}
+              style={{
+                backgroundPosition: getBackgroundPosition(tile),
+              }}
+            ></div>
+          )),
+        )}
+      </div>
     </div>
   );
 }

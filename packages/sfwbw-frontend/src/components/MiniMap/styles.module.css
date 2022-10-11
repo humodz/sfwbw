@@ -4,8 +4,8 @@
 
   display: grid;
   grid-template: repeat(var(--rows), 1fr) / repeat(var(--columns), 1fr);
-  width: min(10rem, calc( 10rem * var(--columns) / var(--rows) ));
-  height: min(10rem, calc( 10rem * var(--rows) / var(--columns) ));
+  width: min(6rem, calc( 6rem * var(--columns) / var(--rows) ));
+  height: min(6rem, calc( 6rem * var(--rows) / var(--columns) ));
 }
 
 .miniMap > div {
