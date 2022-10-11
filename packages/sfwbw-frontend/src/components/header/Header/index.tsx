@@ -1,6 +1,5 @@
 import { NavLink } from 'react-router-dom';
 import { navActiveClass } from '../../../utils';
-import { Else, If } from '../../../utils/jsxConditionals';
 import { Logo } from '../Logo';
 
 interface Props {
@@ -22,7 +21,7 @@ export function Header(props: Props) {
         <NavLink to="/maps" className={classes.navLink}>
           Maps
         </NavLink>
-        {If(props.isLoggedIn) ? (
+        {props.isLoggedIn ? (
           <>
             <NavLink to="/profile" className={classes.navLink}>
               Profile
@@ -30,11 +29,9 @@ export function Header(props: Props) {
             <button onClick={props.signOut}>Sign Out</button>
           </>
         ) : (
-          Else(
-            <NavLink to="/sign-in" className={classes.navLink}>
-              Sign In
-            </NavLink>,
-          )
+          <NavLink to="/sign-in" className={classes.navLink}>
+            Sign In
+          </NavLink>
         )}
       </nav>
       <Logo />

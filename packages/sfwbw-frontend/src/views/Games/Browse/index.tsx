@@ -15,7 +15,6 @@ import {
 import { useCurrentUser } from '../../../store/authSlice';
 import { Deleted, isDeleted, MaybeDeleted } from '../../../utils/deleted';
 import { useErrorPopup } from '../../../utils/errors';
-import { If } from '../../../utils/jsxConditionals';
 
 export function BrowseGames() {
   const searchTerm = useSearchTerm();
@@ -49,7 +48,7 @@ export function BrowseGames() {
     <>
       <ControlledSearchForm isLoading={searchGamesResult.isFetching} />
       <div>
-        {If(searchGamesResult.isSuccess) &&
+        {searchGamesResult.isSuccess &&
           games.map((game) => (
             <GamePreview
               key={game.id}
@@ -68,7 +67,7 @@ export function BrowseGames() {
               }
             />
           ))}
-        {If(searchGamesResult.isSuccess && games.length === 0) && (
+        {searchGamesResult.isSuccess && games.length === 0 && (
           <p className="text-center mt-8">No games found.</p>
         )}
       </div>

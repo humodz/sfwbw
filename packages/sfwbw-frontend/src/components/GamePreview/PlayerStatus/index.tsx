@@ -2,7 +2,6 @@ import styles from './styles.module.css';
 
 import crown from '../../../assets/icons/crown.png';
 import { Player } from '../../../store/api';
-import { If } from '../../../utils/jsxConditionals';
 
 import { nations } from '@sfwbw/sfwbw-assets';
 import { Nation } from '@sfwbw/sfwbw-core';
@@ -39,7 +38,7 @@ export function PlayerStatus(props: PlayerStatusProps) {
           backgroundImage: `url(${nationImage})`,
         }}
       >
-        {If(props.isEditable) && (
+        {props.isEditable && (
           <FormSelect
             options={nationSelectOptions}
             value={props.player.nation}
@@ -48,7 +47,7 @@ export function PlayerStatus(props: PlayerStatusProps) {
         )}
       </div>
       <div className={styles.username}>
-        {If(props.isOwner) && (
+        {props.isOwner && (
           <img src={crown} alt="game owner" title="game owner" />
         )}{' '}
         <span>{props.player.user.username}</span>

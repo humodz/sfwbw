@@ -1,7 +1,6 @@
 import { icons } from '@sfwbw/sfwbw-assets';
 import { ReactNode } from 'react';
 import { getErrorMessage, RtkQueryError } from '../../utils/errors';
-import { If } from '../../utils/jsxConditionals';
 
 interface ErrorMessageProps {
   error?: RtkQueryError;
@@ -26,7 +25,7 @@ export function ErrorMessage(props: ErrorMessageProps) {
         alt="Error"
       />
       <div className={classes.text}>
-        {If(props.error) ? getErrorMessage(props.error) : props.children}
+        {props.error ? getErrorMessage(props.error) : props.children}
       </div>
     </div>
   );

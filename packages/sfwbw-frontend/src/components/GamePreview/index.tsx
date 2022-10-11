@@ -1,7 +1,6 @@
 import styles from './styles.module.css';
 
 import { Game, Player, User } from '../../store/api';
-import { ElseIf, If } from '../../utils/jsxConditionals';
 
 import { Nation } from '@sfwbw/sfwbw-core';
 import React, { useState } from 'react';
@@ -83,7 +82,7 @@ export function GamePreview(props: GamePreviewProps) {
         <div className={styles.details}>Game Details (max turns etc)</div>
       </div>
       <form className={styles.buttons} onSubmit={onJoin}>
-        {If(userIsInGame) ? (
+        {userIsInGame ? (
           <button
             type="button"
             onClick={props.onLeave}
@@ -91,9 +90,9 @@ export function GamePreview(props: GamePreviewProps) {
           >
             Leave
           </button>
-        ) : ElseIf(!gameIsFull) ? (
+        ) : !gameIsFull ? (
           <>
-            {If(props.game.hasPassword) && (
+            {props.game.hasPassword && (
               <input
                 type="password"
                 placeholder="Password"
@@ -106,7 +105,7 @@ export function GamePreview(props: GamePreviewProps) {
             <button type="submit">Join</button>
           </>
         ) : null}
-        {If(userIsOwner) && (
+        {userIsOwner && (
           <button type="button" onClick={onDelete} disabled={gameIsDeleted}>
             Delete
           </button>
