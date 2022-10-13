@@ -81,7 +81,7 @@ export function GamePreview(props: GamePreviewProps) {
 
         <div className={styles.details}>Game Details (max turns etc)</div>
       </div>
-      <form className={styles.buttons} onSubmit={onJoin}>
+      <form className={styles.buttons} onSubmit={onJoin} autoComplete="off">
         {userIsInGame ? (
           <button
             type="button"

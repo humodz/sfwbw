@@ -50,7 +50,7 @@ function SignInForm() {
   };
 
   return (
-    <form onSubmit={onSignIn}>
+    <form onSubmit={onSignIn} autoComplete="off">
       <FormField
         id="signin-username"
         label={'Username'}
@@ -138,7 +138,7 @@ function RegisterForm() {
   };
 
   return (
-    <form onSubmit={onRegister}>
+    <form onSubmit={onRegister} autoComplete="off">
       <FormField
         id="register-username"
         label={

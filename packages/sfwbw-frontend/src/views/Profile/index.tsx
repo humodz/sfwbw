@@ -20,7 +20,7 @@ export function Profile() {
   return (
     <main style={{ width: 'fit-content', margin: 'auto' }}>
       <article>
-        <form onSubmit={updateUser}>
+        <form onSubmit={updateUser} autoComplete="off">
           <FormField
             id="profile-username"
             label={'Username'}

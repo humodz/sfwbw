@@ -26,4 +26,8 @@ a.disabled {
   article {
     padding: 0.5rem;
   }
+
+  #root > header {
+    padding-bottom: 1rem;
+  }
 }

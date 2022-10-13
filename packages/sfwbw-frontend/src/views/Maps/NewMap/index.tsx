@@ -45,7 +45,7 @@ export function NewMap() {
       <article>
         <h4>New Map</h4>
 
-        <form onSubmit={onSubmit}>
+        <form onSubmit={onSubmit} autoComplete="off">
           <FormField
             id="newmap-name"
             label="Name"
@@ -82,9 +82,8 @@ export function NewMap() {
               required
             />
           </div>
-          <br />
           <FormButton
-            className="block m-auto min-w-[50%]"
+            className="block m-auto mt-2 min-w-[50%]"
             type="submit"
             isLoading={createMapResult.isLoading}
           >

@@ -27,7 +27,7 @@ export function SearchForm(props: Props) {
   };
 
   return (
-    <form className={classes.container} onSubmit={onSubmit}>
+    <form className={classes.container} onSubmit={onSubmit} autoComplete="off">
       <input
         type="text"
         className={classes.searchField}

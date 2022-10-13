@@ -56,6 +56,7 @@ export function Editor() {
       <h2>Map Editor</h2>
 
       <form
+        autoComplete="off"
         onSubmit={(e) => {
           e.preventDefault();
           saveMap();

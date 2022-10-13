@@ -14,7 +14,7 @@
 }
 
 .logo svg {
-  font-size: calc(var(--scale) * 1rem);
+  font-size: calc(var(--scale) * 1.2rem);
   height: 1.5em;
   width: 4em;
   position: absolute;
@@ -26,7 +26,7 @@
   fill: #FFF;
   font-weight: bolder;
   stroke: #000;
-  stroke-width: calc((var(--scale) * 0.5px));
+  stroke-width: calc((var(--scale) * 0.7px));
   stroke-linejoin: round;
 }
 
