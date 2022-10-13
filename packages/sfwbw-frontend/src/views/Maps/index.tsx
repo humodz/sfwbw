@@ -27,6 +27,8 @@ export function Maps() {
         <Route path="/" element={<BrowseMaps />} />
         <Route path="/new" element={<NewMap />} />
         <Route path="/my-maps" element={'WIP MY-MAPS'} />
+        <Route path="/:id" element={'WIP map details'} />
+        <Route path="/:id/edit" element={'WIP edit map'} />
       </Routes>
     </main>
   );

@@ -1,10 +1,15 @@
 import { Tile, TileType } from '@sfwbw/sfwbw-core';
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { ErrorMessage } from '../../../components/ErrorMessage';
 import { FormButton } from '../../../components/forms/FormButton';
 import { FormField } from '../../../components/forms/FormField';
 import { useCreateMapMutation } from '../../../store/api';
+import { isSuccessResponse, repeat } from '../../../utils';
+import { formErrorMessage } from '../../../utils/errors';
 
 export function NewMap() {
+  const navigate = useNavigate();
   const [name, setName] = useState('');
   const [columnsRaw, setColumnsRaw] = useState('');
   const [rowsRaw, setRowsRaw] = useState('');
@@ -28,7 +33,11 @@ export function NewMap() {
       { type: TileType.HQ, player: 2 },
     ];
 
-    await createMap({ name: name.trim(), tiles });
+    const response = await createMap({ name: name.trim(), tiles });
+
+    if (isSuccessResponse(response)) {
+      navigate(`/maps/${response.data.id}/edit`);
+    }
   };
 
   return (
@@ -81,16 +90,11 @@ export function NewMap() {
           >
             Create
           </FormButton>
+          {createMapResult.isError && (
+            <ErrorMessage error={createMapResult.error} />
+          )}
         </form>
       </article>
     </div>
   );
-}
-
-function formErrorMessage(message: string) {
-  return (e: { target: any }) => e.target.setCustomValidity(message);
-}
-
-function repeat<T>(length: number, value: T): T[] {
-  return Array(length).fill(value);
 }

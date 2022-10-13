@@ -1,12 +1,12 @@
 import { Tile } from '@sfwbw/sfwbw-core';
-import { Type } from 'class-transformer';
+import { Expose, Type } from 'class-transformer';
 import {
   IsNotEmpty,
   IsString,
   MaxLength,
   ValidateNested,
 } from 'class-validator';
-import { Is2dArray } from '../../utils/validation';
+import { Is2dArray, MatrixColumns, MatrixRows } from '../../utils/validation';
 import { TileDto } from './tile.dto';
 import { IsValidTileData } from './validation';
 
@@ -16,14 +16,12 @@ export class CreateDesignMapRequest {
   @MaxLength(50)
   name!: string;
 
+  @Expose({ name: 'tiles' })
   @Type(() => TileDto)
   @ValidateNested()
-  @Is2dArray({
-    minRows: 5,
-    maxRows: 50,
-    minColumns: 5,
-    maxColumns: 50,
-  })
+  @Is2dArray()
+  @MatrixRows(5, 100)
+  @MatrixColumns(5, 100)
   @IsValidTileData()
-  tiles!: Tile[][];
+  map!: Tile[][];
 }

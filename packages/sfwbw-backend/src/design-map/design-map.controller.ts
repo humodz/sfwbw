@@ -9,7 +9,6 @@ import {
   Get,
   HttpCode,
   HttpStatus,
-  NotImplementedException,
   Param,
   ParseIntPipe,
   Post,
@@ -119,7 +118,7 @@ export class DesignMapController {
 
   calculateProperties(body: CreateDesignMapRequest) {
     const mapMaxPlayers =
-      countUnique(body.tiles.flat().map((tile) => tile.player)) - 1;
+      countUnique(body.map.flat().map((tile) => tile.player)) - 1;
 
     const maxPlayers = Object.values(Nation).length - 1;
 
@@ -131,9 +130,9 @@ export class DesignMapController {
 
     return {
       maxPlayers: mapMaxPlayers,
-      rows: body.tiles.length,
-      columns: body.tiles[0].length,
-      tiles: body.tiles,
+      rows: body.map.length,
+      columns: body.map[0].length,
+      tiles: body.map,
     };
   }
 }

@@ -9,7 +9,7 @@ interface ErrorMessageProps {
 
 const classes = {
   container:
-    'flex bg-accent-bg p-2 rounded border-solid border-0 border-l-4 border-code',
+    'flex bg-accent-bg p-2 mt-4 rounded border-solid border-0 border-l-4 border-code',
   image: 'grow-0 basis-0 pixelated w-[64px] h-[64px]',
   text: 'grow-1 ml-4',
 };
