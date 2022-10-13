@@ -34,6 +34,13 @@ export const apiDesignMapSlice = createApi({
       }),
       transformResponse: deserializeDesignMap,
     }),
+    getMapById: builder.query<DesignMap, number>({
+      query: (id) => ({
+        method: 'GET',
+        url: `/design-maps/@${id}`,
+      }),
+      transformResponse: deserializeDesignMap,
+    }),
     updateMap: builder.mutation<DesignMap, UpdateMapRequest>({
       query: (params) => ({
         method: 'PUT',
@@ -59,4 +66,5 @@ export const {
   useCreateMapMutation,
   useUpdateMapMutation,
   useDeleteMapMutation,
+  useGetMapByIdQuery,
 } = apiDesignMapSlice;
