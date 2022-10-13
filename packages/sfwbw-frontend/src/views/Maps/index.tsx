@@ -28,6 +28,7 @@ export function Maps() {
         <Route path="/" element={<BrowseMaps mode="all" />} />
         <Route path="/new" element={<NewMap />} />
         <Route path="/my-maps" element={<BrowseMaps mode="my-maps" />} />
+        <Route path="/@:id" element={'wip map details'} />
         <Route path="/@:id/edit" element={<EditMap />} />
       </Routes>
     </main>
