@@ -9,6 +9,7 @@
     "add": "cd ../.. && lerna add --scope=\"$npm_package_name\"",
     "prebuild": "rimraf dist",
     "build": "nest build",
+    "typecheck": "npx tsc --noEmit",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",

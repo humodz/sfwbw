@@ -2,6 +2,7 @@
 export interface Tile {
   type: TileType;
   player: number;
+  variation: number;
 }
 
 export const PLAYER_NEUTRAL = 0;

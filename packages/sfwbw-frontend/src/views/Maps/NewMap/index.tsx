@@ -24,13 +24,17 @@ export function NewMap() {
 
     const tiles: Tile[][] = repeat(
       rows,
-      repeat(columns, { type: TileType.PLAINS, player: 0 }),
+      repeat(columns, { type: TileType.PLAINS, player: 0, variation: 0 }),
     );
 
     tiles[0] = [
-      { type: TileType.HQ, player: 1 },
-      ...repeat(columns - 2, { type: TileType.PLAINS, player: 0 }),
-      { type: TileType.HQ, player: 2 },
+      { type: TileType.HQ, player: 1, variation: 0 },
+      ...repeat(columns - 2, {
+        type: TileType.PLAINS,
+        player: 0,
+        variation: 0,
+      }),
+      { type: TileType.HQ, player: 2, variation: 0 },
     ];
 
     const response = await createMap({ name: name.trim(), tiles });

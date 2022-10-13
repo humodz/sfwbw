@@ -12,4 +12,10 @@ export class TileDto implements Tile {
   @Max(4)
   @Expose()
   player!: number;
+
+  @IsInt()
+  @Min(0)
+  @Max(16)
+  @Expose()
+  variation!: number;
 }

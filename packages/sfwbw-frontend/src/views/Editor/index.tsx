@@ -10,7 +10,11 @@ import styles from './styles.module.css';
 function createBoard(size: { width: number; height: number }): Tile[][] {
   return repeat(
     size.height,
-    repeat(size.width, { type: Terrain.PLAINS, player: PLAYER_NEUTRAL }),
+    repeat(size.width, {
+      type: Terrain.PLAINS,
+      player: PLAYER_NEUTRAL,
+      variation: 0,
+    }),
   );
 }
 
@@ -25,6 +29,7 @@ export function Editor() {
   const [selectedTile, setSelectedTile] = useState<Tile>({
     type: Terrain.PLAINS,
     player: PLAYER_NEUTRAL,
+    variation: 0,
   });
 
   const updateBoard = (y: number, x: number, newTile: Tile) => {

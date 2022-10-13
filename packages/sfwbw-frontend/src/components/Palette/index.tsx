@@ -22,6 +22,7 @@ export function Pallette({ tile, onTileChange }: PaletteProps) {
     onTileChange?.({
       type: tileTypes[i],
       player: tile.player,
+      variation: 0,
     });
   };
 
@@ -29,6 +30,7 @@ export function Pallette({ tile, onTileChange }: PaletteProps) {
     onTileChange?.({
       type: tile.type,
       player: i,
+      variation: 0,
     });
   };
 
@@ -43,7 +45,11 @@ export function Pallette({ tile, onTileChange }: PaletteProps) {
             className={cls({
               [styles.selected]: selectedTileType === i,
             })}
-            src={getTileImage({ type: tileType, player: selectedPlayer })}
+            src={getTileImage({
+              type: tileType,
+              player: selectedPlayer,
+              variation: 0,
+            })}
             draggable={false}
           />
         ))}
