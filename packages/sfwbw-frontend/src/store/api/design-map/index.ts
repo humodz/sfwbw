@@ -1,4 +1,5 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
+import { serializeTiles } from '@sfwbw/sfwbw-core';
 import { Deleted, makeDeleted } from '../../../utils/deleted';
 import { baseQuery } from '../baseQuery';
 import { deserializeDesignMap, DesignMap, RawDesignMap } from './models';
@@ -25,7 +26,7 @@ export const apiDesignMapSlice = createApi({
       query: (params) => ({
         method: 'POST',
         url: '/design-maps',
-        body: params,
+        body: { ...params, tiles: serializeTiles(params.tiles) },
       }),
       transformResponse: deserializeDesignMap,
     }),
@@ -33,7 +34,7 @@ export const apiDesignMapSlice = createApi({
       query: (params) => ({
         method: 'PUT',
         url: `/design-maps/@${params.id}`,
-        body: params.data,
+        body: { ...params.data, tiles: serializeTiles(params.data.tiles) },
       }),
       transformResponse: deserializeDesignMap,
     }),

@@ -1,5 +1,5 @@
-import { Tile } from '@sfwbw/sfwbw-core';
-import { Expose, Type } from 'class-transformer';
+import { deserializeTiles, Tile } from '@sfwbw/sfwbw-core';
+import { Expose, Transform, Type } from 'class-transformer';
 import {
   IsNotEmpty,
   IsString,
@@ -17,6 +17,7 @@ export class CreateDesignMapRequest {
   name!: string;
 
   @Expose({ name: 'tiles' })
+  @Transform(({ value }) => deserializeTiles(value))
   @Type(() => TileDto)
   @ValidateNested()
   @Is2dArray()

@@ -22,7 +22,10 @@ export function BrowseMaps() {
 
   const [designMaps, setDesignMaps] = useState<MaybeDeleted<DesignMap>[]>([]);
 
-  const searchMapsResult = useSearchMapsQuery(searchTerm || '');
+  const searchMapsResult = useSearchMapsQuery(searchTerm || '', {
+    refetchOnMountOrArgChange: true,
+  });
+
   const [deleteMap, deleteMapResult] = useDeleteMapMutation();
 
   useEffect(() => {
