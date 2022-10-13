@@ -37,7 +37,7 @@ export function SearchForm(props: Props) {
       ></input>
       <FormButton
         type="submit"
-        loading={props.isLoading}
+        isLoading={props.isLoading}
         className={classes.searchButton}
       >
         Search

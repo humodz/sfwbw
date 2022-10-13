@@ -61,6 +61,63 @@ export class DesignMapController {
     @LoggedUser() user: User,
     @Body() body: CreateDesignMapRequest,
   ) {
+    const props = this.calculateProperties(body);
+
+    const designMap = this.designMapRepository.create({
+      name: body.name,
+      author: user,
+      ...props,
+    });
+
+    await this.designMapRepository.persistAndFlush(designMap);
+
+    return designMap;
+  }
+
+  @Protected()
+  @Put('@:id')
+  async updateMap(
+    @LoggedUser() user: User,
+    @Param('id', ParseIntPipe) id: number,
+    @Body() body: CreateDesignMapRequest,
+  ) {
+    const designMap = await this.findOneAndValidateUser(user, id);
+    const props = this.calculateProperties(body);
+
+    designMap.name = body.name;
+    Object.assign(designMap, props);
+
+    await this.designMapRepository.persistAndFlush(designMap);
+
+    return designMap;
+  }
+
+  @Protected()
+  @Delete('@:id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async deleteMap(
+    @LoggedUser() user: User,
+    @Param('id', ParseIntPipe) id: number,
+  ) {
+    const designMap = await this.findOneAndValidateUser(user, id);
+
+    await this.designMapRepository.removeAndFlush(designMap);
+  }
+
+  async findOneAndValidateUser(user: User, id: number) {
+    const designMap = await this.designMapRepository.findOneOrFail(
+      { id },
+      { populate: ['author'] },
+    );
+
+    if (user.role !== UserRole.ADMIN && user.id !== designMap.author.id) {
+      throw new ForbiddenException();
+    }
+
+    return designMap;
+  }
+
+  calculateProperties(body: CreateDesignMapRequest) {
     const mapMaxPlayers =
       countUnique(body.tiles.flat().map((tile) => tile.player)) - 1;
 
@@ -72,39 +129,11 @@ export class DesignMapController {
       );
     }
 
-    const designMap = this.designMapRepository.create({
-      name: body.name,
-      author: user,
+    return {
       maxPlayers: mapMaxPlayers,
       rows: body.tiles.length,
       columns: body.tiles[0].length,
       tiles: body.tiles,
-    });
-
-    await this.designMapRepository.persistAndFlush(designMap);
-
-    return designMap;
-  }
-
-  @Protected()
-  @Put('@:id')
-  async updateMap() {
-    throw new NotImplementedException();
-  }
-
-  @Protected()
-  @Delete('@:id')
-  @HttpCode(HttpStatus.NO_CONTENT)
-  async deleteMap(@LoggedUser() user: User, @Param('id') id: number) {
-    const designMap = await this.designMapRepository.findOneOrFail(
-      { id },
-      { populate: ['author'] },
-    );
-
-    if (user.role !== UserRole.ADMIN && user.id !== designMap.author.id) {
-      throw new ForbiddenException();
-    }
-
-    await this.designMapRepository.removeAndFlush(designMap);
+    };
   }
 }

@@ -68,7 +68,11 @@ function SignInForm() {
       />
 
       <div>
-        <FormButton type="submit" loading={isLoading} style={{ width: '100%' }}>
+        <FormButton
+          type="submit"
+          isLoading={isLoading}
+          style={{ width: '100%' }}
+        >
           Sign In
         </FormButton>
       </div>
@@ -181,7 +185,11 @@ function RegisterForm() {
       />
 
       <div>
-        <FormButton type="submit" loading={isLoading} style={{ width: '100%' }}>
+        <FormButton
+          type="submit"
+          isLoading={isLoading}
+          style={{ width: '100%' }}
+        >
           Register
         </FormButton>
       </div>
