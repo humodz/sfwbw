@@ -3,7 +3,11 @@ import { serializeTiles } from '@sfwbw/sfwbw-core';
 import { Deleted, makeDeleted } from '../../../utils/deleted';
 import { baseQuery } from '../baseQuery';
 import { deserializeDesignMap, DesignMap, RawDesignMap } from './models';
-import { CreateMapRequest, UpdateMapRequest } from './requests';
+import {
+  CreateMapRequest,
+  SearchMapsRequest,
+  UpdateMapRequest,
+} from './requests';
 
 export * from './models';
 export * from './requests';
@@ -12,11 +16,11 @@ export const apiDesignMapSlice = createApi({
   reducerPath: 'apiDesignMap',
   baseQuery,
   endpoints: (builder) => ({
-    searchMaps: builder.query<DesignMap[], string>({
-      query: (param) => ({
+    searchMaps: builder.query<DesignMap[], SearchMapsRequest>({
+      query: (params) => ({
         method: 'GET',
         url: '/design-maps',
-        params: { search: param },
+        params,
       }),
       transformResponse(response: RawDesignMap[]) {
         return response.map(deserializeDesignMap);

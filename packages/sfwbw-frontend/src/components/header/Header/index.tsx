@@ -23,6 +23,9 @@ export function Header(props: Props) {
         </NavLink>
         {props.isLoggedIn ? (
           <>
+            <NavLink to="/games/my-turn" className={classes.navLink}>
+              My Turn
+            </NavLink>
             <NavLink to="/profile" className={classes.navLink}>
               Profile
             </NavLink>

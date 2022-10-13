@@ -16,13 +16,22 @@ import { useCurrentUser } from '../../../store/authSlice';
 import { cls } from '../../../utils';
 import { MaybeDeleted } from '../../../utils/deleted';
 
-export function BrowseMaps() {
+export interface BrowseMapsProps {
+  mode: 'all' | 'my-maps';
+}
+
+export function BrowseMaps(props: BrowseMapsProps) {
   const searchTerm = useSearchTerm();
   const user = useCurrentUser();
 
   const [designMaps, setDesignMaps] = useState<MaybeDeleted<DesignMap>[]>([]);
 
-  const searchMapsResult = useSearchMapsQuery(searchTerm || '', {
+  const searchParams = {
+    search: searchTerm,
+    author: props.mode === 'all' ? undefined : user?.username,
+  };
+
+  const searchMapsResult = useSearchMapsQuery(searchParams, {
     refetchOnMountOrArgChange: true,
   });
 
@@ -72,14 +81,14 @@ export function BrowseMaps() {
   );
 }
 
-interface Props {
+interface MapPreviewProps {
   user: User | null;
   designMap: MaybeDeleted<DesignMap>;
   onDelete?: () => void;
   isDeleteLoading?: boolean;
 }
 
-export function MapPreview(props: Props) {
+export function MapPreview(props: MapPreviewProps) {
   const deleted = props.designMap.deleted;
 
   return (

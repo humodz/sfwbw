@@ -1,4 +1,4 @@
-import { EntityRepository } from '@mikro-orm/core';
+import { EntityRepository, FilterQuery } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import {
   BadRequestException,
@@ -30,16 +30,24 @@ export class DesignMapController {
   ) {}
 
   @Get()
-  async listMaps(@Query('search') rawSearchTerm = '') {
-    const searchTerm = rawSearchTerm.replace(/[_%]/g, '\\$1');
+  async listMaps(
+    @Query('author') authorUsername: string,
+    @Query('search') rawSearchTerm = '',
+  ) {
+    const where: FilterQuery<DesignMap> = {};
 
-    const where = rawSearchTerm
-      ? {
-          name: {
-            $ilike: `%${searchTerm}%`,
-          },
-        }
-      : {};
+    if (rawSearchTerm) {
+      const searchTerm = rawSearchTerm.replace(/[_%]/g, '\\$1');
+      where.name = {
+        $ilike: `%${searchTerm}%`,
+      };
+    }
+
+    if (authorUsername) {
+      where.author = {
+        username: authorUsername,
+      };
+    }
 
     return await this.designMapRepository.find(where, {
       populate: ['author'],
