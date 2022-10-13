@@ -14,7 +14,7 @@ import { useAppDispatch } from './store/hooks';
 export function App() {
   const dispatch = useAppDispatch();
 
-  const currentUser = useCurrentUser();
+  const user = useCurrentUser();
 
   const signOut = () => {
     dispatch(setAccessToken(null));
@@ -22,7 +22,7 @@ export function App() {
 
   return (
     <>
-      <Header isLoggedIn={!!currentUser} signOut={signOut} />
+      <Header isLoggedIn={!!user} signOut={signOut} />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/games/*" element={<Games />} />

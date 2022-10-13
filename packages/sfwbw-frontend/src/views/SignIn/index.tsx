@@ -1,13 +1,17 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { ErrorMessage } from '../../components/ErrorMessage';
+import { FormButton } from '../../components/forms/FormButton';
 import { FormField } from '../../components/forms/FormField';
 import { PasswordField } from '../../components/forms/PasswordField';
 import { useRegisterMutation, useSignInMutation } from '../../store/api';
-import { ErrorMessage } from '../../components/ErrorMessage';
-import { FormButton } from '../../components/forms/FormButton';
-import { setAccessToken } from '../../store/authSlice';
+import {
+  selectRedirectAfterLogin,
+  setAccessToken,
+  setRedirectAfterLogin,
+} from '../../store/authSlice';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { isErrorResponse } from '../../utils';
-import { useAppDispatch } from '../../store/hooks';
-import { useNavigate } from 'react-router-dom';
 
 export function SignIn() {
   return (
@@ -28,6 +32,8 @@ function SignInForm() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
+  const redirectAfterLogin = useAppSelector(selectRedirectAfterLogin);
+
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -46,7 +52,13 @@ function SignInForm() {
     }
 
     dispatch(setAccessToken(response.data.accessToken));
-    navigate('/');
+
+    if (redirectAfterLogin) {
+      dispatch(setRedirectAfterLogin(false));
+      navigate(-1);
+    } else {
+      navigate('/');
+    }
   };
 
   return (
@@ -68,11 +80,7 @@ function SignInForm() {
       />
 
       <div>
-        <FormButton
-          type="submit"
-          isLoading={isLoading}
-          style={{ width: '100%' }}
-        >
+        <FormButton type="submit" isLoading={isLoading} className="w-full mb-0">
           Sign In
         </FormButton>
       </div>
@@ -85,6 +93,8 @@ function SignInForm() {
 function RegisterForm() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+
+  const redirectAfterLogin = useAppSelector(selectRedirectAfterLogin);
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -134,7 +144,13 @@ function RegisterForm() {
     }
 
     dispatch(setAccessToken(signInResponse.data.accessToken));
-    navigate('/');
+
+    if (redirectAfterLogin) {
+      dispatch(setRedirectAfterLogin(false));
+      navigate(-1);
+    } else {
+      navigate('/');
+    }
   };
 
   return (
@@ -185,11 +201,7 @@ function RegisterForm() {
       />
 
       <div>
-        <FormButton
-          type="submit"
-          isLoading={isLoading}
-          style={{ width: '100%' }}
-        >
+        <FormButton type="submit" isLoading={isLoading} className="w-full mb-0">
           Register
         </FormButton>
       </div>

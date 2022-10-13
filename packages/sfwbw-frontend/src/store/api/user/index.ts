@@ -10,7 +10,8 @@ export const apiUserSlice = createApi({
   reducerPath: 'apiUser',
   baseQuery,
   endpoints: (builder) => ({
-    currentUser: builder.query<UserSelf, unknown>({
+    // Note: argument is only for invalidating cache
+    currentUser: builder.query<UserSelf, string | null>({
       query: () => ({
         url: '/users/self',
       }),

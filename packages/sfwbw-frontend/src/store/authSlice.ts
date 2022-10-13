@@ -1,16 +1,20 @@
 import { createSlice, PayloadAction, Reducer } from '@reduxjs/toolkit';
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { useCurrentUserQuery } from './api';
+import { useAppDispatch } from './hooks';
 
 const ACCESS_TOKEN = '/auth/accessToken';
 
 export interface AuthState {
   accessToken: string | null;
+  redirectAfterLogin: boolean;
 }
 
 const initialState: AuthState = {
   accessToken: localStorage.getItem(ACCESS_TOKEN),
+  redirectAfterLogin: false,
 };
 
 export const authSlice = createSlice({
@@ -28,31 +32,41 @@ export const authSlice = createSlice({
 
       state.accessToken = action.payload;
     },
+    setRedirectAfterLogin: (state, action: PayloadAction<boolean>) => {
+      state.redirectAfterLogin = action.payload;
+    },
   },
 });
 
-export const { setAccessToken } = authSlice.actions;
+export const { setAccessToken, setRedirectAfterLogin } = authSlice.actions;
 
 export const selectAccessToken = (state: { auth: AuthState }) =>
   state.auth.accessToken;
 
-export function useCurrentUser() {
+export const selectRedirectAfterLogin = (state: { auth: AuthState }) =>
+  state.auth.redirectAfterLogin;
+
+export function useCurrentUser(params?: { requiresAuth: boolean }) {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const accessToken = useSelector(selectAccessToken);
 
-  const { data, refetch, isSuccess } = useCurrentUserQuery(
-    {},
-    { skip: !accessToken },
-  );
+  const currentUserResult = useCurrentUserQuery(accessToken, {
+    skip: !accessToken,
+  });
 
   useEffect(() => {
-    refetch();
-  }, [refetch, accessToken]);
+    if (params?.requiresAuth && !accessToken) {
+      dispatch(setRedirectAfterLogin(true));
+      navigate('/sign-in');
+    }
+  }, [dispatch, navigate, params, accessToken]);
 
-  if (!accessToken || !isSuccess) {
+  if (!accessToken || !currentUserResult.isSuccess) {
     return null;
   }
 
-  return data || null;
+  return currentUserResult.data;
 }
 
 export const authReducer: Reducer<AuthState> = authSlice.reducer;

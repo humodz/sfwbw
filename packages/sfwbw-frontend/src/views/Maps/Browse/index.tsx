@@ -22,7 +22,7 @@ export interface BrowseMapsProps {
 
 export function BrowseMaps(props: BrowseMapsProps) {
   const searchTerm = useSearchTerm();
-  const user = useCurrentUser();
+  const user = useCurrentUser({ requiresAuth: props.mode === 'my-maps' });
 
   const [designMaps, setDesignMaps] = useState<MaybeDeleted<DesignMap>[]>([]);
 
@@ -32,6 +32,7 @@ export function BrowseMaps(props: BrowseMapsProps) {
   };
 
   const searchMapsResult = useSearchMapsQuery(searchParams, {
+    skip: !user,
     refetchOnMountOrArgChange: true,
   });
 

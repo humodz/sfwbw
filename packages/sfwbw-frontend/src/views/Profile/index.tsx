@@ -1,17 +1,9 @@
-import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React from 'react';
 import { FormField } from '../../components/forms/FormField';
 import { useCurrentUser } from '../../store/authSlice';
 
 export function Profile() {
-  const navigate = useNavigate();
-  const currentUser = useCurrentUser();
-
-  useEffect(() => {
-    if (!currentUser) {
-      navigate('/sign-in');
-    }
-  }, [navigate, currentUser]);
+  const user = useCurrentUser({ requiresAuth: true });
 
   const updateUser = (event: React.FormEvent) => {
     event.preventDefault();
@@ -24,7 +16,7 @@ export function Profile() {
           <FormField
             id="profile-username"
             label={'Username'}
-            value={currentUser?.username}
+            value={user?.username}
             extras={{ disabled: true }}
           />
 
