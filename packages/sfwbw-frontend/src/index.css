@@ -16,3 +16,14 @@ img {
 img.pixelated {
   image-rendering: pixelated;
 }
+
+a.disabled {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+@media (max-width: 640px) {
+  article {
+    padding: 0.5rem;
+  }
+}

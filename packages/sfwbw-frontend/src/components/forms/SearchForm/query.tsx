@@ -6,7 +6,7 @@ interface Props {
   isLoading: boolean;
 }
 
-export function ControlledSearchForm(props: Props) {
+export function QuerySearchForm(props: Props) {
   const navigate = useNavigate();
   const searchTerm = useSearchTerm();
 

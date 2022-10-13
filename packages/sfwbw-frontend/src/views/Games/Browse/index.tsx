@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import {
-  ControlledSearchForm,
+  QuerySearchForm,
   useSearchTerm,
-} from '../../../components/forms/SearchForm/controlled';
+} from '../../../components/forms/SearchForm/query';
 import { GamePreview } from '../../../components/GamePreview';
 import {
   Game,
@@ -46,7 +46,7 @@ export function BrowseGames() {
 
   return (
     <>
-      <ControlledSearchForm isLoading={searchGamesResult.isFetching} />
+      <QuerySearchForm isLoading={searchGamesResult.isFetching} />
       <div>
         {searchGamesResult.isSuccess &&
           games.map((game) => (

@@ -91,6 +91,7 @@ export class DesignMapController {
     return designMap;
   }
 
+  // TODO can only delete if no games created
   @Protected()
   @Delete('@:id')
   @HttpCode(HttpStatus.NO_CONTENT)
