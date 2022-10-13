@@ -34,7 +34,7 @@ export function SignIn() {
   }, [dispatch, navigate, isAuthenticated, redirectAfterLogin]);
 
   return (
-    <main className="w-fit m-auto">
+    <main className="m-auto grid grid-cols-1 md:grid-cols-2 gap-x-4 items-start">
       <article>
         <h4>Sign In</h4>
         <SignInForm />
@@ -162,7 +162,7 @@ function RegisterForm() {
           <>
             Username
             <br />
-            (only letters, numbers and the following: . _ -)
+            (only letters, numbers and <code>. _ -</code>)
           </>
         }
         value={username}
@@ -177,7 +177,7 @@ function RegisterForm() {
 
       <PasswordField
         id="register-password"
-        label="Password (at least 8 characters)"
+        label="Password (at least 8 chars)"
         value={password}
         setValue={setPassword}
         extras={{ required: true, minLength: 8 }}
