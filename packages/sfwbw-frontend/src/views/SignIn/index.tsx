@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ErrorMessage } from '../../components/ErrorMessage';
 import { FormButton } from '../../components/forms/FormButton';
@@ -6,6 +6,7 @@ import { FormField } from '../../components/forms/FormField';
 import { PasswordField } from '../../components/forms/PasswordField';
 import { useRegisterMutation, useSignInMutation } from '../../store/api';
 import {
+  selectIsAuthenticated,
   selectRedirectAfterLogin,
   setAccessToken,
   setRedirectAfterLogin,
@@ -14,6 +15,24 @@ import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { isErrorResponse } from '../../utils';
 
 export function SignIn() {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const isAuthenticated = useAppSelector(selectIsAuthenticated);
+  const redirectAfterLogin = useAppSelector(selectRedirectAfterLogin);
+  const alreadyLoggedIn = useRef(false);
+
+  useEffect(() => {
+    if (isAuthenticated && !alreadyLoggedIn.current) {
+      alreadyLoggedIn.current = true;
+      if (redirectAfterLogin) {
+        navigate(-1);
+        dispatch(setRedirectAfterLogin(false));
+      } else {
+        navigate('/');
+      }
+    }
+  }, [dispatch, navigate, isAuthenticated, redirectAfterLogin]);
+
   return (
     <main className="w-fit m-auto">
       <article>
@@ -29,15 +48,14 @@ export function SignIn() {
 }
 
 function SignInForm() {
-  const navigate = useNavigate();
   const dispatch = useAppDispatch();
-
-  const redirectAfterLogin = useAppSelector(selectRedirectAfterLogin);
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  const [signIn, { isLoading, error }] = useSignInMutation();
+  const [signIn, { isLoading, error }] = useSignInMutation({
+    fixedCacheKey: 'sign-in',
+  });
 
   const onSignIn = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -52,17 +70,10 @@ function SignInForm() {
     }
 
     dispatch(setAccessToken(response.data.accessToken));
-
-    if (redirectAfterLogin) {
-      dispatch(setRedirectAfterLogin(false));
-      navigate(-1);
-    } else {
-      navigate('/');
-    }
   };
 
   return (
-    <form onSubmit={onSignIn} autoComplete="off">
+    <form onSubmit={onSignIn}>
       <FormField
         id="signin-username"
         label={'Username'}
@@ -91,10 +102,7 @@ function SignInForm() {
 }
 
 function RegisterForm() {
-  const navigate = useNavigate();
   const dispatch = useAppDispatch();
-
-  const redirectAfterLogin = useAppSelector(selectRedirectAfterLogin);
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -111,7 +119,7 @@ function RegisterForm() {
   }, [password, passwordConfirmation, passwordConfirmationError]);
 
   const [register, registerInfo] = useRegisterMutation();
-  const [signIn, signInInfo] = useSignInMutation();
+  const [signIn, signInInfo] = useSignInMutation({ fixedCacheKey: 'sign-in' });
 
   const isLoading = registerInfo.isLoading || signInInfo.isLoading;
   const error = registerInfo.error || signInInfo.error;
@@ -144,13 +152,6 @@ function RegisterForm() {
     }
 
     dispatch(setAccessToken(signInResponse.data.accessToken));
-
-    if (redirectAfterLogin) {
-      dispatch(setRedirectAfterLogin(false));
-      navigate(-1);
-    } else {
-      navigate('/');
-    }
   };
 
   return (

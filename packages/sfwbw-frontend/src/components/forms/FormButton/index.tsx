@@ -7,7 +7,7 @@ interface FormButtonProps
 }
 
 export function FormButton(props: FormButtonProps) {
-  const { isLoading, ...buttonProps } = props;
+  const { isLoading, className, ...buttonProps } = props;
 
   return (
     <button

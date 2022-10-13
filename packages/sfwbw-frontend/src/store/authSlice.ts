@@ -43,6 +43,9 @@ export const { setAccessToken, setRedirectAfterLogin } = authSlice.actions;
 export const selectAccessToken = (state: { auth: AuthState }) =>
   state.auth.accessToken;
 
+export const selectIsAuthenticated = (state: { auth: AuthState }) =>
+  state.auth.accessToken !== null;
+
 export const selectRedirectAfterLogin = (state: { auth: AuthState }) =>
   state.auth.redirectAfterLogin;
 
