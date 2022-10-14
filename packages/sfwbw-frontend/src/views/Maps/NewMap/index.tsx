@@ -5,10 +5,12 @@ import { ErrorMessage } from '../../../components/ErrorMessage';
 import { FormButton } from '../../../components/forms/FormButton';
 import { FormField } from '../../../components/forms/FormField';
 import { useCreateMapMutation } from '../../../store/api';
+import { useCurrentUser } from '../../../store/authSlice';
 import { isSuccessResponse, repeat } from '../../../utils';
 import { formErrorMessage } from '../../../utils/errors';
 
 export function NewMap() {
+  useCurrentUser({ requiresAuth: true });
   const navigate = useNavigate();
   const [name, setName] = useState('');
   const [columnsRaw, setColumnsRaw] = useState('');
@@ -40,7 +42,7 @@ export function NewMap() {
     const response = await createMap({ name: name.trim(), tiles });
 
     if (isSuccessResponse(response)) {
-      navigate(`/maps/${response.data.id}/edit`);
+      navigate(`/maps/@${response.data.id}/edit`);
     }
   };
 
