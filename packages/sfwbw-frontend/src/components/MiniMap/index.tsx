@@ -11,42 +11,83 @@ interface Props {
 
 export const MiniMap = React.memo(MiniMapOriginal);
 
+const tileSize = 4;
+
 function MiniMapOriginal(props: Props) {
   const rows = props.tiles.length;
   const columns = props.tiles[0].length;
 
   const miniMapVars = cssVars({
-    '--tile-previews': `url(${tilePreviews}`,
     '--rows': rows,
     '--columns': columns,
   });
 
+  const drawMiniMap = async (canvas: HTMLCanvasElement | null) => {
+    if (!canvas) {
+      return;
+    }
+
+    const tilesImage = await loadImage(tilePreviews);
+    const ctx = canvas.getContext('2d');
+
+    if (!ctx) {
+      return;
+    }
+
+    props.tiles.forEach((row, y) => {
+      row.forEach((tile, x) => {
+        const px = tileSize * x;
+        const py = tileSize * y;
+
+        const [srcX, srcY] = getTilePosition(tile);
+
+        ctx.drawImage(
+          tilesImage,
+          srcX,
+          srcY,
+          tileSize,
+          tileSize,
+          px,
+          py,
+          tileSize,
+          tileSize,
+        );
+      });
+    });
+  };
+
   return (
     <div style={{ width: '6rem' }}>
-      <div className={styles.miniMap} style={miniMapVars}>
-        {props.tiles.flatMap((row, y) =>
-          row.map((tile, x) => (
-            <div
-              key={`${y}-${x}`}
-              style={{
-                backgroundPosition: getBackgroundPosition(tile),
-              }}
-            ></div>
-          )),
-        )}
-      </div>
+      <canvas
+        ref={drawMiniMap}
+        className={`${styles.miniMap} pixelated`}
+        style={miniMapVars}
+        width={tileSize * columns}
+        height={tileSize * rows}
+      />
     </div>
   );
 }
 
+async function loadImage(src: string) {
+  const img = document.createElement('img');
+  img.src = tilePreviews;
+
+  await new Promise<void>((resolve, reject) => {
+    img.onload = () => resolve();
+    img.onerror = () => reject(new Error(`Failed to load: ${src}`));
+  });
+
+  return img;
+}
+
 const terrainValues = Object.values(Terrain);
 
-function getBackgroundPosition(tile: Tile) {
+function getTilePosition(tile: Tile): [number, number] {
   if (isTerrain(tile.type)) {
     const index = terrainValues.indexOf(tile.type);
-
-    return `calc(${index} * -100%) 0`;
+    return [index * tileSize, 0];
   } else {
-    return `calc(${tile.player} * -100%) 100%`;
+    return [tile.player * tileSize, tileSize];
   }
 }

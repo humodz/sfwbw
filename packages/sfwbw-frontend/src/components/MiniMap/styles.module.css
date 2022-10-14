@@ -2,14 +2,6 @@
   background-color: var(--accent-bg);
   margin: auto;
 
-  display: grid;
-  grid-template: repeat(var(--rows), 1fr) / repeat(var(--columns), 1fr);
   width: min(6rem, calc( 6rem * var(--columns) / var(--rows) ));
   height: min(6rem, calc( 6rem * var(--rows) / var(--columns) ));
-}
-
-.miniMap > div {
-  image-rendering: pixelated;
-  background-image: var(--tile-previews);
-  background-size: calc(10 * 100%) calc(2 * 100%);
 }
