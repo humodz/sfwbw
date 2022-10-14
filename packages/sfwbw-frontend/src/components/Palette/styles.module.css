@@ -1,9 +1,0 @@
-.editorPalette img {
-  width: 32px;
-  height: 32px;
-  border: 2px solid transparent;
-}
-
-.editorPalette img.selected {
-  border-color: #FFF;
-}

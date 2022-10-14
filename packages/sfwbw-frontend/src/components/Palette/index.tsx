@@ -3,8 +3,6 @@ import { Building, Nation, Terrain, Tile } from '@sfwbw/sfwbw-core';
 import { getTileImage } from '../../game/assets';
 import { cls } from '../../utils';
 
-import styles from './styles.module.css';
-
 interface PaletteProps {
   tile: Tile;
   onTileChange?: (tile: Tile) => void;
@@ -13,6 +11,11 @@ interface PaletteProps {
 const tileTypes = [...Object.values(Terrain), ...Object.values(Building)];
 
 const nationNames = Object.values(Nation);
+
+const classes = {
+  tile: 'w-[36px] h-[36px] border-2 border-solid border-transparent select-none',
+  selected: '!border-white',
+};
 
 export function Pallette({ tile, onTileChange }: PaletteProps) {
   const selectedTileType = tileTypes.indexOf(tile.type);
@@ -35,7 +38,7 @@ export function Pallette({ tile, onTileChange }: PaletteProps) {
   };
 
   return (
-    <div className={styles.editorPalette}>
+    <div>
       <p>
         {tileTypes.map((tileType, i) => (
           <img
@@ -43,7 +46,9 @@ export function Pallette({ tile, onTileChange }: PaletteProps) {
             onClick={() => updateTileType(i)}
             alt=""
             className={cls({
-              [styles.selected]: selectedTileType === i,
+              [classes.selected]: selectedTileType === i,
+              [classes.tile]: true,
+              pixelated: true,
             })}
             src={getTileImage({
               type: tileType,
@@ -62,7 +67,9 @@ export function Pallette({ tile, onTileChange }: PaletteProps) {
             onClick={() => updateNation(i)}
             alt=""
             className={cls({
-              [styles.selected]: selectedPlayer === i,
+              [classes.selected]: selectedPlayer === i,
+              [classes.tile]: true,
+              pixelated: true,
             })}
             src={nations[nation]}
             draggable={false}
