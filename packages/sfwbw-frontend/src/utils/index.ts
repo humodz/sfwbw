@@ -28,9 +28,11 @@ export function cls(
     .join(' ');
 }
 
-export function cssVars<T extends React.CSSProperties>(
-  vars: T & Record<string, string | number>,
-): React.CSSProperties {
+interface CSSPropertiesWithVars extends React.CSSProperties {
+  [key: `--${string}`]: string | number;
+}
+
+export function cssVars(vars: CSSPropertiesWithVars): React.CSSProperties {
   return vars as any;
 }
 

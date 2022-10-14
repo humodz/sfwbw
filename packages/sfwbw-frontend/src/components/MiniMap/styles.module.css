@@ -1,7 +1,4 @@
 .miniMap {
-  background-color: var(--accent-bg);
-  margin: auto;
-
   width: min(6rem, calc( 6rem * var(--columns) / var(--rows) ));
   height: min(6rem, calc( 6rem * var(--rows) / var(--columns) ));
 }

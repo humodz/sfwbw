@@ -60,7 +60,7 @@ function MiniMapOriginal(props: Props) {
     <div style={{ width: '6rem' }}>
       <canvas
         ref={drawMiniMap}
-        className={`${styles.miniMap} pixelated`}
+        className={`${styles.miniMap} pixelated m-auto block`}
         style={miniMapVars}
         width={tileSize * columns}
         height={tileSize * rows}
