@@ -2,7 +2,11 @@ import { createApi } from '@reduxjs/toolkit/query/react';
 import { Deleted, makeDeleted } from '../../../utils/deleted';
 import { baseQuery } from '../baseQuery';
 import { deserializeGame, Game, RawGame } from './models';
-import { JoinGameRequest, UpdatePlayerRequest } from './requests';
+import {
+  JoinGameRequest,
+  SearchGamesRequest,
+  UpdatePlayerRequest,
+} from './requests';
 
 export * from './models';
 export * from './requests';
@@ -11,11 +15,11 @@ export const apiGameSlice = createApi({
   reducerPath: 'apiGame',
   baseQuery,
   endpoints: (builder) => ({
-    searchGames: builder.query<Game[], string>({
-      query: (param) => ({
+    searchGames: builder.query<Game[], SearchGamesRequest>({
+      query: (params) => ({
         method: 'GET',
         url: '/games',
-        params: { search: param },
+        params,
       }),
       transformResponse(response: RawGame[]) {
         return response.map(deserializeGame);

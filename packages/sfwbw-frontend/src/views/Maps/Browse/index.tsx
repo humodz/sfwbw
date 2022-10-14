@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { ErrorMessage } from '../../../components/ErrorMessage';
 import { FormButton } from '../../../components/forms/FormButton';
 import {
   QuerySearchForm,
@@ -22,7 +23,7 @@ export interface BrowseMapsProps {
 
 export function BrowseMaps(props: BrowseMapsProps) {
   const searchTerm = useSearchTerm();
-  const user = useCurrentUser({ requiresAuth: props.mode === 'my-maps' });
+  const user = useCurrentUser({ requiresAuth: props.mode !== 'all' });
 
   const [designMaps, setDesignMaps] = useState<MaybeDeleted<DesignMap>[]>([]);
 
@@ -32,7 +33,7 @@ export function BrowseMaps(props: BrowseMapsProps) {
   };
 
   const searchMapsResult = useSearchMapsQuery(searchParams, {
-    skip: !user,
+    skip: props.mode === 'my-maps' && !user,
     refetchOnMountOrArgChange: true,
   });
 
@@ -77,6 +78,12 @@ export function BrowseMaps(props: BrowseMapsProps) {
               isDeleteLoading={deleteMapResult.isLoading}
             />
           ))}
+        {searchMapsResult.isSuccess && designMaps.length === 0 && (
+          <p className="text-center mt-8">No maps found.</p>
+        )}
+        {searchMapsResult.isError && (
+          <ErrorMessage error={searchMapsResult.error} />
+        )}
       </div>
     </>
   );

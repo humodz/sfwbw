@@ -13,7 +13,7 @@ img {
   border-radius: 0;
 }
 
-img.pixelated {
+.pixelated {
   image-rendering: pixelated;
 }
 

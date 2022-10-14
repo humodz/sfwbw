@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { ErrorMessage } from '../../../components/ErrorMessage';
 import {
   QuerySearchForm,
   useSearchTerm,
@@ -16,12 +17,25 @@ import { useCurrentUser } from '../../../store/authSlice';
 import { Deleted, isDeleted, MaybeDeleted } from '../../../utils/deleted';
 import { useErrorPopup } from '../../../utils/errors';
 
-export function BrowseGames() {
+interface Props {
+  mode: 'all' | 'my-games' | 'my-turn';
+}
+
+export function BrowseGames(props: Props) {
   const searchTerm = useSearchTerm();
-  const user = useCurrentUser();
+  const user = useCurrentUser({ requiresAuth: props.mode !== 'all' });
+
+  const searchParams = {
+    search: searchTerm,
+    player: props.mode === 'my-games' ? user?.username : undefined,
+    turn: props.mode === 'my-turn' ? user?.username : undefined,
+  };
+
+  const searchGamesResult = useSearchGamesQuery(searchParams, {
+    refetchOnMountOrArgChange: true,
+  });
 
   const [games, setGames] = useState<MaybeDeleted<Game>[]>([]);
-  const searchGamesResult = useSearchGamesQuery(searchTerm || '');
 
   useEffect(() => {
     const games = searchGamesResult.data;
@@ -69,6 +83,9 @@ export function BrowseGames() {
           ))}
         {searchGamesResult.isSuccess && games.length === 0 && (
           <p className="text-center mt-8">No games found.</p>
+        )}
+        {searchGamesResult.isError && (
+          <ErrorMessage error={searchGamesResult.error} />
         )}
       </div>
     </>

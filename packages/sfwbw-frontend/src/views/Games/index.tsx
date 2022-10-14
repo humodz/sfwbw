@@ -25,10 +25,10 @@ export function Games() {
         </NavLink>
       </nav>
       <Routes>
-        <Route path="/" element={<BrowseGames />} />
+        <Route path="/" element={<BrowseGames mode="all" />} />
         <Route path="/new" element={'WIP NEW GAME'} />
-        <Route path="/my-games" element={'WIP MY-GAMES'} />
-        <Route path="/my-turn" element={'WIP MY-TURN'} />
+        <Route path="/my-games" element={<BrowseGames mode="my-games" />} />
+        <Route path="/my-turn" element={<BrowseGames mode="my-turn" />} />
       </Routes>
     </main>
   );
