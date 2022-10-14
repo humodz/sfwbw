@@ -13,6 +13,10 @@ img {
   border-radius: 0;
 }
 
+hr {
+  border-color: var(--border);
+}
+
 .pixelated {
   image-rendering: pixelated;
 }

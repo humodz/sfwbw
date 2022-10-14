@@ -90,7 +90,7 @@ export function NewMap() {
             />
           </div>
           <FormButton
-            className="block m-auto mt-2 min-w-[50%]"
+            className="block mx-auto mb-0 min-w-[50%]"
             type="submit"
             isLoading={createMapResult.isLoading}
           >

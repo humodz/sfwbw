@@ -3,9 +3,16 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Pallette } from '../../../components/Palette';
 import { getTileImage } from '../../../game/assets';
-import { DesignMap, useGetMapByIdQuery } from '../../../store/api';
+import {
+  DesignMap,
+  useGetMapByIdQuery,
+  useUpdateMapMutation,
+} from '../../../store/api';
 import { useCurrentUser } from '../../../store/auth-slice';
 import produce from 'immer';
+import { ErrorMessage } from '../../../components/ErrorMessage';
+import { FormField } from '../../../components/forms/FormField';
+import { FormButton } from '../../../components/forms/FormButton';
 
 export function EditMap() {
   const navigate = useNavigate();
@@ -34,7 +41,17 @@ export function EditMap() {
     variation: 0,
   });
 
-  const updateBoard = (pos: { x: number; y: number }, newTile: Tile) => {
+  const updateName = (newName: string) => {
+    setDesignMap(
+      produce((draft) => {
+        if (draft) {
+          draft.name = newName;
+        }
+      }),
+    );
+  };
+
+  const updateTiles = (pos: { x: number; y: number }, newTile: Tile) => {
     setDesignMap(
       produce((draft) => {
         if (draft) {
@@ -44,16 +61,39 @@ export function EditMap() {
     );
   };
 
+  const [updateMap, updateMapResult] = useUpdateMapMutation();
+
+  const saveMap = () => {
+    if (designMap) {
+      const { name, tiles } = designMap;
+      updateMap({
+        id: designMap.id,
+        data: { name, tiles },
+      });
+    }
+  };
+
   return (
     <>
-      <p>Edit Map {id}</p>
-
-      <Pallette tile={selectedTile} onTileChange={setSelectedTile} />
-
       {designMap && (
         <>
-          <p>{designMap.name}</p>
+          <FormField
+            id={'editmap-name'}
+            label="Name"
+            value={designMap.name}
+            setValue={updateName}
+          />
+          <FormButton
+            type="button"
+            className="block mx-auto min-w-[50%]"
+            isLoading={updateMapResult.isLoading}
+            onClick={saveMap}
+          >
+            Save
+          </FormButton>
 
+          <hr />
+          <Pallette tile={selectedTile} onTileChange={setSelectedTile} />
           <div className="w-fit m-auto">
             {designMap.tiles.map((row, y) => (
               <div className="flex select-none" key={y}>
@@ -61,10 +101,10 @@ export function EditMap() {
                   <img
                     key={x}
                     src={getTileImage(tile)}
-                    onMouseDown={() => updateBoard({ x, y }, selectedTile)}
+                    onMouseDown={() => updateTiles({ x, y }, selectedTile)}
                     onMouseOver={(event) => {
                       if (event.buttons === 1) {
-                        updateBoard({ x, y }, selectedTile);
+                        updateTiles({ x, y }, selectedTile);
                       }
                     }}
                     alt=""
@@ -78,6 +118,12 @@ export function EditMap() {
             ))}
           </div>
         </>
+      )}
+      {designMapResult.isError && (
+        <ErrorMessage error={designMapResult.error} />
+      )}
+      {updateMapResult.isError && (
+        <ErrorMessage error={updateMapResult.error} />
       )}
     </>
   );
