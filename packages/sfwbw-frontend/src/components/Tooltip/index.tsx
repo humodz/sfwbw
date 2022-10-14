@@ -2,7 +2,7 @@ import styles from './styles.module.css';
 
 import { ReactNode, useState } from 'react';
 import { usePopper } from 'react-popper';
-import { cls } from '../../utils';
+import { cls } from '../../utils/css';
 
 interface TooltipProps {
   hide?: boolean;

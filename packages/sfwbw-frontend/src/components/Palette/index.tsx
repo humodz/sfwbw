@@ -1,7 +1,7 @@
 import { nations } from '@sfwbw/sfwbw-assets';
 import { Building, Nation, Terrain, Tile } from '@sfwbw/sfwbw-core';
 import { getTileImage } from '../../game/assets';
-import { cls } from '../../utils';
+import { cls } from '../../utils/css';
 
 interface PaletteProps {
   tile: Tile;

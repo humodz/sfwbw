@@ -3,7 +3,8 @@ import styles from './styles.module.css';
 import { tilePreviews } from '@sfwbw/sfwbw-assets';
 import { isTerrain, Terrain, Tile } from '@sfwbw/sfwbw-core';
 import React from 'react';
-import { cssVars } from '../../utils';
+import { cssVars } from '../../utils/css';
+import { loadImage } from '../../utils';
 
 interface Props {
   tiles: Tile[][];
@@ -67,18 +68,6 @@ function MiniMapOriginal(props: Props) {
       />
     </div>
   );
-}
-
-async function loadImage(src: string) {
-  const img = document.createElement('img');
-  img.src = tilePreviews;
-
-  await new Promise<void>((resolve, reject) => {
-    img.onload = () => resolve();
-    img.onerror = () => reject(new Error(`Failed to load: ${src}`));
-  });
-
-  return img;
 }
 
 const terrainValues = Object.values(Terrain);

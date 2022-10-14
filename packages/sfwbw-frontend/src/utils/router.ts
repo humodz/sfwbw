@@ -32,3 +32,13 @@ export function toQueryString(query: Record<string, string>) {
 
   return urlSearchParams.toString();
 }
+
+export function navActiveClass(otherClasses = '') {
+  return (props: { isActive: boolean }) => {
+    if (props.isActive) {
+      return `active ${otherClasses}`;
+    } else {
+      return otherClasses;
+    }
+  };
+}

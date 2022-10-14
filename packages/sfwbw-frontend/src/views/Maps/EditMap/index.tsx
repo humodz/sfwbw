@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Pallette } from '../../../components/Palette';
 import { getTileImage } from '../../../game/assets';
 import { DesignMap, useGetMapByIdQuery } from '../../../store/api';
-import { useCurrentUser } from '../../../store/authSlice';
+import { useCurrentUser } from '../../../store/auth-slice';
 import produce from 'immer';
 
 export function EditMap() {

@@ -13,7 +13,7 @@ import {
   useSearchGamesQuery,
   useUpdatePlayerMutation,
 } from '../../../store/api';
-import { useCurrentUser } from '../../../store/authSlice';
+import { useCurrentUser } from '../../../store/auth-slice';
 import { Deleted, isDeleted, MaybeDeleted } from '../../../utils/deleted';
 import { useErrorPopup } from '../../../utils/errors';
 

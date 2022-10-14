@@ -1,6 +1,6 @@
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
-import { setAccessToken } from './store/authSlice';
-import { useCurrentUser } from './store/authSlice';
+import { setAccessToken } from './store/auth-slice';
+import { useCurrentUser } from './store/auth-slice';
 import { Games } from './views/Games';
 import { Profile } from './views/Profile';
 import { SignIn } from './views/SignIn';

@@ -1,7 +1,7 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { serializeTiles } from '@sfwbw/sfwbw-core';
 import { Deleted, makeDeleted } from '../../../utils/deleted';
-import { baseQuery } from '../baseQuery';
+import { baseQuery } from '../base-query';
 import { deserializeDesignMap, DesignMap, RawDesignMap } from './models';
 import {
   CreateMapRequest,

@@ -1,5 +1,5 @@
 import { fetchBaseQuery } from '@reduxjs/toolkit/dist/query';
-import { selectAccessToken } from '../authSlice';
+import { selectAccessToken } from '../auth-slice';
 
 export const baseQuery = fetchBaseQuery({
   baseUrl: `http://${window.location.hostname}:3000`,

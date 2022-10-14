@@ -10,9 +10,9 @@ import {
   selectRedirectAfterLogin,
   setAccessToken,
   setRedirectAfterLogin,
-} from '../../store/authSlice';
+} from '../../store/auth-slice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { isErrorResponse } from '../../utils';
+import { isErrorResponse } from '../../utils/rtk-query';
 
 export function SignIn() {
   const dispatch = useAppDispatch();

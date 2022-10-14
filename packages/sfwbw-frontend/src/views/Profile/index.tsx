@@ -1,6 +1,6 @@
 import React from 'react';
 import { FormField } from '../../components/forms/FormField';
-import { useCurrentUser } from '../../store/authSlice';
+import { useCurrentUser } from '../../store/auth-slice';
 
 export function Profile() {
   const user = useCurrentUser({ requiresAuth: true });

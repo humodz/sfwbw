@@ -5,8 +5,9 @@ import { ErrorMessage } from '../../../components/ErrorMessage';
 import { FormButton } from '../../../components/forms/FormButton';
 import { FormField } from '../../../components/forms/FormField';
 import { useCreateMapMutation } from '../../../store/api';
-import { useCurrentUser } from '../../../store/authSlice';
-import { isSuccessResponse, repeat } from '../../../utils';
+import { useCurrentUser } from '../../../store/auth-slice';
+import { repeat } from '../../../utils';
+import { isSuccessResponse } from '../../../utils/rtk-query';
 import { formErrorMessage } from '../../../utils/errors';
 
 export function NewMap() {

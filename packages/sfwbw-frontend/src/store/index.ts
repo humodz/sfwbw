@@ -1,7 +1,7 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
 import { apiGameSlice, apiUserSlice } from './api';
 import { apiDesignMapSlice } from './api/design-map';
-import { authReducer } from './authSlice';
+import { authReducer } from './auth-slice';
 
 export const store = configureStore({
   reducer: {

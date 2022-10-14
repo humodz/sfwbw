@@ -3,7 +3,8 @@ import produce from 'immer';
 import React, { useState } from 'react';
 import { Pallette } from '../../components/Palette';
 import { getTileImage } from '../../game/assets';
-import { cssVars, repeat, saveFile } from '../../utils';
+import { repeat, saveFile } from '../../utils';
+import { cssVars } from '../../utils/css';
 
 import styles from './styles.module.css';
 

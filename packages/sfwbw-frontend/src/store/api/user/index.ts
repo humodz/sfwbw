@@ -1,5 +1,5 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
-import { baseQuery } from '../baseQuery';
+import { baseQuery } from '../base-query';
 import { Session, UserSelf } from './models';
 import { RegisterRequest, SignInRequest } from './requests';
 

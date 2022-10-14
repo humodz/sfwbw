@@ -1,5 +1,5 @@
 import { NavLink, Route, Routes } from 'react-router-dom';
-import { navActiveClass } from '../../utils';
+import { navActiveClass } from '../../utils/router';
 import { BrowseGames } from './Browse';
 
 const classes = {

@@ -1,6 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { Deleted, makeDeleted } from '../../../utils/deleted';
-import { baseQuery } from '../baseQuery';
+import { baseQuery } from '../base-query';
 import { deserializeGame, Game, RawGame } from './models';
 import {
   JoinGameRequest,

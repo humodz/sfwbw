@@ -13,8 +13,8 @@ import {
   useDeleteMapMutation,
   useSearchMapsQuery,
 } from '../../../store/api/design-map';
-import { useCurrentUser } from '../../../store/authSlice';
-import { cls } from '../../../utils';
+import { useCurrentUser } from '../../../store/auth-slice';
+import { cls } from '../../../utils/css';
 import { MaybeDeleted } from '../../../utils/deleted';
 
 export interface BrowseMapsProps {
