@@ -1,3 +1,22 @@
+import {
+  BaseQueryFn,
+  TypedUseMutationResult,
+  TypedUseQueryStateResult,
+} from '@reduxjs/toolkit/query/react';
+import { RtkQueryError } from './errors';
+
+export type RtkQueryResult<Data, Error = RtkQueryError> =
+  | TypedUseQueryStateResult<
+      Data,
+      unknown,
+      BaseQueryFn<unknown, unknown, Error>
+    >
+  | (TypedUseMutationResult<
+      Data,
+      unknown,
+      BaseQueryFn<unknown, unknown, Error>
+    > & { isFetching?: undefined });
+
 export function isSuccessResponse<T>(response: any): response is { data: T } {
   return 'data' in response;
 }

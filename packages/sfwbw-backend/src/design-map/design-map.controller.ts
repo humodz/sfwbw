@@ -16,6 +16,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { Nation } from '@sfwbw/sfwbw-core';
+import { sleep } from 'src/utils';
 import { LoggedUser, Protected } from '../auth';
 import { DesignMap, User } from '../db/entities';
 import { UserRole } from '../db/entities/user.entity';
@@ -34,6 +35,8 @@ export class DesignMapController {
     @Query('author') authorUsername: string,
     @Query('search') rawSearchTerm = '',
   ) {
+    await sleep(3000);
+
     const where: FilterQuery<DesignMap> = {};
 
     if (rawSearchTerm) {
