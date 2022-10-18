@@ -58,11 +58,11 @@ export function BrowseMaps(props: BrowseMapsProps) {
 
   return (
     <>
-      <QuerySearchForm isLoading={false} />
-      <div>
-        <Loader
-          query={searchMapsResult}
-          view={() =>
+      <QuerySearchForm isLoading={searchMapsResult.isFetching} />
+      <Loader
+        query={searchMapsResult}
+        view={() =>
+          designMaps.length > 0 ? (
             designMaps.map((designMap) => (
               <MapPreview
                 key={designMap.id}
@@ -76,9 +76,11 @@ export function BrowseMaps(props: BrowseMapsProps) {
                 isDeleteLoading={deleteMapResult.isLoading}
               />
             ))
-          }
-        />
-      </div>
+          ) : (
+            <p className="text-center mt-8">No maps found.</p>
+          )
+        }
+      />
     </>
   );
 }

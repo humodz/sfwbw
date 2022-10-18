@@ -5,6 +5,7 @@ import {
   useSearchTerm,
 } from '../../../components/forms/SearchForm/query';
 import { GamePreview } from '../../../components/GamePreview';
+import { Loader } from '../../../components/Loader';
 import {
   Game,
   useDeleteGameMutation,
@@ -61,33 +62,33 @@ export function BrowseGames(props: Props) {
   return (
     <>
       <QuerySearchForm isLoading={searchGamesResult.isFetching} />
-      <div>
-        {searchGamesResult.isSuccess &&
-          games.map((game) => (
-            <GamePreview
-              key={game.id}
-              user={user}
-              game={game}
-              onJoin={(pwd) =>
-                joinGame({ gameId: game.id, password: pwd || null })
-              }
-              onLeave={() => leaveGame({ gameId: game.id })}
-              onDelete={() => deleteGame({ gameId: game.id })}
-              onPlayerNationChange={(nation) =>
-                updatePlayer({ gameId: game.id, nation })
-              }
-              onPlayerReadyChange={(ready) =>
-                updatePlayer({ gameId: game.id, ready })
-              }
-            />
-          ))}
-        {searchGamesResult.isSuccess && games.length === 0 && (
-          <p className="text-center mt-8">No games found.</p>
-        )}
-        {searchGamesResult.isError && (
-          <ErrorMessage error={searchGamesResult.error} />
-        )}
-      </div>
+      <Loader
+        query={searchGamesResult}
+        view={() =>
+          games.length > 0 ? (
+            games.map((game) => (
+              <GamePreview
+                key={game.id}
+                user={user}
+                game={game}
+                onJoin={(pwd) =>
+                  joinGame({ gameId: game.id, password: pwd || null })
+                }
+                onLeave={() => leaveGame({ gameId: game.id })}
+                onDelete={() => deleteGame({ gameId: game.id })}
+                onPlayerNationChange={(nation) =>
+                  updatePlayer({ gameId: game.id, nation })
+                }
+                onPlayerReadyChange={(ready) =>
+                  updatePlayer({ gameId: game.id, ready })
+                }
+              />
+            ))
+          ) : (
+            <p className="text-center mt-8">No games found.</p>
+          )
+        }
+      />
     </>
   );
 }

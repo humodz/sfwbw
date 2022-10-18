@@ -16,7 +16,7 @@ export function Loader<Data>(props: LoaderProps<Data>) {
     props.query.isFetching ||
     props.query.isUninitialized
   ) {
-    return <LoadingIcon scale={3} className="mx-auto my-8 block" />;
+    return <LoadingIcon scale={3} className="mx-auto mt-8 block" />;
   } else if (props.query.isError) {
     if (props.error) {
       return <>{props.error(props.query.error)}</>;
