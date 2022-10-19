@@ -35,3 +35,10 @@ export function getErrorMessage(error: RtkQueryError): string {
     return 'Unknown error';
   }
 }
+
+export function isFetchError(
+  error: RtkQueryError,
+  status?: number,
+): error is FetchBaseQueryError {
+  return 'status' in error && (status === undefined || status === error.status);
+}

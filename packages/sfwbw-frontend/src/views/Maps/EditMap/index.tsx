@@ -1,7 +1,7 @@
 import { Terrain, PLAYER_NEUTRAL, Tile } from '@sfwbw/sfwbw-core';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Pallette } from '../../../components/Palette';
+import { PaletteSelection, Pallette } from '../../../components/Palette';
 import { getTileImage } from '../../../game/assets';
 import {
   DesignMap,
@@ -35,10 +35,13 @@ export function EditMap() {
     }
   }, [navigate, user, designMapResult]);
 
-  const [selectedTile, setSelectedTile] = useState<Tile>({
-    type: Terrain.PLAINS,
-    player: PLAYER_NEUTRAL,
-    variation: 0,
+  const [selection, setSelection] = useState<PaletteSelection>({
+    type: 'tile',
+    value: {
+      type: Terrain.PLAINS,
+      player: PLAYER_NEUTRAL,
+      variation: 0,
+    },
   });
 
   const updateName = (newName: string) => {
@@ -51,14 +54,18 @@ export function EditMap() {
     );
   };
 
-  const updateTiles = (pos: { x: number; y: number }, newTile: Tile) => {
-    setDesignMap(
-      produce((draft) => {
-        if (draft) {
-          draft.tiles[pos.y][pos.x] = newTile;
-        }
-      }),
-    );
+  const updateMapData = (
+    pos: { x: number; y: number },
+    selection: PaletteSelection,
+  ) => {
+    if (selection.type === 'tile')
+      setDesignMap(
+        produce((draft) => {
+          if (draft) {
+            draft.tiles[pos.y][pos.x] = selection.value;
+          }
+        }),
+      );
   };
 
   const [updateMap, updateMapResult] = useUpdateMapMutation();
@@ -68,7 +75,7 @@ export function EditMap() {
       const { name, tiles } = designMap;
       updateMap({
         id: designMap.id,
-        data: { name, tiles },
+        data: { name, tiles, units: {} },
       });
     }
   };
@@ -93,7 +100,7 @@ export function EditMap() {
           </FormButton>
 
           <hr />
-          <Pallette tile={selectedTile} onTileChange={setSelectedTile} />
+          <Pallette selection={selection} onSelectionChange={setSelection} />
           <div className="w-fit m-auto">
             {designMap.tiles.map((row, y) => (
               <div className="flex select-none" key={y}>
@@ -101,10 +108,10 @@ export function EditMap() {
                   <img
                     key={x}
                     src={getTileImage(tile)}
-                    onMouseDown={() => updateTiles({ x, y }, selectedTile)}
+                    onMouseDown={() => updateMapData({ x, y }, selection)}
                     onMouseOver={(event) => {
                       if (event.buttons === 1) {
-                        updateTiles({ x, y }, selectedTile);
+                        updateMapData({ x, y }, selection);
                       }
                     }}
                     alt=""

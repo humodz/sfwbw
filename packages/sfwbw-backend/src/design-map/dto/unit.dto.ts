@@ -1,6 +1,5 @@
 import { Unit, UnitType } from '@sfwbw/sfwbw-core';
-import { Type } from 'class-transformer';
-import { IsArray, IsEnum, IsInt, Max, Min } from 'class-validator';
+import { IsEnum } from 'class-validator';
 import { IsPlayer } from './validation';
 
 export class UnitDto implements Unit {
@@ -10,19 +9,19 @@ export class UnitDto implements Unit {
   @IsPlayer()
   player!: number;
 
-  @Min(0)
-  @Max(10)
-  health!: number;
+  // @Min(0)
+  // @Max(10)
+  // health!: number;
 
-  @IsInt()
-  @Min(0)
-  fuel!: number;
+  // @IsInt()
+  // @Min(0)
+  // fuel!: number;
 
-  @IsInt()
-  @Min(0)
-  ammo!: number;
+  // @IsInt()
+  // @Min(0)
+  // ammo!: number;
 
-  @IsArray()
-  @Type(() => UnitDto)
-  loaded!: Unit[];
+  // @IsArray()
+  // @Type(() => UnitDto)
+  // loaded!: Unit[];
 }

@@ -40,7 +40,7 @@ export function NewMap() {
       { type: TileType.HQ, player: 2, variation: 0 },
     ];
 
-    const response = await createMap({ name: name.trim(), tiles });
+    const response = await createMap({ name: name.trim(), tiles, units: {} });
 
     if (isSuccessResponse(response)) {
       navigate(`/maps/@${response.data.id}/edit`);

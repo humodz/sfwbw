@@ -2,6 +2,7 @@ import { createSlice, PayloadAction, Reducer } from '@reduxjs/toolkit';
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { isFetchError } from '../utils/errors';
 import { useCurrentUserQuery } from './api';
 import { useAppDispatch } from './hooks';
 
@@ -64,6 +65,15 @@ export function useCurrentUser(params?: { requiresAuth: boolean }) {
       navigate('/sign-in');
     }
   }, [dispatch, navigate, params, accessToken]);
+
+  useEffect(() => {
+    if (
+      currentUserResult.isError &&
+      isFetchError(currentUserResult.error, 401)
+    ) {
+      dispatch(setAccessToken(null));
+    }
+  }, [dispatch, currentUserResult]);
 
   if (!accessToken || !currentUserResult.isSuccess) {
     return null;

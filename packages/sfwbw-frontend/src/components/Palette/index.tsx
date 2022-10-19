@@ -1,14 +1,20 @@
 import { nations } from '@sfwbw/sfwbw-assets';
-import { Building, Nation, Terrain, Tile } from '@sfwbw/sfwbw-core';
-import { getTileImage } from '../../game/assets';
+import { Nation, Tile, TileType, Unit, UnitType } from '@sfwbw/sfwbw-core';
+import produce from 'immer';
+import { getTileImage, getUnitImage } from '../../game/assets';
 import { cls } from '../../utils/css';
 
+export type PaletteSelection =
+  | { type: 'unit'; value: Unit }
+  | { type: 'tile'; value: Tile };
+
 interface PaletteProps {
-  tile: Tile;
-  onTileChange?: (tile: Tile) => void;
+  selection: PaletteSelection;
+  onSelectionChange?: (selection: PaletteSelection) => void;
 }
 
-const tileTypes = [...Object.values(Terrain), ...Object.values(Building)];
+const tileTypes = Object.values(TileType);
+const unitTypes = Object.values(UnitType);
 
 const nationNames = Object.values(Nation);
 
@@ -17,33 +23,67 @@ const classes = {
   selected: '!border-white',
 };
 
-export function Pallette({ tile, onTileChange }: PaletteProps) {
-  const selectedTileType = tileTypes.indexOf(tile.type);
-  const selectedPlayer = tile.player;
+export function Pallette({ selection, onSelectionChange }: PaletteProps) {
+  const selectedPlayer = selection.value.player;
 
-  const updateTileType = (i: number) => {
-    onTileChange?.({
-      type: tileTypes[i],
-      player: tile.player,
-      variation: 0,
+  const selectedTileType =
+    selection.type === 'tile' ? tileTypes.indexOf(selection.value.type) : -1;
+
+  const selectedUnitType =
+    selection.type === 'unit' ? unitTypes.indexOf(selection.value.type) : -1;
+
+  const selectTile = (i: number) => {
+    onSelectionChange?.({
+      type: 'tile',
+      value: {
+        type: tileTypes[i],
+        player: selection.value.player,
+        variation: 0,
+      },
+    });
+  };
+
+  const selectUnit = (i: number) => {
+    onSelectionChange?.({
+      type: 'unit',
+      value: {
+        type: unitTypes[i],
+        player: selection.value.player,
+      },
     });
   };
 
   const updateNation = (i: number) => {
-    onTileChange?.({
-      type: tile.type,
-      player: i,
-      variation: 0,
-    });
+    onSelectionChange?.(
+      produce(selection, (draft) => {
+        draft.value.player = i;
+      }),
+    );
   };
 
   return (
     <div>
       <p>
+        {nationNames.map((nation, i) => (
+          <img
+            key={i}
+            onClick={() => updateNation(i)}
+            alt=""
+            className={cls({
+              [classes.selected]: selectedPlayer === i,
+              [classes.tile]: true,
+              pixelated: true,
+            })}
+            src={nations[nation]}
+            draggable={false}
+          />
+        ))}
+      </p>
+      <p>
         {tileTypes.map((tileType, i) => (
           <img
             key={i}
-            onClick={() => updateTileType(i)}
+            onClick={() => selectTile(i)}
             alt=""
             className={cls({
               [classes.selected]: selectedTileType === i,
@@ -59,19 +99,21 @@ export function Pallette({ tile, onTileChange }: PaletteProps) {
           />
         ))}
       </p>
-
       <p>
-        {nationNames.map((nation, i) => (
+        {unitTypes.map((unitType, i) => (
           <img
             key={i}
-            onClick={() => updateNation(i)}
+            onClick={() => selectUnit(i)}
             alt=""
             className={cls({
-              [classes.selected]: selectedPlayer === i,
+              [classes.selected]: selectedUnitType === i,
               [classes.tile]: true,
               pixelated: true,
             })}
-            src={nations[nation]}
+            src={getUnitImage({
+              type: unitType,
+              player: selectedPlayer,
+            })}
             draggable={false}
           />
         ))}

@@ -1,5 +1,5 @@
-import { isBuilding, isTerrain, Nation, Tile } from '@sfwbw/sfwbw-core';
-import { tiles } from '@sfwbw/sfwbw-assets';
+import { isBuilding, isTerrain, Nation, Tile, Unit } from '@sfwbw/sfwbw-core';
+import { tiles, units } from '@sfwbw/sfwbw-assets';
 
 const defaultNationIndexes = [
   Nation.NEUTRAL,
@@ -20,4 +20,11 @@ export function getTileImage(
   }
 
   return '';
+}
+
+export function getUnitImage(
+  unit: Unit,
+  nations: Nation[] = defaultNationIndexes,
+) {
+  return units[nations[unit.player]][unit.type];
 }

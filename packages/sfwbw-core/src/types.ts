@@ -61,10 +61,6 @@ export function isBuilding(type: string): type is Building {
 export interface Unit {
   type:  UnitType;
   player: number;
-  health: number;
-  fuel: number;
-  ammo: number;
-  loaded: Unit[];
 }
 
 export enum BaseUnit {

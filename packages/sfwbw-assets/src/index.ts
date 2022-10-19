@@ -15,7 +15,7 @@ export { default as tilePreviews } from './assets/tile-previews.png';
 
 import { Nation } from '@sfwbw/sfwbw-core';
 
-export * as units from './units';
+export { units } from './units';
 
 export const tiles = {
   terrain,
