@@ -11,8 +11,8 @@ export function LoadingIcon(props: LoadingIconProps) {
     <img
       src={icons.loading}
       alt="Loading"
-      height={24 * scale}
-      width={24 * scale}
+      height={20 * scale}
+      width={20 * scale}
       {...imgProps}
       className={cls(imgProps.className, {
         pixelated: Number.isInteger(scale),

@@ -6,7 +6,8 @@ import {
   Unique,
 } from '@mikro-orm/core';
 import { serializeTiles, Tile, Unit } from '@sfwbw/sfwbw-core';
-import { Expose } from 'class-transformer';
+import { Expose, Type } from 'class-transformer';
+import { UnitDto } from 'src/design-map/dto/unit.dto';
 import { DictItem } from 'src/utils';
 import { User } from './user.entity';
 
@@ -41,6 +42,7 @@ export class DesignMap {
   tiles!: Tile[][];
 
   @Expose()
+  @Type(() => DictItem)
   @Property({ type: 'json' })
   units!: DictItem<[number, number], Unit>[];
 

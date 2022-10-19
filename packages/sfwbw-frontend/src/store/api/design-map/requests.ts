@@ -1,4 +1,5 @@
 import { serializeTiles, Tile, Unit } from '@sfwbw/sfwbw-core';
+import { serializeUnits } from './models';
 
 export interface SearchMapsRequest {
   search?: string;
@@ -22,13 +23,4 @@ export function serializeDesignMap(data: CreateMapRequest) {
     tiles: serializeTiles(data.tiles),
     units: serializeUnits(data.units),
   };
-}
-
-export function serializeUnits(
-  units: Record<string, Unit>,
-): Array<{ key: [number, number]; value: Unit }> {
-  return Object.entries(units).map(([coord, unit]) => ({
-    key: coord.split(',').map(Number) as [number, number],
-    value: unit,
-  }));
 }
