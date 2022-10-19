@@ -1,9 +1,30 @@
-import { Action } from './types/action';
+import { Action, Coord } from './types/action';
 import { Tile } from './types/tiles';
-import { Unit } from './types/units';
+import { PredeployedUnit, Unit } from './types/units';
 
 export interface Game {
   tiles: Tile[][];
-  units: Unit;
+  units: Array<[Coord, Unit]>;
   history: Action[];
+  currentPlayer: number;
+  players: { defeated: boolean }[];
+  rng: { type: string; state: unknown };
+}
+
+export function createGame(
+  tiles: Tile[][],
+  units: Array<[Coord, PredeployedUnit]>,
+): Game {
+  return {
+    tiles: [],
+    units: [],
+    history: [],
+    currentPlayer: 0,
+    players: [],
+    rng: { type: 'alea', state: 'TODO' },
+  };
+}
+
+export function executeAction(game: Game, action: Action): Game {
+  return game;
 }

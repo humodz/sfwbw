@@ -1,4 +1,5 @@
 export * from './types';
+export * from './game';
 export * from './serialization';
 
 export const PLAYER_NEUTRAL = 0;

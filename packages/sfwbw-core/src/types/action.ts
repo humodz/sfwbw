@@ -1,6 +1,6 @@
 import { UnitType } from './units';
 
-type Coord = [number, number];
+export type Coord = [number, number];
 
 export type Action =
   | ActionRecruit
