@@ -15,7 +15,7 @@ import {
   Put,
   Query,
 } from '@nestjs/common';
-import { Nation } from '@sfwbw/sfwbw-core';
+import { Nation, PLAYER_NEUTRAL } from '@sfwbw/sfwbw-core';
 import { LoggedUser, Protected } from '../auth';
 import { DesignMap, User } from '../db/entities';
 import { UserRole } from '../db/entities/user.entity';
@@ -73,6 +73,7 @@ export class DesignMapController {
     const designMap = this.designMapRepository.create({
       name: body.name,
       author: user,
+      units: body.units,
       ...props,
     });
 
@@ -91,8 +92,11 @@ export class DesignMapController {
     const designMap = await this.findOneAndValidateUser(user, id);
     const props = this.calculateProperties(body);
 
-    designMap.name = body.name;
-    Object.assign(designMap, props);
+    Object.assign(designMap, {
+      name: body.name,
+      units: body.units,
+      ...props,
+    });
 
     await this.designMapRepository.persistAndFlush(designMap);
 
@@ -126,8 +130,16 @@ export class DesignMapController {
   }
 
   calculateProperties(body: CreateDesignMapRequest) {
-    const mapMaxPlayers =
-      countUnique(body.map.flat().map((tile) => tile.player)) - 1;
+    // TODO - validate players of units and coords
+    // TODO - validate players of tiles
+
+    const mapPlayers = body.map.flatMap((row) =>
+      row.map((tile) => tile.player),
+    );
+
+    const mapMaxPlayers = countUnique(
+      mapPlayers.filter((it) => it !== PLAYER_NEUTRAL),
+    );
 
     const maxPlayers = Object.values(Nation).length - 1;
 
@@ -137,10 +149,13 @@ export class DesignMapController {
       );
     }
 
+    const rows = body.map.length;
+    const columns = body.map[0].length;
+
     return {
       maxPlayers: mapMaxPlayers,
-      rows: body.map.length,
-      columns: body.map[0].length,
+      rows,
+      columns,
       tiles: body.map,
     };
   }
