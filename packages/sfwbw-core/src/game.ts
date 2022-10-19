@@ -7,4 +7,3 @@ export interface Game {
   units: Unit;
   history: Action[];
 }
-

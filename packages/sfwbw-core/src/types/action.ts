@@ -2,7 +2,11 @@ import { UnitType } from './units';
 
 type Coord = [number, number];
 
-export type Action = ActionRecruit | ActionRangedAttack | ActionMove | ActionIdle;
+export type Action =
+  | ActionRecruit
+  | ActionRangedAttack
+  | ActionMove
+  | ActionIdle;
 
 export enum ActionType {
   RECRUIT = 'RECRUIT',
