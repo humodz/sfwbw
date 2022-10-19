@@ -326,7 +326,7 @@ export class GameController {
     const players = await game.getPlayers();
 
     if (players.every((player) => player.ready)) {
-      game.status = GameStatus.PLAYING;
+      game.status = GameStatus.IN_PROGRESS;
     }
   }
 }

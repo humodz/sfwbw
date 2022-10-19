@@ -17,7 +17,7 @@ import { User } from './user.entity';
 
 export enum GameStatus {
   OPEN = 'OPEN',
-  PLAYING = 'PLAYING',
+  IN_PROGRESS = 'IN_PROGRESS',
   FINISHED = 'FINISHED',
 }
 
