@@ -9,6 +9,9 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "dependencies": {
+    "@sfwbw/sfwbw-core": "*"
+  },
   "devDependencies": {
     "vite": "^3.1.0"
   }

@@ -1,87 +1,89 @@
-import neutralAirport from './tiles/neutral-airport.png';
-import neutralBase from './tiles/neutral-base.png';
-import neutralCity from './tiles/neutral-city.png';
-import neutralHq from './tiles/neutral-hq.png';
-import neutralLab from './tiles/neutral-lab.png';
-import neutralPort from './tiles/neutral-port.png';
-import neutralStation from './tiles/neutral-station.png';
+import neutralAirport from './assets/tiles/neutral-airport.png';
+import neutralBase from './assets/tiles/neutral-base.png';
+import neutralCity from './assets/tiles/neutral-city.png';
+import neutralHq from './assets/tiles/neutral-hq.png';
+import neutralLab from './assets/tiles/neutral-lab.png';
+import neutralPort from './assets/tiles/neutral-port.png';
+import neutralStation from './assets/tiles/neutral-station.png';
 
-import redAirport from './tiles/red-airport.png';
-import redBase from './tiles/red-base.png';
-import redCity from './tiles/red-city.png';
-import redHq from './tiles/red-hq.png';
-import redLab from './tiles/red-lab.png';
-import redPort from './tiles/red-port.png';
-import redStation from './tiles/red-station.png';
+import redAirport from './assets/tiles/red-airport.png';
+import redBase from './assets/tiles/red-base.png';
+import redCity from './assets/tiles/red-city.png';
+import redHq from './assets/tiles/red-hq.png';
+import redLab from './assets/tiles/red-lab.png';
+import redPort from './assets/tiles/red-port.png';
+import redStation from './assets/tiles/red-station.png';
 
-import blueAirport from './tiles/blue-airport.png';
-import blueBase from './tiles/blue-base.png';
-import blueCity from './tiles/blue-city.png';
-import blueHq from './tiles/blue-hq.png';
-import blueLab from './tiles/blue-lab.png';
-import bluePort from './tiles/blue-port.png';
-import blueStation from './tiles/blue-station.png';
+import blueAirport from './assets/tiles/blue-airport.png';
+import blueBase from './assets/tiles/blue-base.png';
+import blueCity from './assets/tiles/blue-city.png';
+import blueHq from './assets/tiles/blue-hq.png';
+import blueLab from './assets/tiles/blue-lab.png';
+import bluePort from './assets/tiles/blue-port.png';
+import blueStation from './assets/tiles/blue-station.png';
 
-import greenAirport from './tiles/green-airport.png';
-import greenBase from './tiles/green-base.png';
-import greenCity from './tiles/green-city.png';
-import greenHq from './tiles/green-hq.png';
-import greenLab from './tiles/green-lab.png';
-import greenPort from './tiles/green-port.png';
-import greenStation from './tiles/green-station.png';
+import greenAirport from './assets/tiles/green-airport.png';
+import greenBase from './assets/tiles/green-base.png';
+import greenCity from './assets/tiles/green-city.png';
+import greenHq from './assets/tiles/green-hq.png';
+import greenLab from './assets/tiles/green-lab.png';
+import greenPort from './assets/tiles/green-port.png';
+import greenStation from './assets/tiles/green-station.png';
 
-import yellowAirport from './tiles/yellow-airport.png';
-import yellowBase from './tiles/yellow-base.png';
-import yellowCity from './tiles/yellow-city.png';
-import yellowHq from './tiles/yellow-hq.png';
-import yellowLab from './tiles/yellow-lab.png';
-import yellowPort from './tiles/yellow-port.png';
-import yellowStation from './tiles/yellow-station.png';
+import yellowAirport from './assets/tiles/yellow-airport.png';
+import yellowBase from './assets/tiles/yellow-base.png';
+import yellowCity from './assets/tiles/yellow-city.png';
+import yellowHq from './assets/tiles/yellow-hq.png';
+import yellowLab from './assets/tiles/yellow-lab.png';
+import yellowPort from './assets/tiles/yellow-port.png';
+import yellowStation from './assets/tiles/yellow-station.png';
 
-export const buildings = {
-  neutral: {
-    airport: neutralAirport,
-    base: neutralBase,
-    city: neutralCity,
-    hq: neutralHq,
-    lab: neutralLab,
-    port: neutralPort,
-    station: neutralStation,
+import { Nation, Building } from '@sfwbw/sfwbw-core';
+
+export const buildings: Record<Nation, Record<Building, string>> = {
+  NEUTRAL: {
+    AIRPORT: neutralAirport,
+    BASE: neutralBase,
+    CITY: neutralCity,
+    HQ: neutralHq,
+    LAB: neutralLab,
+    PORT: neutralPort,
+    STATION: neutralStation,
   },
-  red: {
-    airport: redAirport,
-    base: redBase,
-    city: redCity,
-    hq: redHq,
-    lab: redLab,
-    port: redPort,
-    station: redStation,
+  RED_STAR: {
+    AIRPORT: redAirport,
+    BASE: redBase,
+    CITY: redCity,
+    HQ: redHq,
+    LAB: redLab,
+    PORT: redPort,
+    STATION: redStation,
   },
-  blue: {
-    airport: blueAirport,
-    base: blueBase,
-    city: blueCity,
-    hq: blueHq,
-    lab: blueLab,
-    port: bluePort,
-    station: blueStation,
+  BLUE_MOON: {
+    AIRPORT: blueAirport,
+    BASE: blueBase,
+    CITY: blueCity,
+    HQ: blueHq,
+    LAB: blueLab,
+    PORT: bluePort,
+    STATION: blueStation,
   },
-  green: {
-    airport: greenAirport,
-    base: greenBase,
-    city: greenCity,
-    hq: greenHq,
-    lab: greenLab,
-    port: greenPort,
-    station: greenStation,
+  GREEN_EARTH: {
+    AIRPORT: greenAirport,
+    BASE: greenBase,
+    CITY: greenCity,
+    HQ: greenHq,
+    LAB: greenLab,
+    PORT: greenPort,
+    STATION: greenStation,
   },
-  yellow: {
-    airport: yellowAirport,
-    base: yellowBase,
-    city: yellowCity,
-    hq: yellowHq,
-    lab: yellowLab,
-    port: yellowPort,
-    station: yellowStation,
+  YELLOW_COMET: {
+    AIRPORT: yellowAirport,
+    BASE: yellowBase,
+    CITY: yellowCity,
+    HQ: yellowHq,
+    LAB: yellowLab,
+    PORT: yellowPort,
+    STATION: yellowStation,
   },
 };
