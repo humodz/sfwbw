@@ -1,9 +1,9 @@
-import { Unit, UnitType } from '@sfwbw/sfwbw-core';
+import { PredeployedUnit, UnitType } from '@sfwbw/sfwbw-core';
 import { Expose } from 'class-transformer';
 import { IsEnum } from 'class-validator';
 import { IsPlayer } from './validation';
 
-export class UnitDto implements Unit {
+export class PredeployedUnitDto implements PredeployedUnit {
   @Expose()
   @IsEnum(UnitType)
   type!: UnitType;
@@ -23,6 +23,10 @@ export class UnitDto implements Unit {
   // @IsInt()
   // @Min(0)
   // ammo!: number;
+
+  // @IsInt()
+  // @Min(0)
+  // experience!: number;
 
   // @IsArray()
   // @Type(() => UnitDto)

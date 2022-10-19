@@ -10,7 +10,7 @@ import {
 } from 'class-validator';
 import { Is2dArray, MatrixColumns, MatrixRows } from '../../utils/validation';
 import { TileDto } from './tile.dto';
-import { UnitDto } from './unit.dto';
+import { PredeployedUnitDto } from './unit.dto';
 import { IsCoord } from './validation';
 
 export class CreateDesignMapRequest {
@@ -42,7 +42,7 @@ class UnitsDictItem {
   key!: [number, number];
 
   @IsObject()
-  @Type(() => UnitDto)
+  @Type(() => PredeployedUnitDto)
   @ValidateNested()
-  value!: UnitDto;
+  value!: PredeployedUnitDto;
 }

@@ -58,8 +58,8 @@ export function isBuilding(type: string): type is Building {
   return buildingValues.includes(type as any);
 }
 
-export interface Unit {
-  type:  UnitType;
+export interface PredeployedUnit {
+  type: UnitType;
   player: number;
 }
 

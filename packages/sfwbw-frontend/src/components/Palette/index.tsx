@@ -1,11 +1,17 @@
 import { nations } from '@sfwbw/sfwbw-assets';
-import { Nation, Tile, TileType, Unit, UnitType } from '@sfwbw/sfwbw-core';
+import {
+  Nation,
+  Tile,
+  TileType,
+  PredeployedUnit,
+  UnitType,
+} from '@sfwbw/sfwbw-core';
 import produce from 'immer';
 import { getTileImage, getUnitImage } from '../../game/assets';
 import { cls } from '../../utils/css';
 
 export type PaletteSelection =
-  | { type: 'unit'; value: Unit }
+  | { type: 'unit'; value: PredeployedUnit }
   | { type: 'tile'; value: Tile };
 
 interface PaletteProps {

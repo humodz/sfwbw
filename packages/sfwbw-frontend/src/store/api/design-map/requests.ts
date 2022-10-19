@@ -1,4 +1,4 @@
-import { serializeTiles, Tile, Unit } from '@sfwbw/sfwbw-core';
+import { serializeTiles, Tile, PredeployedUnit } from '@sfwbw/sfwbw-core';
 import { serializeUnits } from './models';
 
 export interface SearchMapsRequest {
@@ -9,7 +9,7 @@ export interface SearchMapsRequest {
 export interface CreateMapRequest {
   name: string;
   tiles: Tile[][];
-  units: Record<string, Unit>;
+  units: Record<string, PredeployedUnit>;
 }
 
 export interface UpdateMapRequest {
