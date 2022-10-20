@@ -17,6 +17,4 @@ export enum WeaponType {
 
 export type DamageTable = Partial<Record<UnitType, number>>;
 
-type WeaponsTable = Partial<Record<UnitType, Record<string, UnitWeapon>>>;
-
-export const weapons: WeaponsTable = {};
+export const weapons = {};
