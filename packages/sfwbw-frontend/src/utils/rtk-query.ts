@@ -24,3 +24,7 @@ export function isSuccessResponse<T>(response: any): response is { data: T } {
 export function isErrorResponse(response: any): response is { error: any } {
   return 'error' in response;
 }
+
+export type RtkMutationResponse<
+  T extends () => readonly [(...args: any) => Promise<any>, any],
+> = Awaited<ReturnType<ReturnType<T>[0]>>;

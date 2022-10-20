@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ErrorMessage } from '../../components/ErrorMessage';
 import { FormButton } from '../../components/forms/FormButton';
@@ -6,50 +6,53 @@ import { FormField } from '../../components/forms/FormField';
 import { PasswordField } from '../../components/forms/PasswordField';
 import { useRegisterMutation, useSignInMutation } from '../../store/api';
 import {
-  selectIsAuthenticated,
   selectRedirectAfterLogin,
   setAccessToken,
   setRedirectAfterLogin,
 } from '../../store/auth-slice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { isErrorResponse } from '../../utils';
+import { isErrorResponse, RtkMutationResponse } from '../../utils';
+
+type SignInResponse = RtkMutationResponse<typeof useSignInMutation>;
 
 export function SignIn() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const isAuthenticated = useAppSelector(selectIsAuthenticated);
   const redirectAfterLogin = useAppSelector(selectRedirectAfterLogin);
-  const alreadyLoggedIn = useRef(false);
 
-  useEffect(() => {
-    if (isAuthenticated && !alreadyLoggedIn.current) {
-      alreadyLoggedIn.current = true;
-      if (redirectAfterLogin) {
-        navigate(-1);
-        dispatch(setRedirectAfterLogin(false));
-      } else {
-        navigate('/');
-      }
+  const afterSignIn = async (response: SignInResponse) => {
+    if (isErrorResponse(response)) {
+      return;
     }
-  }, [dispatch, navigate, isAuthenticated, redirectAfterLogin]);
+
+    dispatch(setAccessToken(response.data.accessToken));
+    if (redirectAfterLogin) {
+      navigate(-1);
+      dispatch(setRedirectAfterLogin(false));
+    } else {
+      navigate('/');
+    }
+  };
 
   return (
     <main className="m-auto grid grid-cols-1 md:grid-cols-2 gap-x-4 items-start">
       <article>
         <h4>Sign In</h4>
-        <SignInForm />
+        <SignInForm afterSignIn={afterSignIn} />
       </article>
       <article>
         <h4>New User?</h4>
-        <RegisterForm />
+        <RegisterForm afterSignIn={afterSignIn} />
       </article>
     </main>
   );
 }
 
-function SignInForm() {
-  const dispatch = useAppDispatch();
+interface SignInProps {
+  afterSignIn?: (response: SignInResponse) => void;
+}
 
+function SignInForm(props: SignInProps) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -65,11 +68,7 @@ function SignInForm() {
       password,
     });
 
-    if (isErrorResponse(response)) {
-      return;
-    }
-
-    dispatch(setAccessToken(response.data.accessToken));
+    props.afterSignIn?.(response);
   };
 
   return (
@@ -101,9 +100,11 @@ function SignInForm() {
   );
 }
 
-function RegisterForm() {
-  const dispatch = useAppDispatch();
+interface RegisterProps {
+  afterSignIn?: (response: SignInResponse) => void;
+}
 
+function RegisterForm(props: RegisterProps) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
@@ -147,11 +148,7 @@ function RegisterForm() {
       password,
     });
 
-    if (isErrorResponse(signInResponse)) {
-      return;
-    }
-
-    dispatch(setAccessToken(signInResponse.data.accessToken));
+    props.afterSignIn?.(signInResponse);
   };
 
   return (
