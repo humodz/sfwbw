@@ -9,6 +9,9 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "dependencies": {
+    "immer": "^9.0.7"
+  },
   "devDependencies": {
     "typescript": "^4.8.3",
     "@typescript-eslint/eslint-plugin": "^5.0.0",

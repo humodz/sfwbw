@@ -2,6 +2,8 @@ import { Building, TileType, UnitType } from '../../types';
 import { MovementType } from './terrain';
 import { UnitWeapon } from './weapons';
 
+// TODO resupply costs
+
 export interface UnitData {
   cost: number;
   vision: number;

@@ -2,6 +2,10 @@ export function countUnique(items: unknown[]): number {
   return new Set(items).size;
 }
 
+export function unique<T>(items: T[]): T[] {
+  return [...new Set(items)];
+}
+
 export function first<T>(items: T[]): T | undefined {
   return items[0];
 }
