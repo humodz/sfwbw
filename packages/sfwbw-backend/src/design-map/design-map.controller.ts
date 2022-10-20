@@ -19,7 +19,7 @@ import { Nation, PLAYER_NEUTRAL } from '@sfwbw/sfwbw-core';
 import { LoggedUser, Protected } from '../auth';
 import { DesignMap, User } from '../db/entities';
 import { UserRole } from '../db/entities/user.entity';
-import { countUnique } from '../utils/array';
+import { countUnique } from '@sfwbw/sfwbw-core';
 import { CreateDesignMapRequest } from './dto/create-design-map.request';
 
 @Controller('/design-maps')

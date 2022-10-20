@@ -8,7 +8,7 @@ import {
   MaxLength,
   ValidateNested,
 } from 'class-validator';
-import { Is2dArray, MatrixColumns, MatrixRows } from '../../utils/validation';
+import { Is2dArray, MatrixColumns, MatrixRows } from '../../utils';
 import { TileDto } from './tile.dto';
 import { PredeployedUnitDto } from './predeployed-unit.dto';
 import { IsCoord } from './validation';

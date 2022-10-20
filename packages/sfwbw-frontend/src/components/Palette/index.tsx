@@ -8,7 +8,7 @@ import {
 } from '@sfwbw/sfwbw-core';
 import produce from 'immer';
 import { getTileImage, getUnitImage } from '../../game/assets';
-import { cls } from '../../utils/css';
+import { cls } from '../../utils';
 
 export type PaletteSelection =
   | { type: 'unit'; value: Omit<PredeployedUnit, 'pos'> }

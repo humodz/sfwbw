@@ -2,7 +2,7 @@ import { createSlice, PayloadAction, Reducer } from '@reduxjs/toolkit';
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { isFetchError } from '../utils/errors';
+import { isFetchError } from '../utils';
 import { useCurrentUserQuery } from './api';
 import { useAppDispatch } from './hooks';
 

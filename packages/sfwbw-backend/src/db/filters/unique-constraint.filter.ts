@@ -5,7 +5,7 @@ import {
   ExceptionFilter,
   HttpStatus,
 } from '@nestjs/common';
-import { getResponse } from '../../utils/nest';
+import { getResponse } from '../../utils';
 
 @Catch(UniqueConstraintViolationException)
 export class UniqueConstraintFilter implements ExceptionFilter {

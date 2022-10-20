@@ -1,6 +1,6 @@
 import { icons } from '@sfwbw/sfwbw-assets';
 import { ReactNode } from 'react';
-import { getErrorMessage, RtkQueryError } from '../../utils/errors';
+import { getErrorMessage, RtkQueryError } from '../../utils';
 
 interface ErrorMessageProps {
   error?: RtkQueryError;

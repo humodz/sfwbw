@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { SearchForm } from '.';
-import { useQueryParams, toQueryString } from '../../../utils/router';
+import { useQueryParams, toQueryString } from '../../../utils';
 
 interface Props {
   isLoading: boolean;

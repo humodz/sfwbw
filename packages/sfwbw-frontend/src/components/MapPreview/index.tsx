@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { User, DesignMap } from '../../store/api';
-import { cls } from '../../utils/css';
-import { MaybeDeleted } from '../../utils/deleted';
+import { cls } from '../../utils';
+import { MaybeDeleted } from '../../utils';
 import { FormButton } from '../forms/FormButton';
 import { MiniMap } from '../MiniMap';
 

@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
-import { RtkQueryError } from '../../utils/errors';
-import { RtkQueryResult } from '../../utils/rtk-query';
+import { RtkQueryError } from '../../utils';
+import { RtkQueryResult } from '../../utils';
 import { ErrorMessage } from '../ErrorMessage';
 import { LoadingIcon } from '../LoadingIcon';
 

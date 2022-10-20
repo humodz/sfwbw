@@ -3,7 +3,7 @@ import styles from './styles.module.css';
 import { tilePreviews } from '@sfwbw/sfwbw-assets';
 import { isTerrain, Terrain, Tile } from '@sfwbw/sfwbw-core';
 import React from 'react';
-import { cssVars } from '../../utils/css';
+import { cssVars } from '../../utils';
 import { loadImage } from '../../utils';
 
 interface Props {

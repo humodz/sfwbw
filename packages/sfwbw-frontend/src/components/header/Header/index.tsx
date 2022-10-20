@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import { navActiveClass } from '../../../utils/router';
+import { navActiveClass } from '../../../utils';
 import { Logo } from '../Logo';
 
 interface Props {

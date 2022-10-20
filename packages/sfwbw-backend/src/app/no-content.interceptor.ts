@@ -6,7 +6,7 @@ import {
   NestInterceptor,
 } from '@nestjs/common';
 import { Observable, tap } from 'rxjs';
-import { getResponse } from '../utils/nest';
+import { getResponse } from '../utils';
 
 @Injectable()
 export class NoContentInterceptor implements NestInterceptor {

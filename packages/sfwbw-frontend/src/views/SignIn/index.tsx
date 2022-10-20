@@ -12,7 +12,7 @@ import {
   setRedirectAfterLogin,
 } from '../../store/auth-slice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { isErrorResponse } from '../../utils/rtk-query';
+import { isErrorResponse } from '../../utils';
 
 export function SignIn() {
   const dispatch = useAppDispatch();

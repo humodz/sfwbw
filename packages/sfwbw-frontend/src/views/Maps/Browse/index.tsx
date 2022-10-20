@@ -11,7 +11,7 @@ import {
   useSearchMapsQuery,
 } from '../../../store/api/design-map';
 import { useCurrentUser } from '../../../store/auth-slice';
-import { MaybeDeleted } from '../../../utils/deleted';
+import { MaybeDeleted } from '../../../utils';
 
 interface BrowseMapsProps {
   mode: 'all' | 'my-maps';

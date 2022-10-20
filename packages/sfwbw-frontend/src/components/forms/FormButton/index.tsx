@@ -1,5 +1,5 @@
 import { LoadingIcon } from '../../LoadingIcon';
-import { cls } from '../../../utils/css';
+import { cls } from '../../../utils';
 
 interface FormButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {

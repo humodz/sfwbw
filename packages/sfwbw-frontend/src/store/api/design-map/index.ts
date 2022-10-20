@@ -1,5 +1,5 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
-import { Deleted, makeDeleted } from '../../../utils/deleted';
+import { Deleted, makeDeleted } from '../../../utils';
 import { baseQuery } from '../base-query';
 import { deserializeDesignMap, DesignMap, RawDesignMap } from './models';
 import {

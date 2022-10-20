@@ -4,7 +4,7 @@ import { Game, Player, User } from '../../store/api';
 
 import { Nation } from '@sfwbw/sfwbw-core';
 import React, { useState } from 'react';
-import { isDeleted } from '../../utils/deleted';
+import { isDeleted } from '../../utils';
 import { MiniMap } from '../MiniMap';
 import { PlayerStatus } from './PlayerStatus';
 

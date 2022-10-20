@@ -1,4 +1,5 @@
 export * from './array';
+export * from './sort';
 
 export function isEnum<Enum extends Record<string, any>>(
   theEnum: Enum,

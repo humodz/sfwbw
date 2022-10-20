@@ -15,8 +15,8 @@ import {
   useUpdatePlayerMutation,
 } from '../../../store/api';
 import { useCurrentUser } from '../../../store/auth-slice';
-import { Deleted, isDeleted, MaybeDeleted } from '../../../utils/deleted';
-import { useErrorPopup } from '../../../utils/errors';
+import { Deleted, isDeleted, MaybeDeleted } from '../../../utils';
+import { useErrorPopup } from '../../../utils';
 
 interface Props {
   mode: 'all' | 'my-games' | 'my-turn';

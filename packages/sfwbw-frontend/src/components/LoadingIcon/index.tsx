@@ -1,5 +1,5 @@
 import { icons } from '@sfwbw/sfwbw-assets';
-import { cls } from '../../utils/css';
+import { cls } from '../../utils';
 
 interface LoadingIconProps extends React.ImgHTMLAttributes<HTMLImageElement> {
   scale?: number;

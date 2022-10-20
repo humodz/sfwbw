@@ -1,4 +1,4 @@
-import { Tile, TileType } from '@sfwbw/sfwbw-core';
+import { repeat, Tile, TileType } from '@sfwbw/sfwbw-core';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ErrorMessage } from '../../../components/ErrorMessage';
@@ -6,9 +6,8 @@ import { FormButton } from '../../../components/forms/FormButton';
 import { FormField } from '../../../components/forms/FormField';
 import { useCreateMapMutation } from '../../../store/api';
 import { useCurrentUser } from '../../../store/auth-slice';
-import { repeat } from '../../../utils';
-import { isSuccessResponse } from '../../../utils/rtk-query';
-import { formErrorMessage } from '../../../utils/errors';
+import { isSuccessResponse } from '../../../utils';
+import { formErrorMessage } from '../../../utils';
 
 export function NewMap() {
   useCurrentUser({ requiresAuth: true });
