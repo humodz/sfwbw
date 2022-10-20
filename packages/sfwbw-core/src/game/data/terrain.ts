@@ -1,4 +1,13 @@
-import { MovementType, TileType } from 'src/types';
+import { TileType } from 'src/types';
+
+export enum MovementType {
+  BOOT = 'BOOT',
+  TIRE = 'TIRE',
+  TREAD = 'TREAD',
+  SHIP = 'SHIP',
+  TRAIN = 'TRAIN',
+  AIR = 'AIR',
+}
 
 export const defenseStars: Record<TileType, number> = {
   PLAINS: 1,
