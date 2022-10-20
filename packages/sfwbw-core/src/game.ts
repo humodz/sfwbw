@@ -8,7 +8,7 @@ export interface Game {
   history: Action[];
   currentPlayer: number;
   players: { defeated: boolean }[];
-  rng: { type: string; state: unknown };
+  rng: unknown;
 }
 
 export function createGame(
@@ -21,7 +21,7 @@ export function createGame(
     history: [],
     currentPlayer: 0,
     players: [],
-    rng: { type: 'alea', state: 'TODO' },
+    rng: 'TODO',
   };
 }
 
