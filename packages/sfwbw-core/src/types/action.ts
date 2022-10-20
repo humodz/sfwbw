@@ -28,12 +28,14 @@ export interface ActionRangedAttack {
 
 export interface ActionMove {
   type: ActionType.MOVE;
+  where: Point;
   path: Point[];
   subAction: SubAction | null;
 }
 
 export interface ActionIdle {
   type: ActionType.IDLE;
+  where: Point;
   subAction: SubAction | null;
 }
 
@@ -48,7 +50,7 @@ export enum SubActionType {
 }
 
 export interface SubActionSimple {
-  type: SubActionType.CAPTURE | SubActionType.LOAD | SubActionType.UNLOAD;
+  type: SubActionType.CAPTURE | SubActionType.LOAD;
 }
 
 export interface SubActionAttack {
