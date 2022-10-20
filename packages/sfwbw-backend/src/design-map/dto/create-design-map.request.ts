@@ -10,7 +10,7 @@ import {
 } from 'class-validator';
 import { Is2dArray, MatrixColumns, MatrixRows } from '../../utils/validation';
 import { TileDto } from './tile.dto';
-import { PredeployedUnitDto } from './unit.dto';
+import { PredeployedUnitDto } from './predeployed-unit.dto';
 import { IsCoord } from './validation';
 
 export class CreateDesignMapRequest {
