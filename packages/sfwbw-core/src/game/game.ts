@@ -29,7 +29,7 @@ export function createGame(tiles: Tile[][], units: PredeployedUnit[]): Game {
       const unit = {
         ...predeployedUnit,
         moved: false,
-        health: 10,
+        health: 100,
         fuel: 0,
         ammo: 0,
         experience: 0,

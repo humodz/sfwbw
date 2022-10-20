@@ -56,3 +56,12 @@ export const UnitType = {
   ...PortUnit,
   PROTOTYPE_TANK: 'PROTOTYPE_TANK',
 } as const;
+
+export enum MovementType {
+  BOOT = 'BOOT',
+  TIRE = 'TIRE',
+  TREAD = 'TREAD',
+  SHIP = 'SHIP',
+  TRAIN = 'TRAIN',
+  AIR = 'AIR',
+}
