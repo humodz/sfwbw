@@ -1,4 +1,10 @@
-import { deserializeTiles, Tile, PredeployedUnit } from '@sfwbw/sfwbw-core';
+import {
+  deserializeTiles,
+  Tile,
+  PredeployedUnit,
+  pointFromString,
+  pointToString,
+} from '@sfwbw/sfwbw-core';
 import { User } from '../user';
 
 export interface DesignMap {
@@ -9,7 +15,7 @@ export interface DesignMap {
   rows: number;
   columns: number;
   tiles: Tile[][];
-  units: Record<string, PredeployedUnit>;
+  units: Map<string, PredeployedUnit>;
 }
 
 export interface RawDesignMap extends Omit<DesignMap, 'tiles' | 'units'> {
@@ -27,21 +33,27 @@ export function deserializeDesignMap(rawDesignMap: RawDesignMap) {
   };
 }
 
-function deserializeUnits(unitsRaw: SerializedUnits): Record<string, PredeployedUnit> {
-  const result: any = {};
+function deserializeUnits(unitsRaw: SerializedUnits) {
+  const result = new Map<string, PredeployedUnit>();
 
   for (const entry of unitsRaw) {
-    const coord = entry.key.join(',');
+    const point = { x: entry.key[0], y: entry.key[1] };
     const unit = entry.value;
-    result[coord] = unit;
+    result.set(pointToString(point), unit);
   }
 
   return result;
 }
 
-export function serializeUnits(units: Record<string, PredeployedUnit>): SerializedUnits {
-  return Object.entries(units).map(([coord, unit]) => ({
-    key: coord.split(',').map(Number) as [number, number],
-    value: unit,
-  }));
+export function serializeUnits(
+  units: Map<string, PredeployedUnit>,
+): SerializedUnits {
+  return Object.entries(units).map(([pointRaw, unit]) => {
+    const point = pointFromString(pointRaw);
+
+    return {
+      key: [point.x, point.y],
+      value: unit,
+    };
+  });
 }

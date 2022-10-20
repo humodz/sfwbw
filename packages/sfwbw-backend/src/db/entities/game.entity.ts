@@ -9,8 +9,8 @@ import {
 } from '@mikro-orm/core';
 import { Nation } from '@sfwbw/sfwbw-core';
 import { Expose } from 'class-transformer';
-import { by } from 'src/utils/sort';
-import { removeSymbols } from 'src/utils/types';
+import { by } from '../../utils/sort';
+import { removeSymbols } from '../../utils/types';
 import { DesignMap } from './design-map.entity';
 import { PlayerInGame } from './player-in-game.entity';
 import { User } from './user.entity';

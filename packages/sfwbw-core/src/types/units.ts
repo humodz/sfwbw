@@ -1,18 +1,18 @@
-export interface Unit {
+import { Point } from './point';
+
+export interface PredeployedUnit {
   type: UnitType;
   player: number;
-
+  pos: Point;
+}
+export interface Unit extends PredeployedUnit {
+  moved: boolean;
   health: number;
   fuel: number;
   ammo: number;
   experience: number;
   captureProgress: number;
   loaded: Unit[];
-}
-
-export interface PredeployedUnit {
-  type: UnitType;
-  player: number;
 }
 
 export enum BaseUnit {

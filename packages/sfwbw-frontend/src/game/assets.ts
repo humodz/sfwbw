@@ -29,7 +29,7 @@ export function getTileImage(
 }
 
 export function getUnitImage(
-  unit: PredeployedUnit,
+  unit: Omit<PredeployedUnit, 'pos'>,
   nations: Nation[] = defaultNationIndexes,
 ) {
   return units[nations[unit.player]][unit.type];

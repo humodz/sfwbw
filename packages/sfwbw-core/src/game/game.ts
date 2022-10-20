@@ -1,15 +1,11 @@
-import { Game } from 'src';
-import { Action, Coord } from '../types/action';
+import { Game } from '../types';
 import { Terrain, Tile } from '../types/tiles';
 import { PredeployedUnit } from '../types/units';
 import { countUnique, isEnum, repeat } from '../utils';
 
 export const PLAYER_NEUTRAL = 0;
 
-export function createGame(
-  tiles: Tile[][],
-  units: Array<[Coord, PredeployedUnit]>,
-): Game {
+export function createGame(tiles: Tile[][], units: PredeployedUnit[]): Game {
   const correctedTiles = tiles.map((row) =>
     row.map((tile) => {
       if (isEnum(Terrain, tile.type)) {
@@ -29,9 +25,10 @@ export function createGame(
 
   return {
     tiles: correctedTiles,
-    units: units.map(([coord, predeployedUnit]) => {
+    units: units.map((predeployedUnit) => {
       const unit = {
         ...predeployedUnit,
+        moved: false,
         health: 10,
         fuel: 0,
         ammo: 0,
@@ -40,15 +37,11 @@ export function createGame(
         loaded: [],
       };
 
-      return [coord, unit];
+      return unit;
     }),
     history: [],
     currentPlayer: 0,
     players: repeat(playerCount, { funds: 0, defeated: false }),
     rng: 'TODO',
   };
-}
-
-export function executeAction(game: Game, action: Action): Game {
-  return game;
 }

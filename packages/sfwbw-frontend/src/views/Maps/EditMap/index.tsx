@@ -1,6 +1,15 @@
-import { Terrain, PLAYER_NEUTRAL, Tile } from '@sfwbw/sfwbw-core';
+import {
+  PLAYER_NEUTRAL,
+  Point,
+  pointToString,
+  Terrain,
+} from '@sfwbw/sfwbw-core';
+import produce from 'immer';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { ErrorMessage } from '../../../components/ErrorMessage';
+import { FormButton } from '../../../components/forms/FormButton';
+import { FormField } from '../../../components/forms/FormField';
 import { PaletteSelection, Pallette } from '../../../components/Palette';
 import { getTileImage, getUnitImage } from '../../../game/assets';
 import {
@@ -9,10 +18,6 @@ import {
   useUpdateMapMutation,
 } from '../../../store/api';
 import { useCurrentUser } from '../../../store/auth-slice';
-import produce from 'immer';
-import { ErrorMessage } from '../../../components/ErrorMessage';
-import { FormField } from '../../../components/forms/FormField';
-import { FormButton } from '../../../components/forms/FormButton';
 
 export function EditMap() {
   const navigate = useNavigate();
@@ -54,32 +59,28 @@ export function EditMap() {
     );
   };
 
-  const updateMapData = (
-    pos: { x: number; y: number },
-    selection: PaletteSelection,
-  ) => {
+  const updateMapData = (pos: Point, selection: PaletteSelection) => {
     setDesignMap(
       produce((draft) => {
         if (draft) {
           if (selection.type === 'tile') {
             draft.tiles[pos.y][pos.x] = selection.value;
           } else {
-            const coord = `${pos.x},${pos.y}`;
+            const oldUnit = draft.units.get(pointToString(pos));
 
-            const oldUnit = draft.units[coord];
-            const newUnit = selection.value;
+            const newUnit = {
+              ...selection.value,
+              pos,
+            };
 
             if (
               oldUnit &&
               oldUnit.type === newUnit.type &&
               oldUnit.player === newUnit.player
             ) {
-              delete draft.units[coord];
+              draft.units.delete(pointToString(pos));
             } else {
-              draft.units = {
-                ...draft.units,
-                [coord]: selection.value,
-              };
+              draft.units.set(pointToString(pos), newUnit);
             }
           }
         }
@@ -126,7 +127,7 @@ export function EditMap() {
                 {row.map((tile, x) => (
                   <div
                     key={x}
-                    className="pixelated select-none"
+                    className="pixelated select-none bg-cover"
                     onMouseDown={() => updateMapData({ x, y }, selection)}
                     onMouseOver={(event) => {
                       if (event.buttons === 1) {
@@ -135,21 +136,11 @@ export function EditMap() {
                     }}
                     style={{
                       backgroundImage: `url(${getTileImage(tile)}`,
-                      backgroundSize: 'cover',
                       width: '32px',
                       height: '32px',
                     }}
                   >
-                    {designMap.units[`${x},${y}`] && (
-                      <img
-                        src={getUnitImage(designMap.units[`${x},${y}`])}
-                        alt=""
-                        className="pixelated select-none pointer-events-none"
-                        width="32"
-                        height="32"
-                        draggable="false"
-                      />
-                    )}
+                    <UnitImage units={designMap.units} pos={{ x, y }} />
                   </div>
                 ))}
               </div>
@@ -164,5 +155,29 @@ export function EditMap() {
         <ErrorMessage error={updateMapResult.error} />
       )}
     </>
+  );
+}
+
+interface UnitImageProps {
+  units: DesignMap['units'];
+  pos: Point;
+}
+
+function UnitImage(props: UnitImageProps) {
+  const unit = props.units.get(pointToString(props.pos));
+
+  if (!unit) {
+    return null;
+  }
+
+  return (
+    <img
+      src={getUnitImage(unit)}
+      alt=""
+      className="pixelated select-none pointer-events-none"
+      width="32"
+      height="32"
+      draggable="false"
+    />
   );
 }

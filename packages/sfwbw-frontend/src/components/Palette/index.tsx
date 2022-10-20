@@ -11,7 +11,7 @@ import { getTileImage, getUnitImage } from '../../game/assets';
 import { cls } from '../../utils/css';
 
 export type PaletteSelection =
-  | { type: 'unit'; value: PredeployedUnit }
+  | { type: 'unit'; value: Omit<PredeployedUnit, 'pos'> }
   | { type: 'tile'; value: Tile };
 
 interface PaletteProps {

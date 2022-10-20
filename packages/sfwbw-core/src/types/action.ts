@@ -1,6 +1,5 @@
+import { Point } from './point';
 import { UnitType } from './units';
-
-export type Coord = [number, number];
 
 export type Action =
   | ActionRecruit
@@ -17,20 +16,19 @@ export enum ActionType {
 
 export interface ActionRecruit {
   type: ActionType.RECRUIT;
-  where: Coord;
+  where: Point;
   unit: UnitType;
 }
 
 export interface ActionRangedAttack {
   type: ActionType.RANGED_ATTACK;
-  where: Coord;
-  target: Coord;
+  where: Point;
+  target: Point;
 }
 
 export interface ActionMove {
   type: ActionType.MOVE;
-  from: Coord;
-  to: Coord;
+  path: Point[];
   subAction: SubAction | null;
 }
 
@@ -55,11 +53,11 @@ export interface SubActionSimple {
 
 export interface SubActionAttack {
   type: SubActionType.ATTACK;
-  target: Coord;
+  target: Point;
 }
 
 export interface SubActionUnload {
   type: SubActionType.ATTACK;
-  where: Coord;
+  where: Point;
   unitIndex: number;
 }

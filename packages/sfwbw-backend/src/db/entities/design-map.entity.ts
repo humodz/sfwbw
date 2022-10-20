@@ -7,7 +7,7 @@ import {
 } from '@mikro-orm/core';
 import { PredeployedUnit, serializeTiles, Tile } from '@sfwbw/sfwbw-core';
 import { Expose, Type } from 'class-transformer';
-import { DictItem } from 'src/utils';
+import { DictItem } from '../../utils';
 import { User } from './user.entity';
 
 @Entity()

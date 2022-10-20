@@ -16,7 +16,6 @@ import {
   Query,
 } from '@nestjs/common';
 import { Nation, PLAYER_NEUTRAL } from '@sfwbw/sfwbw-core';
-import { sleep } from 'src/utils';
 import { LoggedUser, Protected } from '../auth';
 import { DesignMap, User } from '../db/entities';
 import { UserRole } from '../db/entities/user.entity';
