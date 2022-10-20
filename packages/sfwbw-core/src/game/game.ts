@@ -97,6 +97,8 @@ export function endTurn(game: Game): Game {
   });
 }
 
+// TODO - check this
+// TODO - move this somewhere?
 const tileTypes = {
   [UnitFactory.BASE_OR_HQ]: [TileType.HQ, TileType.BASE, TileType.CITY],
   [UnitFactory.LAB]: [TileType.HQ, TileType.BASE, TileType.CITY],
