@@ -1,4 +1,4 @@
-import { configureStore, ThunkAction, Action, isPlain } from '@reduxjs/toolkit';
+import { Action, configureStore, ThunkAction } from '@reduxjs/toolkit';
 import { apiGameSlice, apiUserSlice } from './api';
 import { apiDesignMapSlice } from './api/design-map';
 import { authReducer } from './auth-slice';
@@ -11,12 +11,7 @@ export const store = configureStore({
     [apiDesignMapSlice.reducerPath]: apiDesignMapSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
-      serializableCheck: {
-        isSerializable: (value: any) =>
-          isPlain(value) || value instanceof Map || value instanceof Set,
-      },
-    }).concat(
+    getDefaultMiddleware().concat(
       apiUserSlice.middleware,
       apiGameSlice.middleware,
       apiDesignMapSlice.middleware,

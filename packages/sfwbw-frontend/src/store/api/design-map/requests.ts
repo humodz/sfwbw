@@ -9,7 +9,7 @@ export interface SearchMapsRequest {
 export interface CreateMapRequest {
   name: string;
   tiles: Tile[][];
-  units: Map<string, PredeployedUnit>;
+  units: Record<string, PredeployedUnit>;
 }
 
 export interface UpdateMapRequest {

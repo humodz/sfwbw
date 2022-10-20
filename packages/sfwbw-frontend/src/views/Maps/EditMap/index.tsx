@@ -59,14 +59,18 @@ export function EditMap() {
     );
   };
 
-  const updateMapData = (pos: Point, selection: PaletteSelection) => {
+  const updateMapData = (
+    pos: Point,
+    selection: PaletteSelection,
+    mode: 'click' | 'drag',
+  ) => {
     setDesignMap(
       produce((draft) => {
         if (draft) {
           if (selection.type === 'tile') {
             draft.tiles[pos.y][pos.x] = selection.value;
-          } else {
-            const oldUnit = draft.units.get(pointToString(pos));
+          } else if (mode === 'click') {
+            const oldUnit = draft.units[pointToString(pos)];
 
             const newUnit = {
               ...selection.value,
@@ -78,9 +82,9 @@ export function EditMap() {
               oldUnit.type === newUnit.type &&
               oldUnit.player === newUnit.player
             ) {
-              draft.units.delete(pointToString(pos));
+              delete draft.units[pointToString(pos)];
             } else {
-              draft.units.set(pointToString(pos), newUnit);
+              draft.units[pointToString(pos)] = newUnit;
             }
           }
         }
@@ -128,10 +132,12 @@ export function EditMap() {
                   <div
                     key={x}
                     className="pixelated select-none bg-cover"
-                    onMouseDown={() => updateMapData({ x, y }, selection)}
+                    onMouseDown={() =>
+                      updateMapData({ x, y }, selection, 'click')
+                    }
                     onMouseOver={(event) => {
                       if (event.buttons === 1) {
-                        updateMapData({ x, y }, selection);
+                        updateMapData({ x, y }, selection, 'drag');
                       }
                     }}
                     style={{
@@ -164,7 +170,7 @@ interface UnitImageProps {
 }
 
 function UnitImage(props: UnitImageProps) {
-  const unit = props.units.get(pointToString(props.pos));
+  const unit = props.units[pointToString(props.pos)];
 
   if (!unit) {
     return null;

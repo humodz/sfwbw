@@ -42,7 +42,7 @@ export function NewMap() {
     const response = await createMap({
       name: name.trim(),
       tiles,
-      units: new Map(),
+      units: {},
     });
 
     if (isSuccessResponse(response)) {

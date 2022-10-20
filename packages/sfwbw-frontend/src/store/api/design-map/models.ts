@@ -15,7 +15,7 @@ export interface DesignMap {
   rows: number;
   columns: number;
   tiles: Tile[][];
-  units: Map<string, PredeployedUnit>;
+  units: Record<string, PredeployedUnit>;
 }
 
 export interface RawDesignMap extends Omit<DesignMap, 'tiles' | 'units'> {
@@ -25,7 +25,7 @@ export interface RawDesignMap extends Omit<DesignMap, 'tiles' | 'units'> {
 
 type SerializedUnits = Array<{ key: [number, number]; value: PredeployedUnit }>;
 
-export function deserializeDesignMap(rawDesignMap: RawDesignMap) {
+export function deserializeDesignMap(rawDesignMap: RawDesignMap): DesignMap {
   return {
     ...rawDesignMap,
     tiles: deserializeTiles(rawDesignMap.tiles),
@@ -33,20 +33,22 @@ export function deserializeDesignMap(rawDesignMap: RawDesignMap) {
   };
 }
 
-function deserializeUnits(unitsRaw: SerializedUnits) {
-  const result = new Map<string, PredeployedUnit>();
+function deserializeUnits(
+  unitsRaw: SerializedUnits,
+): Record<string, PredeployedUnit> {
+  const result: any = {};
 
   for (const entry of unitsRaw) {
     const point = { x: entry.key[0], y: entry.key[1] };
     const unit = entry.value;
-    result.set(pointToString(point), unit);
+    result[pointToString(point)] = unit;
   }
 
   return result;
 }
 
 export function serializeUnits(
-  units: Map<string, PredeployedUnit>,
+  units: Record<string, PredeployedUnit>,
 ): SerializedUnits {
   return Object.entries(units).map(([pointRaw, unit]) => {
     const point = pointFromString(pointRaw);
