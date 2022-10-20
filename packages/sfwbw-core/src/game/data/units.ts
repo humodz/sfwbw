@@ -1,4 +1,4 @@
-import { UnitType } from '../../types';
+import { Building, TileType, UnitType } from '../../types';
 import { MovementType } from './terrain';
 import { UnitWeapon } from './weapons';
 
@@ -16,6 +16,7 @@ export interface UnitData {
   canTransport?: {
     capacity: number;
     types: TransportType[];
+    canLoadAt: TileType[];
   };
   weapons: UnitWeapon[];
 }
@@ -154,6 +155,7 @@ export const unitData: Record<UnitType, UnitData> = {
     canTransport: {
       capacity: 2,
       types: [TransportType.INFANTRY, TransportType.VEHICLE],
+      canLoadAt: [TileType.STATION],
     },
     weapons: [],
   },
@@ -223,6 +225,7 @@ export const unitData: Record<UnitType, UnitData> = {
     canTransport: {
       capacity: 1,
       types: [TransportType.INFANTRY],
+      canLoadAt: Object.values(TileType),
     },
     weapons: [],
   },
@@ -305,6 +308,8 @@ export const unitData: Record<UnitType, UnitData> = {
     canTransport: {
       capacity: 1,
       types: [TransportType.INFANTRY],
+      // TODO - check bridge, rail, shoal
+      canLoadAt: [...Object.values(Building), TileType.PLAINS, TileType.ROAD],
     },
     weapons: [],
   },
@@ -335,6 +340,7 @@ export const unitData: Record<UnitType, UnitData> = {
     canTransport: {
       capacity: 1,
       types: [TransportType.COPTER],
+      canLoadAt: Object.values(TileType),
     },
     weapons: [],
   },
@@ -352,6 +358,7 @@ export const unitData: Record<UnitType, UnitData> = {
     canTransport: {
       capacity: 2,
       types: [TransportType.INFANTRY, TransportType.VEHICLE],
+      canLoadAt: [TileType.PORT, TileType.SHOAL],
     },
     weapons: [],
   },
