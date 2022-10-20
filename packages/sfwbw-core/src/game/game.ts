@@ -111,4 +111,3 @@ function canBeResupplied(unit: Unit, tile: Tile) {
   const factory = unitData[unit.type].factory;
   return isOneOf(tile.type, tileTypes[factory]);
 }
-
