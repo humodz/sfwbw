@@ -49,7 +49,6 @@ export function createGame(tiles: Tile[][], units: PredeployedUnit[]): Game {
 
 export function startTurn(game: Game): Game {
   return produce(game, (game) => {
-    // TODO - unwait player units
     if (game.history.length > 0) {
       game.currentPlayerIndex =
         (game.currentPlayerIndex + 1) % game.players.length;
@@ -66,6 +65,7 @@ export function startTurn(game: Game): Game {
 
     for (const unit of game.units) {
       if (unit.player === myself.id) {
+        unit.moved = false;
         const tile = game.tiles[unit.pos.y][unit.pos.x];
 
         // TODO - what happens if the player does not have enough funds?
