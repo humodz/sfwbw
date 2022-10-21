@@ -13,6 +13,9 @@ export interface Game {
 }
 
 export interface GameSettings {
+  totalHealth: number;
+  repairAmount: number;
+  unitLimit: number;
   fundsPerProperty: number;
 }
 

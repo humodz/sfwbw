@@ -1,4 +1,5 @@
-import { GamePlayer, TileType, UnitType } from 'src/types';
+import { GamePlayer, Tile, TileType, Unit, UnitType } from '../types';
+import { isOneOf } from '../utils';
 import { unitData, UnitFactory } from './data/units';
 
 const factoryData = {
@@ -25,4 +26,18 @@ export function getAvailableUnits(player: GamePlayer, tile: FactoryTile) {
   return factoryData[tile].filter(
     (unitType) => player.funds >= unitData[unitType].cost,
   );
+}
+
+// TODO - validate this in the game
+const resupplyData = {
+  [UnitFactory.BASE_OR_HQ]: [TileType.HQ, TileType.BASE, TileType.CITY],
+  [UnitFactory.LAB]: [TileType.HQ, TileType.BASE, TileType.CITY],
+  [UnitFactory.AIRPORT]: [TileType.AIRPORT],
+  [UnitFactory.PORT]: [TileType.PORT],
+  [UnitFactory.STATION]: [TileType.STATION],
+};
+
+export function canBeResupplied(unit: Unit, tile: Tile) {
+  const factory = unitData[unit.type].factory;
+  return isOneOf(tile.type, resupplyData[factory]);
 }

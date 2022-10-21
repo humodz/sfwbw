@@ -2,9 +2,10 @@ import produce from 'immer';
 import { ActionRecruit, Game } from '../../types';
 import { unitData } from '../data/units';
 import { getAvailableUnits, isFactory } from '../factory';
-import { createUnit, InvalidAction, isCurrentPlayer, isVacant } from './etc';
+import { createUnit, isVacant } from '../unit';
+import { InvalidAction, isCurrentPlayer } from './etc';
 
-// TODO - unit limit
+// TODO - check unit limit
 export function executeActionRecruit(game: Game, action: ActionRecruit) {
   return produce(game, (game) => {
     const player = game.players[game.currentPlayerIndex];
@@ -19,7 +20,13 @@ export function executeActionRecruit(game: Game, action: ActionRecruit) {
       throw new InvalidAction();
     }
 
-    game.units.push(createUnit(action.unit, player.id, action.where));
+    const unit = createUnit(
+      game.settings,
+      action.unit,
+      player.id,
+      action.where,
+    );
+    game.units.push(unit);
     player.funds -= unitData[action.unit].cost;
   });
 }

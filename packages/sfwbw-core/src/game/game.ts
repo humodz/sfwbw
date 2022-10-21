@@ -1,16 +1,13 @@
 import { produce } from 'immer';
-import { Game } from '../types';
-import { Terrain, Tile, TileType } from '../types/tiles';
-import { PredeployedUnit, Unit } from '../types/units';
-import { isEnum, isOneOf, sorted, unique } from '../utils';
-import { unitData, UnitFactory } from './data/units';
+import { Game, GameSettings } from '../types';
+import { Terrain, Tile } from '../types/tiles';
+import { PredeployedUnit } from '../types/units';
+import { isEnum, sorted, unique } from '../utils';
+import { unitData } from './data/units';
+import { canBeResupplied } from './factory';
+import { calculateRepair, calculateResupplyCost, createUnit } from './unit';
 
 export const PLAYER_NEUTRAL = 0;
-
-const constants = {
-  totalHealth: 100,
-  repairAmount: 20,
-};
 
 export function createGame(tiles: Tile[][], units: PredeployedUnit[]): Game {
   const correctedTiles = tiles.map((row) =>
@@ -32,27 +29,17 @@ export function createGame(tiles: Tile[][], units: PredeployedUnit[]): Game {
     ),
   );
 
+  const settings: GameSettings = {
+    fundsPerProperty: 1000,
+    totalHealth: 100,
+    repairAmount: 20,
+    unitLimit: 50,
+  };
+
   return {
-    settings: {
-      fundsPerProperty: 1000,
-    },
+    settings,
     tiles: correctedTiles,
-    units: units.map((predeployedUnit) => {
-      const data = unitData[predeployedUnit.type];
-
-      const unit = {
-        ...predeployedUnit,
-        moved: false,
-        health: constants.totalHealth,
-        fuel: data.fuel,
-        ammo: data.ammo,
-        experience: 0,
-        captureProgress: 0,
-        loaded: [],
-      };
-
-      return unit;
-    }),
+    units: units.map((it) => createUnit(settings, it.type, it.player, it.pos)),
     history: [],
     currentPlayerIndex: 0,
     players: playerIds.map((id) => ({ id, funds: 0, defeated: false })),
@@ -83,12 +70,12 @@ export function startTurn(game: Game): Game {
 
         // TODO - what happens if the player does not have enough funds?
         if (tile.player === myself.id && canBeResupplied(unit, tile)) {
-          const { repair, repairCost } = calculateRepair(unit);
+          const { repair, repairCost } = calculateRepair(game.settings, unit);
+          const resupplyCost = calculateResupplyCost(unit);
+
+          myself.funds -= repairCost + resupplyCost;
 
           unit.health += repair;
-          myself.funds -= repairCost;
-
-          // TODO - subtract funds
           unit.ammo = unitData[unit.type].ammo;
           unit.fuel = unitData[unit.type].fuel;
         }
@@ -97,30 +84,4 @@ export function startTurn(game: Game): Game {
 
     myself.funds = Math.max(0, myself.funds);
   });
-}
-
-// TODO - validate this
-// TODO - move this somewhere?
-const tileTypes = {
-  [UnitFactory.BASE_OR_HQ]: [TileType.HQ, TileType.BASE, TileType.CITY],
-  [UnitFactory.LAB]: [TileType.HQ, TileType.BASE, TileType.CITY],
-  [UnitFactory.AIRPORT]: [TileType.AIRPORT],
-  [UnitFactory.PORT]: [TileType.PORT],
-  [UnitFactory.STATION]: [TileType.STATION],
-};
-
-function canBeResupplied(unit: Unit, tile: Tile) {
-  const factory = unitData[unit.type].factory;
-  return isOneOf(tile.type, tileTypes[factory]);
-}
-
-function calculateRepair(unit: Unit) {
-  const repair = Math.min(
-    constants.repairAmount,
-    constants.totalHealth - unit.health,
-  );
-
-  const repairCost = Math.floor((unitData[unit.type].cost * repair) / 100);
-
-  return { repair, repairCost };
 }
