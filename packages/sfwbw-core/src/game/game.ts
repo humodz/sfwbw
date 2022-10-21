@@ -47,7 +47,7 @@ export function createGame(tiles: Tile[][], units: PredeployedUnit[]): Game {
   };
 }
 
-export function startTurn(game: Game): Game {
+export function nextTurn(game: Game): Game {
   return produce(game, (game) => {
     if (game.history.length > 0) {
       game.currentPlayerIndex =
