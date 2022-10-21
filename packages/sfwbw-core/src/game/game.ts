@@ -9,7 +9,7 @@ export const PLAYER_NEUTRAL = 0;
 
 const constants = {
   totalHealth: 100,
-  healAmount: 20,
+  repairAmount: 20,
 };
 
 export function createGame(tiles: Tile[][], units: PredeployedUnit[]): Game {
@@ -62,6 +62,12 @@ export function createGame(tiles: Tile[][], units: PredeployedUnit[]): Game {
 
 export function startTurn(game: Game): Game {
   return produce(game, (game) => {
+    // TODO - unwait player units
+    if (game.history.length > 0) {
+      game.currentPlayerIndex =
+        (game.currentPlayerIndex + 1) % game.players.length;
+    }
+
     const myself = game.players[game.currentPlayerIndex];
 
     const properties = game.tiles
@@ -77,27 +83,23 @@ export function startTurn(game: Game): Game {
 
         // TODO - what happens if the player does not have enough funds?
         if (tile.player === myself.id && canBeResupplied(unit, tile)) {
+          const { repair, repairCost } = calculateRepair(unit);
+
+          unit.health += repair;
+          myself.funds -= repairCost;
+
           // TODO - subtract funds
-          unit.health = Math.min(
-            constants.totalHealth,
-            unit.health + constants.healAmount,
-          );
           unit.ammo = unitData[unit.type].ammo;
           unit.fuel = unitData[unit.type].fuel;
         }
       }
     }
+
+    myself.funds = Math.max(0, myself.funds);
   });
 }
 
-export function endTurn(game: Game): Game {
-  return produce(game, (game) => {
-    game.currentPlayerIndex =
-      (game.currentPlayerIndex + 1) % game.players.length;
-  });
-}
-
-// TODO - check this
+// TODO - validate this
 // TODO - move this somewhere?
 const tileTypes = {
   [UnitFactory.BASE_OR_HQ]: [TileType.HQ, TileType.BASE, TileType.CITY],
@@ -110,4 +112,15 @@ const tileTypes = {
 function canBeResupplied(unit: Unit, tile: Tile) {
   const factory = unitData[unit.type].factory;
   return isOneOf(tile.type, tileTypes[factory]);
+}
+
+function calculateRepair(unit: Unit) {
+  const repair = Math.min(
+    constants.repairAmount,
+    constants.totalHealth - unit.health,
+  );
+
+  const repairCost = Math.floor((unitData[unit.type].cost * repair) / 100);
+
+  return { repair, repairCost };
 }
