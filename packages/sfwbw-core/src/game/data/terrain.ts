@@ -1,4 +1,4 @@
-import { TileType } from 'src/types';
+import { TileType } from '../../types';
 
 export enum MovementType {
   BOOT = 'BOOT',
