@@ -3,9 +3,10 @@ import {
   Point,
   pointToString,
   Terrain,
+  Tile,
 } from '@sfwbw/sfwbw-core';
 import produce from 'immer';
-import { useEffect, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ErrorMessage } from '../../../components/ErrorMessage';
 import { FormButton } from '../../../components/forms/FormButton';
@@ -129,25 +130,18 @@ export function EditMap() {
             {designMap.tiles.map((row, y) => (
               <div className="flex select-none" key={y}>
                 {row.map((tile, x) => (
-                  <div
+                  <EditorTile
                     key={x}
-                    className="pixelated select-none bg-cover"
+                    tile={tile}
                     onMouseDown={() =>
                       updateMapData({ x, y }, selection, 'click')
                     }
-                    onMouseOver={(event) => {
-                      if (event.buttons === 1) {
-                        updateMapData({ x, y }, selection, 'drag');
-                      }
-                    }}
-                    style={{
-                      backgroundImage: `url(${getTileImage(tile)}`,
-                      width: '32px',
-                      height: '32px',
-                    }}
+                    onMouseDrag={() =>
+                      updateMapData({ x, y }, selection, 'drag')
+                    }
                   >
-                    <UnitImage units={designMap.units} pos={{ x, y }} />
-                  </div>
+                    <EditorUnit units={designMap.units} pos={{ x, y }} />
+                  </EditorTile>
                 ))}
               </div>
             ))}
@@ -164,12 +158,38 @@ export function EditMap() {
   );
 }
 
+interface EditorTileProps {
+  tile: Tile;
+  children?: ReactNode;
+  onMouseDown?: () => void;
+  onMouseDrag?: () => void;
+}
+
+function EditorTile(props: EditorTileProps) {
+  return (
+    <div
+      className="pixelated select-none bg-cover w-[32px] h-[32px]"
+      onMouseDown={() => props.onMouseDown?.()}
+      onMouseOver={(event) => {
+        if (event.buttons === 1) {
+          props.onMouseDrag?.();
+        }
+      }}
+      style={{
+        backgroundImage: `url(${getTileImage(props.tile)}`,
+      }}
+    >
+      {props.children}
+    </div>
+  );
+}
+
 interface UnitImageProps {
   units: DesignMap['units'];
   pos: Point;
 }
 
-function UnitImage(props: UnitImageProps) {
+function EditorUnit(props: UnitImageProps) {
   const unit = props.units[pointToString(props.pos)];
 
   if (!unit) {
