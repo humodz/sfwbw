@@ -26,6 +26,6 @@ export interface GamePlayer {
 }
 
 export interface GameDay {
-  player: number;
+  playerIndex: number;
   actions: Action[];
 }

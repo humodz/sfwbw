@@ -10,6 +10,10 @@ export function first<T>(items: T[]): T | undefined {
   return items[0];
 }
 
+export function last<T>(items: T[]): T | undefined {
+  return items[items.length - 1];
+}
+
 export function repeat<T>(length: number, value: T): T[] {
   return Array(length).fill(value);
 }

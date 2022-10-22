@@ -22,6 +22,10 @@ export function isFactory(tile: TileType): tile is FactoryTile {
   return tile in factoryData;
 }
 
+export function getFactoryUnits(tile: FactoryTile) {
+  return factoryData[tile];
+}
+
 export function getAvailableUnits(player: GamePlayer, tile: FactoryTile) {
   return factoryData[tile].filter(
     (unitType) => player.funds >= unitData[unitType].cost,

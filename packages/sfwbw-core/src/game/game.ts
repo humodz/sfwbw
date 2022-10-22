@@ -56,6 +56,11 @@ export function nextTurn(game: Game): Game {
         (game.currentPlayerIndex + 1) % game.players.length;
     }
 
+    game.history.push({
+      playerIndex: game.currentPlayerIndex,
+      actions: [],
+    });
+
     const myself = game.players[game.currentPlayerIndex];
 
     const properties = game.tiles

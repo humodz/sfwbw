@@ -3,7 +3,7 @@ import { ActionRecruit, Game } from '../../types';
 import { unitData } from '../data/units';
 import { getAvailableUnits, isFactory } from '../factory';
 import { createUnit, isVacant } from '../unit';
-import { InvalidAction, isCurrentPlayer } from './etc';
+import { InvalidAction, isCurrentPlayer } from '../etc';
 
 // TODO - check unit limit
 export function executeActionRecruit(game: Game, action: ActionRecruit) {
