@@ -184,12 +184,12 @@ function EditorTile(props: EditorTileProps) {
   );
 }
 
-interface UnitImageProps {
+interface EditorUnitProps {
   units: DesignMap['units'];
   pos: Point;
 }
 
-function EditorUnit(props: UnitImageProps) {
+function EditorUnit(props: EditorUnitProps) {
   const unit = props.units[pointToString(props.pos)];
 
   if (!unit) {

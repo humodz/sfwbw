@@ -1,6 +1,7 @@
 import { NavLink, Route, Routes } from 'react-router-dom';
 import { navActiveClass } from '../../utils';
 import { BrowseMaps } from './Browse';
+import { DevPlayMap } from './DevPlayMap';
 import { EditMap } from './EditMap';
 import { NewMap } from './NewMap';
 
@@ -29,6 +30,7 @@ export function Maps() {
         <Route path="/new" element={<NewMap />} />
         <Route path="/my-maps" element={<BrowseMaps mode="my-maps" />} />
         <Route path="/@:id" element={'wip map details'} />
+        <Route path="/@:id/play" element={<DevPlayMap />} />
         <Route path="/@:id/edit" element={<EditMap />} />
       </Routes>
     </main>

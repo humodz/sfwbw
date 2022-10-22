@@ -2,9 +2,10 @@ import { Building, TileType, UnitType } from '../../types';
 import { MovementType } from './terrain';
 import { UnitWeapon } from './weapons';
 
-// TODO resupply costs
+// TODO - resupply costs
 
 export interface UnitData {
+  name: string;
   cost: number;
   vision: number;
   move: number;
@@ -40,6 +41,7 @@ export enum UnitFactory {
 
 export const unitData: Record<UnitType, UnitData> = {
   INFANTRY: {
+    name: 'Infantry',
     cost: 1000,
     vision: 2,
     move: 3,
@@ -53,6 +55,7 @@ export const unitData: Record<UnitType, UnitData> = {
     weapons: [],
   },
   MECH: {
+    name: 'Mech',
     cost: 3000,
     vision: 2,
     move: 2,
@@ -66,6 +69,7 @@ export const unitData: Record<UnitType, UnitData> = {
     weapons: [],
   },
   LIGHT_TANK: {
+    name: 'Light Tank',
     cost: 6000,
     vision: 3,
     move: 6,
@@ -79,6 +83,7 @@ export const unitData: Record<UnitType, UnitData> = {
     weapons: [],
   },
   MEDIUM_TANK: {
+    name: 'Medium Tank',
     cost: 12000,
     vision: 2,
     move: 5,
@@ -92,6 +97,7 @@ export const unitData: Record<UnitType, UnitData> = {
     weapons: [],
   },
   HEAVY_TANK: {
+    name: 'Heavy Tank',
     cost: 18000,
     vision: 1,
     move: 4,
@@ -105,6 +111,7 @@ export const unitData: Record<UnitType, UnitData> = {
     weapons: [],
   },
   PROTOTYPE_TANK: {
+    name: 'Prototype Tank',
     cost: 0,
     vision: 2,
     move: 6,
@@ -118,6 +125,7 @@ export const unitData: Record<UnitType, UnitData> = {
     weapons: [],
   },
   ARTILLERY: {
+    name: 'Artillery',
     cost: 7000,
     vision: 1,
     move: 4,
@@ -131,6 +139,7 @@ export const unitData: Record<UnitType, UnitData> = {
     weapons: [],
   },
   ROCKET: {
+    name: 'Rocket',
     cost: 15000,
     vision: 1,
     move: 4,
@@ -144,6 +153,7 @@ export const unitData: Record<UnitType, UnitData> = {
     weapons: [],
   },
   TRAIN: {
+    name: 'Train',
     cost: 30000,
     vision: 1,
     move: 15,
@@ -162,6 +172,7 @@ export const unitData: Record<UnitType, UnitData> = {
     weapons: [],
   },
   FLAK: {
+    name: 'Flak',
     cost: 6500,
     vision: 1,
     move: 4,
@@ -175,6 +186,7 @@ export const unitData: Record<UnitType, UnitData> = {
     weapons: [],
   },
   MISSILE: {
+    name: 'Missile',
     cost: 13000,
     vision: 1,
     move: 4,
@@ -188,6 +200,7 @@ export const unitData: Record<UnitType, UnitData> = {
     weapons: [],
   },
   RECON: {
+    name: 'Recon',
     cost: 3500,
     vision: 5,
     move: 8,
@@ -201,6 +214,7 @@ export const unitData: Record<UnitType, UnitData> = {
     weapons: [],
   },
   ANTI_AIR: {
+    name: 'Anti Air',
     cost: 8000,
     vision: 2,
     move: 6,
@@ -214,6 +228,7 @@ export const unitData: Record<UnitType, UnitData> = {
     weapons: [],
   },
   APC: {
+    name: 'APC',
     cost: 5000,
     vision: 1,
     move: 6,
@@ -232,6 +247,7 @@ export const unitData: Record<UnitType, UnitData> = {
     weapons: [],
   },
   TRUCK: {
+    name: 'Truck',
     cost: 4000,
     vision: 1,
     move: 8,
@@ -245,6 +261,7 @@ export const unitData: Record<UnitType, UnitData> = {
     weapons: [],
   },
   FIGHTER: {
+    name: 'Fighter',
     cost: 20000,
     vision: 2,
     move: 9,
@@ -258,6 +275,7 @@ export const unitData: Record<UnitType, UnitData> = {
     weapons: [],
   },
   BOMBER: {
+    name: 'Bomber',
     cost: 22000,
     vision: 1,
     move: 7,
@@ -271,6 +289,7 @@ export const unitData: Record<UnitType, UnitData> = {
     weapons: [],
   },
   PLANE: {
+    name: 'Plane',
     cost: 26000,
     vision: 1,
     move: 8,
@@ -284,6 +303,7 @@ export const unitData: Record<UnitType, UnitData> = {
     weapons: [],
   },
   B_COPTER: {
+    name: 'B Copter',
     cost: 8500,
     vision: 3,
     move: 6,
@@ -297,6 +317,7 @@ export const unitData: Record<UnitType, UnitData> = {
     weapons: [],
   },
   T_COPTER: {
+    name: 'T Copter',
     cost: 5500,
     vision: 2,
     move: 6,
@@ -316,6 +337,7 @@ export const unitData: Record<UnitType, UnitData> = {
     weapons: [],
   },
   BATTLESHIP: {
+    name: 'Battleship',
     cost: 35000,
     vision: 3,
     move: 5,
@@ -329,6 +351,7 @@ export const unitData: Record<UnitType, UnitData> = {
     weapons: [],
   },
   CRUISER: {
+    name: 'Cruiser',
     cost: 22000,
     vision: 5,
     move: 6,
@@ -347,6 +370,7 @@ export const unitData: Record<UnitType, UnitData> = {
     weapons: [],
   },
   LANDER: {
+    name: 'Lander',
     cost: 16500,
     vision: 1,
     move: 5,
@@ -365,6 +389,7 @@ export const unitData: Record<UnitType, UnitData> = {
     weapons: [],
   },
   SUBMARINE: {
+    name: 'Submarine',
     cost: 24000,
     vision: 3,
     move: 4,
