@@ -7,6 +7,8 @@ import {
   Point,
   pointEquals,
   Tile,
+  sorted,
+  by,
 } from '@sfwbw/sfwbw-core';
 import { unitData } from '@sfwbw/sfwbw-core/src/game/data/units';
 import {
@@ -61,16 +63,24 @@ export function DevPlayMap() {
 
     if (isFactory(tile.type) && isCurrentPlayer(game, tile.player)) {
       const player = getCurrentPlayer(game);
-      const units = getFactoryUnits(tile.type);
-      const availableUnits = getAvailableUnits(player, tile.type);
+      const unitTypes = getFactoryUnits(tile.type);
+      const availableUnitTypes = getAvailableUnits(player, tile.type);
+
+      const units = unitTypes.map((type) => ({
+        type,
+        ...unitData[type],
+      }));
+
+      const sortedUnits = sorted(
+        units,
+        by((unit) => unit.cost),
+      );
 
       setOptions(
-        units.map((unitType) => {
-          const unit = unitData[unitType];
-
+        sortedUnits.map((unit) => {
           return {
             label: `${unit.name} - ${unit.cost}`,
-            disabled: !availableUnits.includes(unitType),
+            disabled: !availableUnitTypes.includes(unit.type),
             action: () => console.log('wip'),
           };
         }),
