@@ -9,22 +9,26 @@ import {
   Tile,
   sorted,
   by,
+  executeAction,
+  ActionType,
+  isOccupied,
 } from '@sfwbw/sfwbw-core';
-import { unitData } from '@sfwbw/sfwbw-core/src/game/data/units';
+import { unitData } from '@sfwbw/sfwbw-core';
 import {
   getAvailableUnits,
   getFactoryUnits,
   isFactory,
-} from '@sfwbw/sfwbw-core/src/game/factory';
+} from '@sfwbw/sfwbw-core';
 import { ReactNode, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { getTileImage, getUnitImage } from '../../../game/assets';
 import { useGetMapByIdQuery } from '../../../store/api';
+import { cls } from '../../../utils';
 
 function maybe<T>(
   fn: (value: T) => T,
 ): (value: T | undefined) => T | undefined {
-  return (value) => (value ? fn(value) : value);
+  return (value) => (value !== undefined ? fn(value) : value);
 }
 
 interface SideBarOption {
@@ -42,7 +46,15 @@ export function DevPlayMap() {
 
   const designMap = designMapResult.data;
 
-  const [game, setGame] = useState<Game>();
+  const [game, setGameOptional] = useState<Game>();
+
+  const setGame = (arg: Game | ((game: Game) => Game)) => {
+    if (typeof arg === 'function') {
+      setGameOptional(maybe(arg));
+    } else {
+      setGameOptional(arg);
+    }
+  };
 
   const [options, setOptions] = useState<SideBarOption[]>();
 
@@ -61,7 +73,11 @@ export function DevPlayMap() {
       return;
     }
 
-    if (isFactory(tile.type) && isCurrentPlayer(game, tile.player)) {
+    if (
+      isFactory(tile.type) &&
+      isCurrentPlayer(game, tile.player) &&
+      !isOccupied(game, pos)
+    ) {
       const player = getCurrentPlayer(game);
       const unitTypes = getFactoryUnits(tile.type);
       const availableUnitTypes = getAvailableUnits(player, tile.type);
@@ -81,7 +97,16 @@ export function DevPlayMap() {
           return {
             label: `${unit.name} - ${unit.cost}`,
             disabled: !availableUnitTypes.includes(unit.type),
-            action: () => console.log('wip'),
+            action: () => {
+              setOptions([]);
+              setGame((game) =>
+                executeAction(game, {
+                  type: ActionType.RECRUIT,
+                  where: pos,
+                  unit: unit.type,
+                }),
+              );
+            },
           };
         }),
       );
@@ -105,8 +130,16 @@ export function DevPlayMap() {
             Player {i}: ${player.funds}
           </div>
         ))}
-        <button onClick={() => setGame(maybe(nextTurn))}>End Turn</button>
+        <button
+          onClick={() => {
+            setOptions([]);
+            setGame(nextTurn);
+          }}
+        >
+          End Turn
+        </button>
       </div>
+      <hr />
       <div className="flex select-none">
         {options && (
           <div>
@@ -125,7 +158,7 @@ export function DevPlayMap() {
             ))}
           </div>
         )}
-        <div className="w-fit m-auto">
+        <div className="w-fit ml-auto">
           {game.tiles.map((row, y) => (
             <div className="flex select-none" key={y}>
               {row.map((tile, x) => (
@@ -181,7 +214,10 @@ function GameUnit(props: GameUnitProps) {
     <img
       src={getUnitImage(unit)}
       alt=""
-      className="pixelated select-none pointer-events-none"
+      className={cls({
+        'pixelated select-none pointer-events-none': true,
+        'brightness-50': !unit.ready,
+      })}
       width="32"
       height="32"
       draggable="false"

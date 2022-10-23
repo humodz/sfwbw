@@ -13,6 +13,7 @@ export function createUnit(
   type: UnitType,
   player: number,
   where: Point,
+  ready = false,
 ): Unit {
   const data = unitData[type];
 
@@ -22,7 +23,7 @@ export function createUnit(
     pos: where,
 
     loaded: [],
-    moved: true,
+    ready,
     health: settings.totalHealth,
     fuel: data.fuel,
     ammo: data.ammo,

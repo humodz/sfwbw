@@ -6,7 +6,7 @@ export interface PredeployedUnit {
   pos: Point;
 }
 export interface Unit extends PredeployedUnit {
-  moved: boolean;
+  ready: boolean;
   health: number;
   fuel: number;
   ammo: number;

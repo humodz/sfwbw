@@ -39,7 +39,9 @@ export function createGame(tiles: Tile[][], units: PredeployedUnit[]): Game {
   return {
     settings,
     tiles: correctedTiles,
-    units: units.map((it) => createUnit(settings, it.type, it.player, it.pos)),
+    units: units.map((it) =>
+      createUnit(settings, it.type, it.player, it.pos, true),
+    ),
     history: [],
     currentPlayerIndex: 0,
     players: playerIds.map((id) => ({ id, funds: 0, defeated: false })),
@@ -72,7 +74,7 @@ export function nextTurn(game: Game): Game {
 
     for (const unit of game.units) {
       if (unit.player === myself.id) {
-        unit.moved = false;
+        unit.ready = true;
         const tile = game.tiles[unit.pos.y][unit.pos.x];
 
         // TODO - what happens if the player does not have enough funds?
