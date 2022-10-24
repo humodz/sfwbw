@@ -1,17 +1,12 @@
 import { Point } from './point';
 import { UnitType } from './units';
 
-export type Action =
-  | ActionRecruit
-  | ActionRangedAttack
-  | ActionMove
-  | ActionIdle;
+export type Action = ActionRecruit | ActionRangedAttack | ActionMove;
 
 export enum ActionType {
   RECRUIT = 'RECRUIT',
   RANGED_ATTACK = 'RANGED_ATTACK',
   MOVE = 'MOVE',
-  IDLE = 'IDLE',
 }
 
 export interface ActionRecruit {
@@ -30,12 +25,6 @@ export interface ActionMove {
   type: ActionType.MOVE;
   where: Point;
   path: Point[];
-  subAction: SubAction | null;
-}
-
-export interface ActionIdle {
-  type: ActionType.IDLE;
-  where: Point;
   subAction: SubAction | null;
 }
 

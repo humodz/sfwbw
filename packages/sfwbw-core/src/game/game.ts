@@ -74,6 +74,7 @@ export function nextTurn(game: Game): Game {
 
     for (const unit of game.units) {
       if (unit.player === myself.id) {
+        // TODO - subtract daily fuel costs
         unit.ready = true;
         const tile = game.tiles[unit.pos.y][unit.pos.x];
 

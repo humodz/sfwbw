@@ -1,4 +1,4 @@
-import { Game, Point, pointEquals } from '../types';
+import { Game, Point, pointEquals, Tile } from '../types';
 
 export function getCurrentPlayer(game: Game) {
   return game.players[game.currentPlayerIndex];
@@ -9,6 +9,9 @@ export function isCurrentPlayer(game: Game, playerId: number) {
   return currentPlayer.id === playerId;
 }
 
+export function isOccupied(game: Game, where: Point) {
+  return game.units.some((unit) => pointEquals(unit.pos, where));
+}
 export class InvalidAction extends Error {
   constructor(message = 'Invalid Action') {
     super(message);
@@ -25,6 +28,9 @@ export class InvalidAction extends Error {
   }
 }
 
-export function isOccupied(game: Game, where: Point) {
-  return game.units.some((unit) => pointEquals(unit.pos, where));
+export function getMapDimensions(tiles: Tile[][]): Point {
+  return {
+    x: tiles[0].length,
+    y: tiles.length,
+  };
 }
