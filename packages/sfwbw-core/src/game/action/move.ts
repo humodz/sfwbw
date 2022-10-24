@@ -5,6 +5,7 @@ import {
   Point,
   pointAdd,
   pointEquals,
+  pointFromString,
   pointToString,
   Unit,
 } from '../../types';
@@ -26,7 +27,6 @@ export function calculateValidMoves(game: Game, unit: Unit) {
   const totalMoves = unitData[unit.type].move;
 
   const visited = new Set<string>();
-  const pendingSet = new Set<string>([pointToString(unit.pos)]);
   const pending: Move[] = [{ pos: unit.pos, remainingMoves: totalMoves }];
 
   while (pending.length > 0) {
@@ -38,7 +38,10 @@ export function calculateValidMoves(game: Game, unit: Unit) {
     }
 
     visited.add(coord);
-    pendingSet.delete(coord);
+
+    if (move.remainingMoves === 0) {
+      continue;
+    }
 
     const neighbors = getNeighbors(move.pos, getMapDimensions(game.tiles));
 
@@ -51,9 +54,15 @@ export function calculateValidMoves(game: Game, unit: Unit) {
         continue;
       }
 
+      const remainingMoves = move.remainingMoves - tileMoveCost;
+
+      if (remainingMoves < 0) {
+        continue;
+      }
+
       const newMove = {
         pos: neighbor,
-        remainingMoves: move.remainingMoves - tileMoveCost,
+        remainingMoves: remainingMoves,
       };
 
       insertBefore(
@@ -64,7 +73,7 @@ export function calculateValidMoves(game: Game, unit: Unit) {
     }
   }
 
-  return [];
+  return Array.from(visited, (coord) => pointFromString(coord));
 }
 
 // TODO - fuel costs
